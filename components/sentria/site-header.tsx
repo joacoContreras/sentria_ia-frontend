@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Activity, ShieldCheck, Lock, Headphones, UserRound } from "lucide-react"
 
 const badges = [
@@ -13,14 +14,14 @@ export function SiteHeader() {
       <div className="max-w-container-max mx-auto px-gutter-mobile lg:px-gutter-desktop py-space-sm">
         <div className="flex items-center justify-between gap-space-lg">
           <div className="flex items-center gap-space-lg">
-            <a href="#" className="flex items-center gap-space-xs shrink-0">
+            <Link href="/" className="flex items-center gap-space-xs shrink-0">
               <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
                 <Activity className="h-5 w-5" aria-hidden="true" />
               </span>
               <span className="text-headline-sm text-on-surface leading-tight">
                 Sentria <span className="text-primary">AI</span>
               </span>
-            </a>
+            </Link>
 
             <ul className="hidden xl:flex items-center gap-space-sm">
               {badges.map(({ icon: Icon, label }) => (
@@ -38,21 +39,21 @@ export function SiteHeader() {
           </div>
 
           <nav className="flex items-center gap-space-md">
-            <a href="#" className="text-label-lg text-primary hover:underline">
+            <Link href="#acceso" className="text-label-lg text-primary hover:underline">
               Acceso
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="#verificacion"
               className="hidden sm:inline text-label-lg text-on-surface-variant hover:text-on-surface"
             >
               Verificación
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="#ayuda"
               className="hidden sm:inline text-label-lg text-on-surface-variant hover:text-on-surface"
             >
               Ayuda
-            </a>
+            </Link>
             <button
               type="button"
               aria-label="Cuenta"

@@ -1,383 +1,460 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import {
   LogIn,
   UserPlus,
   IdCard,
   Lock,
   Mail,
-  KeyRound,
   ShieldPlus,
-  ChevronDown,
   Info,
   CheckCircle2,
   Shield,
-  Eye,
-  EyeOff,
 } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Select } from "@/components/ui/select"
+import { PasswordInput } from "@/components/ui/password-input"
+import { Button } from "@/components/ui/button"
 
-const inputClass =
-  "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-
-function passwordScore(value: string) {
-  let score = 0
-  if (value.length >= 8) score++
-  if (/[A-Z]/.test(value)) score++
-  if (/[0-9]/.test(value)) score++
-  if (/[^A-Za-z0-9]/.test(value)) score++
-  return score
+interface PatientFormData {
+  fullName: string
+  docType: string
+  docNumber: string
+  phone: string
+  email: string
+  password: string
+  coverageProvider: string
+  memberId: string
+  acceptTerms: boolean
 }
+
+const initialFormData: PatientFormData = {
+  fullName: "",
+  docType: "DNI",
+  docNumber: "",
+  phone: "",
+  email: "",
+  password: "",
+  coverageProvider: "",
+  memberId: "",
+  acceptTerms: true,
+}
+
+const coverageOptions = [
+  { value: "", label: "Seleccione entidad...", disabled: true },
+  { value: "OSDE", label: "OSDE" },
+  { value: "Swiss Medical", label: "Swiss Medical" },
+  { value: "Galeno", label: "Galeno" },
+  { value: "Medife", label: "Medifé" },
+  { value: "Omint", label: "Omint" },
+  { value: "Particular", label: "Particular / Sin Cobertura" },
+]
 
 export function RegistrationCard() {
   const [tab, setTab] = useState<"login" | "register">("register")
-  const [showPassword, setShowPassword] = useState(false)
-  const [password, setPassword] = useState("SaludSegura2024!")
+  const [formData, setFormData] = useState<PatientFormData>(initialFormData)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
 
-  const score = useMemo(() => passwordScore(password), [password])
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    // Simulamos una llamada de red a la API institucional
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      setIsSuccess(true)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="lg:col-span-7">
       <div className="flex flex-col gap-space-lg rounded-2xl bg-surface-container-lowest p-space-lg lg:p-space-xl shadow-xl">
-        {/* Tab switch */}
+        {/* Tab Switcher */}
         <div className="flex w-full rounded-xl bg-surface-container-low p-1">
-          {(
-            [
-              { id: "login", label: "Iniciar Sesión", icon: LogIn },
-              { id: "register", label: "Registrarse", icon: UserPlus },
-            ] as const
-          ).map(({ id, label, icon: Icon }) => {
-            const active = tab === id
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setTab(id)}
-                aria-pressed={active}
-                className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all ${
-                  active
-                    ? "bg-primary text-on-primary shadow-sm"
-                    : "text-secondary hover:text-on-surface"
-                }`}
-              >
-                <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-                {label}
-              </button>
-            )
-          })}
+          <button
+            type="button"
+            onClick={() => {
+              setTab("register")
+              setIsSuccess(false)
+            }}
+            aria-pressed={tab === "register"}
+            className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
+              tab === "register"
+                ? "bg-primary text-on-primary shadow-sm"
+                : "text-secondary hover:text-on-surface"
+            }`}
+          >
+            <UserPlus className="h-[18px] w-[18px]" aria-hidden="true" />
+            Registrarse
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setTab("login")
+              setIsSuccess(false)
+            }}
+            aria-pressed={tab === "login"}
+            className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
+              tab === "login"
+                ? "bg-primary text-on-primary shadow-sm"
+                : "text-secondary hover:text-on-surface"
+            }`}
+          >
+            <LogIn className="h-[18px] w-[18px]" aria-hidden="true" />
+            Iniciar Sesión
+          </button>
         </div>
 
-        {/* Header */}
-        <div className="flex flex-col gap-space-2xs">
-          <span className="text-label-sm uppercase text-primary">
-            Registro de Paciente (RF-01)
-          </span>
-          <h2 className="text-headline-md text-on-surface">
-            Crear Ficha de Paciente
-          </h2>
-          <p className="text-body-md text-secondary">
-            Complete sus datos para vincular su historia clínica y validar su
-            cobertura médica institucional.
-          </p>
-        </div>
-
-        <form
-          className="flex flex-col gap-space-lg"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          {/* Section 1: Personal data */}
-          <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-            <legend className="mb-space-2xs flex items-center gap-space-xs">
-              <IdCard className="h-5 w-5 text-primary" aria-hidden="true" />
-              <span className="text-headline-sm text-on-surface">
-                1. Datos Personales
-              </span>
-            </legend>
-
+        {/* Feedback visual de éxito */}
+        {isSuccess ? (
+          <div className="flex flex-col items-center justify-center gap-space-md py-space-xl text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <CheckCircle2 className="h-10 w-10" aria-hidden="true" />
+            </div>
             <div className="flex flex-col gap-space-2xs">
-              <label
-                className="text-label-md text-on-surface"
-                htmlFor="full-name"
-              >
-                Nombre y Apellido completo <span className="text-error">*</span>
-              </label>
-              <input
-                id="full-name"
-                type="text"
-                required
-                placeholder="ej. María Florencia Gómez"
-                className={`${inputClass} px-space-md`}
-              />
+              <h3 className="text-headline-md text-on-surface">
+                {tab === "register"
+                  ? "¡Ficha Clínica Creada!"
+                  : "¡Bienvenido de vuelta!"}
+              </h3>
+              <p className="text-body-md text-secondary max-w-md">
+                {tab === "register"
+                  ? `Se ha registrado exitosamente a ${formData.fullName || "paciente"}. Su credencial ${formData.coverageProvider || "médica"} está siendo validada.`
+                  : `Has iniciado sesión correctamente con ${formData.email}.`}
+              </p>
+            </div>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setIsSuccess(false)
+                setFormData(initialFormData)
+              }}
+            >
+              Realizar otra operación
+            </Button>
+          </div>
+        ) : (
+          <>
+            {/* Header del formulario */}
+            <div className="flex flex-col gap-space-2xs">
+              <span className="text-label-sm uppercase text-primary">
+                {tab === "register"
+                  ? "Registro de Paciente (RF-01)"
+                  : "Portal Pacientes"}
+              </span>
+              <h2 className="text-headline-md text-on-surface">
+                {tab === "register"
+                  ? "Crear Ficha de Paciente"
+                  : "Acceso Seguro"}
+              </h2>
+              <p className="text-body-md text-secondary">
+                {tab === "register"
+                  ? "Complete sus datos para vincular su historia clínica y validar su cobertura médica institucional."
+                  : "Ingrese sus credenciales de acceso para ver sus turnos y resultados médicos."}
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
-              <div className="flex flex-col gap-space-2xs sm:col-span-7">
-                <label
-                  className="text-label-md text-on-surface"
-                  htmlFor="doc-number"
-                >
-                  Tipo y Nº de Documento <span className="text-error">*</span>
-                </label>
-                <div className="flex gap-space-xs">
-                  <select
-                    id="doc-type"
-                    className="h-12 shrink-0 rounded-xl bg-surface-container-lowest px-space-sm text-label-md text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="DNI">DNI</option>
-                    <option value="LC">LC</option>
-                    <option value="LE">LE</option>
-                    <option value="PAS">Pasaporte</option>
-                  </select>
-                  <input
-                    id="doc-number"
-                    type="text"
+            <form onSubmit={handleSubmit} className="flex flex-col gap-space-lg">
+              {tab === "login" ? (
+                /* Vista de Login */
+                <div className="flex flex-col gap-space-md">
+                  <Input
+                    label="Correo Electrónico"
+                    id="login-email"
+                    name="email"
+                    type="email"
                     required
-                    maxLength={11}
-                    placeholder="38.452.901"
-                    className={`${inputClass} px-space-md`}
+                    placeholder="paciente@email.com"
+                    leftIcon={<Mail className="h-5 w-5" />}
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-space-2xs sm:col-span-5">
-                <label
-                  className="text-label-md text-on-surface"
-                  htmlFor="phone-mobile"
-                >
-                  Teléfono Móvil <span className="text-error">*</span>
-                </label>
-                <input
-                  id="phone-mobile"
-                  type="tel"
-                  required
-                  placeholder="+54 9 11 4821 0000"
-                  className={`${inputClass} px-space-md`}
-                />
-                <span className="text-label-sm text-secondary">
-                  Para confirmación vía WhatsApp
-                </span>
-              </div>
-            </div>
-          </fieldset>
-
-          {/* Section 2: Credentials */}
-          <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-            <legend className="mb-space-2xs flex items-center gap-space-xs">
-              <Lock className="h-5 w-5 text-primary" aria-hidden="true" />
-              <span className="text-headline-sm text-on-surface">
-                2. Credenciales de Acceso
-              </span>
-            </legend>
-
-            <div className="flex flex-col gap-space-2xs">
-              <label
-                className="text-label-md text-on-surface"
-                htmlFor="email-address"
-              >
-                Correo Electrónico <span className="text-error">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <Mail
-                  className="pointer-events-none absolute left-space-md h-5 w-5 text-outline"
-                  aria-hidden="true"
-                />
-                <input
-                  id="email-address"
-                  type="email"
-                  required
-                  placeholder="paciente@email.com"
-                  className={`${inputClass} pl-12 pr-space-md`}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-space-2xs">
-              <div className="flex items-center justify-between">
-                <label
-                  className="text-label-md text-on-surface"
-                  htmlFor="password-field"
-                >
-                  Contraseña <span className="text-error">*</span>
-                </label>
-                <span className="text-label-sm text-primary">
-                  Segura: 8+ caracteres, mayúscula y número
-                </span>
-              </div>
-              <div className="relative flex items-center">
-                <KeyRound
-                  className="pointer-events-none absolute left-space-md h-5 w-5 text-outline"
-                  aria-hidden="true"
-                />
-                <input
-                  id="password-field"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className={`${inputClass} pl-12 pr-12`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={
-                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                  }
-                  className="absolute right-space-md text-secondary hover:text-on-surface focus:outline-none"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" aria-hidden="true" />
-                  ) : (
-                    <Eye className="h-5 w-5" aria-hidden="true" />
-                  )}
-                </button>
-              </div>
-              <div className="mt-space-2xs grid grid-cols-4 gap-space-2xs">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-1.5 rounded-full ${
-                      i < score ? "bg-primary" : "bg-surface-container-highest"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </fieldset>
-
-          {/* Section 3: Coverage */}
-          <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-            <legend className="mb-space-2xs flex items-center gap-space-xs">
-              <ShieldPlus className="h-5 w-5 text-primary" aria-hidden="true" />
-              <span className="text-headline-sm text-on-surface">
-                3. Cobertura Sanitaria
-              </span>
-            </legend>
-
-            <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
-              <div className="flex flex-col gap-space-2xs sm:col-span-6">
-                <label
-                  className="text-label-md text-on-surface"
-                  htmlFor="coverage-provider"
-                >
-                  Obra Social o Prepaga <span className="text-error">*</span>
-                </label>
-                <div className="relative">
-                  <select
-                    id="coverage-provider"
+                  <PasswordInput
+                    label="Contraseña"
+                    id="login-password"
+                    name="password"
                     required
-                    defaultValue=""
-                    className={`${inputClass} cursor-pointer appearance-none px-space-md`}
-                  >
-                    <option value="" disabled>
-                      Seleccione entidad...
-                    </option>
-                    <option value="OSDE">OSDE</option>
-                    <option value="Swiss Medical">Swiss Medical</option>
-                    <option value="Galeno">Galeno</option>
-                    <option value="Medife">Medifé</option>
-                    <option value="Omint">Omint</option>
-                    <option value="Particular">
-                      Particular / Sin Cobertura
-                    </option>
-                  </select>
-                  <ChevronDown
-                    className="pointer-events-none absolute right-space-md top-1/2 h-5 w-5 -translate-y-1/2 text-secondary"
-                    aria-hidden="true"
+                    placeholder="••••••••••••"
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-space-2xs sm:col-span-6">
-                <div className="flex items-center justify-between">
-                  <label
-                    className="text-label-md text-on-surface"
-                    htmlFor="member-id"
+                  <div className="flex justify-end">
+                    <a
+                      href="#recuperar"
+                      className="text-label-sm text-primary hover:underline"
+                    >
+                      ¿Olvidó su contraseña?
+                    </a>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    isLoading={isLoading}
+                    leftIcon={<LogIn className="h-5 w-5" />}
+                    className="w-full mt-space-sm"
                   >
-                    Nº Afiliado / Credencial{" "}
-                    <span className="text-error">*</span>
-                  </label>
-                  <div className="group relative flex cursor-pointer items-center">
-                    <Info
-                      className="h-4 w-4 text-secondary hover:text-primary"
-                      aria-hidden="true"
+                    Ingresar al Portal
+                  </Button>
+                </div>
+              ) : (
+                /* Vista de Registro */
+                <>
+                  {/* Sección 1: Datos Personales */}
+                  <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
+                    <legend className="mb-space-2xs flex items-center gap-space-xs">
+                      <IdCard
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                      <span className="text-headline-sm text-on-surface">
+                        1. Datos Personales
+                      </span>
+                    </legend>
+
+                    <Input
+                      label="Nombre y Apellido completo"
+                      id="full-name"
+                      name="fullName"
+                      type="text"
+                      required
+                      placeholder="ej. María Florencia Gómez"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
                     />
-                    <div className="absolute bottom-full right-0 z-20 mb-2 hidden w-64 rounded-lg bg-inverse-surface p-space-xs text-label-sm text-inverse-on-surface shadow-xl group-hover:block">
-                      Ubicado al frente de su credencial plástica o digital
-                      (generalmente de 10 a 16 dígitos).
+
+                    <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
+                      <div className="flex flex-col gap-space-2xs sm:col-span-7">
+                        <label
+                          className="text-label-md text-on-surface"
+                          htmlFor="doc-number"
+                        >
+                          Tipo y Nº de Documento{" "}
+                          <span className="text-error">*</span>
+                        </label>
+                        <div className="flex gap-space-xs">
+                          <Select
+                            id="doc-type"
+                            name="docType"
+                            value={formData.docType}
+                            onChange={handleInputChange}
+                            className="w-28 shrink-0"
+                            options={[
+                              { value: "DNI", label: "DNI" },
+                              { value: "LC", label: "LC" },
+                              { value: "LE", label: "LE" },
+                              { value: "PAS", label: "Pasaporte" },
+                            ]}
+                          />
+                          <Input
+                            id="doc-number"
+                            name="docNumber"
+                            type="text"
+                            required
+                            maxLength={11}
+                            placeholder="38.452.901"
+                            value={formData.docNumber}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:col-span-5">
+                        <Input
+                          label="Teléfono Móvil"
+                          id="phone-mobile"
+                          name="phone"
+                          type="tel"
+                          required
+                          placeholder="+54 9 11 4821 0000"
+                          helperText="Para confirmación vía WhatsApp"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  {/* Sección 2: Credenciales */}
+                  <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
+                    <legend className="mb-space-2xs flex items-center gap-space-xs">
+                      <Lock
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                      <span className="text-headline-sm text-on-surface">
+                        2. Credenciales de Acceso
+                      </span>
+                    </legend>
+
+                    <Input
+                      label="Correo Electrónico"
+                      id="register-email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="paciente@email.com"
+                      leftIcon={<Mail className="h-5 w-5" />}
+                      value={formData.email}
+                      onChange={handleInputChange}
+                    />
+
+                    <PasswordInput
+                      label="Contraseña"
+                      id="register-password"
+                      name="password"
+                      required
+                      showStrengthMeter
+                      placeholder="••••••••••••"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                    />
+                  </fieldset>
+
+                  {/* Sección 3: Cobertura */}
+                  <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
+                    <legend className="mb-space-2xs flex items-center gap-space-xs">
+                      <ShieldPlus
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                      <span className="text-headline-sm text-on-surface">
+                        3. Cobertura Sanitaria
+                      </span>
+                    </legend>
+
+                    <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
+                      <div className="sm:col-span-6">
+                        <Select
+                          label="Obra Social o Prepaga"
+                          id="coverage-provider"
+                          name="coverageProvider"
+                          required
+                          value={formData.coverageProvider}
+                          onChange={handleInputChange}
+                          options={coverageOptions}
+                        />
+                      </div>
+
+                      <div className="sm:col-span-6">
+                        <div className="flex flex-col gap-space-2xs">
+                          <div className="flex items-center justify-between">
+                            <label
+                              className="text-label-md text-on-surface"
+                              htmlFor="member-id"
+                            >
+                              Nº Afiliado / Credencial{" "}
+                              <span className="text-error">*</span>
+                            </label>
+                            <div className="group relative flex cursor-pointer items-center">
+                              <Info
+                                className="h-4 w-4 text-secondary hover:text-primary"
+                                aria-hidden="true"
+                              />
+                              <div className="absolute bottom-full right-0 z-20 mb-2 hidden w-64 rounded-lg bg-inverse-surface p-space-xs text-label-sm text-inverse-on-surface shadow-xl group-hover:block">
+                                Ubicado al frente de su credencial plástica o
+                                digital (10 a 16 dígitos).
+                              </div>
+                            </div>
+                          </div>
+                          <Input
+                            id="member-id"
+                            name="memberId"
+                            type="text"
+                            required
+                            placeholder="02-12345678-01"
+                            value={formData.memberId}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-space-xs rounded-xl bg-primary-fixed/30 p-space-sm">
+                      <CheckCircle2
+                        className="h-5 w-5 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                      <span className="text-body-md text-on-primary-fixed-variant">
+                        Tu cobertura se verificará automáticamente al guardar
+                        con el padrón del financiador. No requiere copias
+                        físicas.
+                      </span>
+                    </div>
+                  </fieldset>
+
+                  {/* Términos */}
+                  <div className="flex items-start gap-space-sm pt-space-xs">
+                    <input
+                      id="terms-check"
+                      name="acceptTerms"
+                      type="checkbox"
+                      checked={formData.acceptTerms}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-primary"
+                    />
+                    <label
+                      htmlFor="terms-check"
+                      className="cursor-pointer select-none text-body-md text-on-surface-variant"
+                    >
+                      Acepto los{" "}
+                      <a href="#" className="font-medium text-primary underline">
+                        Términos de Servicio
+                      </a>{" "}
+                      y la{" "}
+                      <a href="#" className="font-medium text-primary underline">
+                        Política de Privacidad de Datos Médicos (Ley 25.326)
+                      </a>{" "}
+                      para el resguardo de información clínica sensible.
+                    </label>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="flex flex-col gap-space-sm pt-space-xs">
+                    <Button
+                      type="submit"
+                      isLoading={isLoading}
+                      leftIcon={<Shield className="h-5 w-5" />}
+                      className="w-full"
+                    >
+                      Crear Cuenta
+                    </Button>
+                    <div className="pt-space-2xs text-center">
+                      <span className="text-body-md text-secondary">
+                        ¿Ya tienes cuenta?{" "}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setTab("login")}
+                        className="text-label-lg text-primary hover:underline cursor-pointer"
+                      >
+                        Inicia sesión
+                      </button>
                     </div>
                   </div>
-                </div>
-                <input
-                  id="member-id"
-                  type="text"
-                  required
-                  placeholder="02-12345678-01"
-                  className={`${inputClass} px-space-md`}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-start gap-space-xs rounded-xl bg-primary-fixed/30 p-space-sm">
-              <CheckCircle2
-                className="h-5 w-5 shrink-0 text-primary"
-                aria-hidden="true"
-              />
-              <span className="text-body-md text-on-primary-fixed-variant">
-                Tu cobertura se verificará automáticamente al guardar con el
-                padrón del financiador. No requiere copias físicas.
-              </span>
-            </div>
-          </fieldset>
-
-          {/* Terms */}
-          <div className="flex items-start gap-space-sm pt-space-xs">
-            <input
-              id="terms-check"
-              type="checkbox"
-              defaultChecked
-              required
-              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-primary"
-            />
-            <label
-              htmlFor="terms-check"
-              className="cursor-pointer select-none text-body-md text-on-surface-variant"
-            >
-              Acepto los{" "}
-              <a href="#" className="font-medium text-primary underline">
-                Términos de Servicio
-              </a>{" "}
-              y la{" "}
-              <a href="#" className="font-medium text-primary underline">
-                Política de Privacidad de Datos Médicos (Ley 25.326)
-              </a>{" "}
-              para el resguardo de información clínica sensible.
-            </label>
-          </div>
-
-          {/* CTA */}
-          <div className="flex flex-col gap-space-sm pt-space-xs">
-            <button
-              type="submit"
-              className="flex h-12 w-full items-center justify-center gap-space-xs rounded-xl bg-primary text-label-lg text-on-primary shadow-md transition-all hover:bg-primary-container active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <Shield className="h-5 w-5" aria-hidden="true" />
-              Crear Cuenta
-            </button>
-            <div className="pt-space-2xs text-center">
-              <span className="text-body-md text-secondary">
-                ¿Ya tienes cuenta?{" "}
-              </span>
-              <button
-                type="button"
-                onClick={() => setTab("login")}
-                className="text-label-lg text-primary hover:underline"
-              >
-                Inicia sesión
-              </button>
-            </div>
-          </div>
-        </form>
+                </>
+              )}
+            </form>
+          </>
+        )}
       </div>
     </div>
   )

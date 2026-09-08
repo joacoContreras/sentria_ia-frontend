@@ -1,9 +1,10 @@
+import Link from "next/link"
 import { Siren, Phone } from "lucide-react"
 
 const links = [
-  { label: "Términos Clínicos" },
-  { label: "Privacidad Médica" },
-  { label: "Protocolo Criptográfico" },
+  { label: "Términos Clínicos", href: "#terminos" },
+  { label: "Privacidad Médica", href: "#privacidad" },
+  { label: "Protocolo Criptográfico", href: "#protocolo" },
 ]
 
 export function SiteFooter() {
@@ -24,13 +25,13 @@ export function SiteFooter() {
               </span>
             </div>
           </div>
-          <button
-            type="button"
-            className="flex shrink-0 items-center gap-space-xs rounded-full bg-error px-space-lg py-space-xs text-label-lg text-on-error"
+          <a
+            href="tel:911"
+            className="flex shrink-0 items-center gap-space-xs rounded-full bg-error px-space-lg py-space-xs text-label-lg text-on-error hover:opacity-95 transition-opacity"
           >
             <Phone className="h-[18px] w-[18px]" aria-hidden="true" />
             Llamar 911 / 112 Directo
-          </button>
+          </a>
         </div>
 
         <div className="flex flex-col items-center justify-center gap-space-sm pt-space-md text-center">
@@ -40,13 +41,13 @@ export function SiteFooter() {
             </span>
             <span className="text-outline">•</span>
             {links.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href="#"
+                href={link.href}
                 className="text-label-sm text-on-surface-variant transition-colors hover:text-primary"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
           <span className="mt-space-2xs text-label-sm text-on-surface-variant">
