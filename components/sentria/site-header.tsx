@@ -1,11 +1,8 @@
 import Link from "next/link"
-import { Activity, ShieldCheck, Lock, Headphones, UserRound } from "lucide-react"
+import { Activity, ShieldCheck, UserRound } from "lucide-react"
 
 const badges = [
-  { icon: ShieldCheck, label: "Plataforma Clínica Acreditada" },
-  { icon: ShieldCheck, label: "Normas HIPAA" },
-  { icon: Lock, label: "Encriptación SSL 256-bit" },
-  { icon: Headphones, label: "Centro de Soporte al Paciente" },
+  { icon: ShieldCheck, label: "Plataforma Clínica Acreditada" }
 ]
 
 export function SiteHeader() {

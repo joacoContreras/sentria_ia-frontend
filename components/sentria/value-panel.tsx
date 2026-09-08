@@ -39,7 +39,7 @@ const pulsePath =
 
 export function ValuePanel() {
   return (
-    <div className="lg:col-span-5 flex flex-col gap-space-lg lg:sticky lg:top-24">
+    <div className="lg:col-span-5 flex flex-col gap-space-lg">
       {/* Branding & headline */}
       <div className="flex flex-col gap-space-sm items-start">
         <div className="inline-flex items-center gap-space-xs bg-surface-container px-space-sm py-space-2xs rounded-full">
