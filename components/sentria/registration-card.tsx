@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import type * as React from "react"
 import {
   LogIn,
   UserPlus,
@@ -38,7 +39,7 @@ const initialFormData: PatientFormData = {
   password: "",
   coverageProvider: "",
   memberId: "",
-  acceptTerms: true,
+  acceptTerms: false,
 }
 
 const coverageOptions = [
