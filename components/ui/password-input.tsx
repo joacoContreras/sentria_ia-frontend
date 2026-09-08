@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { KeyRound, Eye, EyeOff } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -26,7 +27,7 @@ export const PasswordInput = React.forwardRef<
 >(
   (
     {
-      className = "",
+      className,
       label = "Contraseña",
       helperText,
       error,
@@ -77,9 +78,11 @@ export const PasswordInput = React.forwardRef<
             required={required}
             value={value}
             onChange={onChange}
-            className={`w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm pl-12 pr-12 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
-              error ? "ring-2 ring-error focus:ring-error" : ""
-            } ${className}`}
+            className={cn(
+              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm pl-12 pr-12 transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
+              error ? "ring-2 ring-error focus:ring-error" : "",
+              className
+            )}
             {...props}
           />
 

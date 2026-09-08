@@ -1,4 +1,5 @@
 import * as React from "react"
+import { cn } from "@/lib/utils"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,7 +30,7 @@ const sizeStyles = {
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      className = "",
+      className,
       variant = "primary",
       size = "lg",
       leftIcon,
@@ -47,7 +48,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         disabled={disabled || isLoading}
-        className={`inline-flex items-center justify-center font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:pointer-events-none cursor-pointer ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={cn(
+          "inline-flex items-center justify-center font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          variantStyles[variant],
+          sizeStyles[size],
+          className
+        )}
         {...props}
       >
         {isLoading ? (

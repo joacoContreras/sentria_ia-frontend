@@ -1,7 +1,7 @@
-import { SiteHeader } from "@/components/sentria/site-header"
-import { ValuePanel } from "@/components/sentria/value-panel"
-import { RegistrationCard } from "@/components/sentria/registration-card"
-import { SiteFooter } from "@/components/sentria/site-footer"
+import { SiteHeader } from "@/components/shared/site-header"
+import { ValuePanel } from "@/features/landing/components/value-panel"
+import { RegistrationCard } from "@/features/auth/components/registration-card"
+import { SiteFooter } from "@/components/shared/site-footer"
 
 export default function Home() {
   return (

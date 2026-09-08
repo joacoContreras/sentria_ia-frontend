@@ -1,4 +1,5 @@
 import * as React from "react"
+import { cn } from "@/lib/utils"
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,7 +12,7 @@ export interface InputProps
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      className = "",
+      className,
       label,
       helperText,
       error,
@@ -45,9 +46,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             required={required}
-            className={`w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
-              leftIcon ? "pl-12 pr-space-md" : "px-space-md"
-            } ${error ? "ring-2 ring-error focus:ring-error" : ""} ${className}`}
+            className={cn(
+              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
+              leftIcon ? "pl-12 pr-space-md" : "px-space-md",
+              error ? "ring-2 ring-error focus:ring-error" : "",
+              className
+            )}
             {...props}
           />
         </div>

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export interface SelectOption {
   value: string
@@ -18,7 +19,7 @@ export interface SelectProps
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   (
     {
-      className = "",
+      className,
       label,
       helperText,
       error,
@@ -46,9 +47,11 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             ref={ref}
             required={required}
-            className={`w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface shadow-sm appearance-none cursor-pointer px-space-md pr-10 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
-              error ? "ring-2 ring-error focus:ring-error" : ""
-            } ${className}`}
+            className={cn(
+              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface shadow-sm appearance-none cursor-pointer px-space-md pr-10 transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
+              error ? "ring-2 ring-error focus:ring-error" : "",
+              className
+            )}
             {...props}
           >
             {options
