@@ -1,6 +1,7 @@
 "use client"
 
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, ArrowRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 interface RegistrationSuccessProps {
@@ -18,8 +19,10 @@ export function RegistrationSuccess({
   email,
   onReset,
 }: RegistrationSuccessProps) {
+  const router = useRouter()
+
   return (
-    <div className="flex flex-col items-center justify-center gap-space-md py-space-xl text-center">
+    <div className="flex flex-col items-center justify-center gap-space-md py-space-xl text-center animate-fade-in">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
         <CheckCircle2 className="h-10 w-10" aria-hidden="true" />
       </div>
@@ -35,9 +38,21 @@ export function RegistrationSuccess({
             : `Has iniciado sesión correctamente con ${email}.`}
         </p>
       </div>
-      <Button variant="secondary" onClick={onReset}>
-        Realizar otra operación
-      </Button>
+
+      <div className="flex flex-col sm:flex-row items-center gap-space-sm w-full max-w-xs mt-space-xs">
+        <Button
+          variant="primary"
+          onClick={() => router.push("/portal")}
+          rightIcon={<ArrowRight className="h-4 w-4" />}
+          className="w-full"
+        >
+          Ingresar a mi Portal
+        </Button>
+        <Button variant="secondary" onClick={onReset} className="w-full">
+          Cerrar
+        </Button>
+      </div>
     </div>
   )
 }
+

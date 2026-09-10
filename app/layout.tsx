@@ -20,14 +20,18 @@ export const metadata: Metadata = {
     "Acceso directo al ecosistema asistencial Sentria AI. Centralice su historial médico, turnos hospitalarios y validaciones de cobertura en tiempo real.",
 };
 
-export default function RootLayout({ children }: { children: import("react").ReactNode }) {  return (
+import { AuthProvider } from "@/features/auth/hooks/use-auth";
+
+export default function RootLayout({ children }: { children: import("react").ReactNode }) {
+  return (
     <html
       lang="es"
       className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-on-background">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
 }
+

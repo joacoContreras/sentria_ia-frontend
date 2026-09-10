@@ -18,6 +18,17 @@ export interface PatientLoginInput {
   password: string
 }
 
+export interface AuthUser {
+  id: string
+  fullName: string
+  email: string
+  docNumber: string
+  docType?: string
+  phone?: string
+  coverageProvider?: string
+  memberId?: string
+}
+
 export interface ApiError {
   message: string
   statusCode?: number
@@ -27,13 +38,8 @@ export interface ApiError {
 export interface AuthResponse {
   success: boolean
   message: string
-  user?: {
-    id: string
-    fullName: string
-    email: string
-    docNumber: string
-    coverageProvider?: string
-  }
+  user?: AuthUser
   error?: string
 }
+
 

@@ -5,12 +5,11 @@ import { LogIn, UserPlus, AlertCircle, X } from "lucide-react"
 import { LoginForm } from "./login-form"
 import { RegisterForm } from "./register-form"
 import { RegistrationSuccess } from "./registration-success"
-import { authService } from "../services/auth.service"
+import { useAuth } from "../hooks/use-auth"
 import type { PatientRegistrationInput, PatientLoginInput } from "@/types/auth"
 
 export function RegistrationCard() {
   const [tab, setTab] = useState<"login" | "register">("register")
-  const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
   const [successInfo, setSuccessInfo] = useState<{
@@ -19,11 +18,12 @@ export function RegistrationCard() {
     email?: string
   }>({})
 
+  const { login, register, isLoading } = useAuth()
+
   const handleRegister = async (data: PatientRegistrationInput) => {
-    setIsLoading(true)
     setApiError(null)
     try {
-      const response = await authService.register(data)
+      const response = await register(data)
       if (response.success) {
         setSuccessInfo({
           fullName: data.fullName,
@@ -44,16 +44,13 @@ export function RegistrationCard() {
           ? err.message
           : "Error de conexión con el servidor. Intente nuevamente."
       setApiError(message)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   const handleLogin = async (credentials: PatientLoginInput) => {
-    setIsLoading(true)
     setApiError(null)
     try {
-      const response = await authService.login(credentials)
+      const response = await login(credentials)
       if (response.success) {
         setSuccessInfo({
           email: credentials.email,
@@ -72,10 +69,9 @@ export function RegistrationCard() {
           ? err.message
           : "Error de conexión con el servidor. Intente nuevamente."
       setApiError(message)
-    } finally {
-      setIsLoading(false)
     }
   }
+
 
   const handleReset = () => {
     setIsSuccess(false)

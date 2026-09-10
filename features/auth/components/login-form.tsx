@@ -7,6 +7,7 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
 import type { PatientLoginInput } from "@/types/auth"
 import { validateLoginForm, validateEmail } from "../schemas/auth.schema"
+import { ForgotPasswordModal } from "./forgot-password-modal"
 
 interface LoginFormProps {
   isLoading: boolean
@@ -24,6 +25,7 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
   const [touched, setTouched] = React.useState<
     Partial<Record<keyof PatientLoginInput, boolean>>
   >({})
+  const [isForgotModalOpen, setIsForgotModalOpen] = React.useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -69,51 +71,61 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-md">
-      <Input
-        label="Correo Electrónico"
-        id="login-email"
-        name="email"
-        type="email"
-        required
-        placeholder="paciente@email.com"
-        leftIcon={<Mail className="h-5 w-5" />}
-        value={formData.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.email ? errors.email : undefined}
-      />
+    <>
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-md">
+        <Input
+          label="Correo Electrónico"
+          id="login-email"
+          name="email"
+          type="email"
+          required
+          placeholder="paciente@email.com"
+          leftIcon={<Mail className="h-5 w-5" />}
+          value={formData.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.email ? errors.email : undefined}
+        />
 
-      <PasswordInput
-        label="Contraseña"
-        id="login-password"
-        name="password"
-        required
-        placeholder="••••••••••••"
-        value={formData.password}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.password ? errors.password : undefined}
-      />
+        <PasswordInput
+          label="Contraseña"
+          id="login-password"
+          name="password"
+          required
+          placeholder="••••••••••••"
+          value={formData.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.password ? errors.password : undefined}
+        />
 
-      <div className="flex justify-end">
-        <a
-          href="#recuperar"
-          className="text-label-sm text-primary hover:underline"
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setIsForgotModalOpen(true)}
+            className="text-label-sm text-primary hover:underline cursor-pointer"
+          >
+            ¿Olvidó su contraseña?
+          </button>
+        </div>
+
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          leftIcon={<LogIn className="h-5 w-5" />}
+          className="w-full mt-space-sm"
         >
-          ¿Olvidó su contraseña?
-        </a>
-      </div>
+          Ingresar al Portal
+        </Button>
+      </form>
 
-      <Button
-        type="submit"
-        isLoading={isLoading}
-        leftIcon={<LogIn className="h-5 w-5" />}
-        className="w-full mt-space-sm"
-      >
-        Ingresar al Portal
-      </Button>
-    </form>
+      <ForgotPasswordModal
+        isOpen={isForgotModalOpen}
+        onClose={() => setIsForgotModalOpen(false)}
+        initialEmail={formData.email}
+      />
+    </>
   )
 }
+
 
