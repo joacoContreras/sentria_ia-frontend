@@ -189,7 +189,7 @@ export default function PatientPortalPage() {
               </p>
             </div>
             <div className="pt-space-md border-t border-outline-variant/30 mt-space-md">
-              <Button variant="secondary" size="sm" className="w-full">
+              <Button variant="primary" size="sm" className="w-full">
                 Solicitar Nuevo Turno
               </Button>
             </div>

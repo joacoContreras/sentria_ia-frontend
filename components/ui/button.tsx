@@ -12,7 +12,7 @@ export interface ButtonProps
 
 const variantStyles = {
   primary:
-    "bg-primary text-on-primary shadow-md hover:bg-primary-container active:scale-[0.99]",
+    "bg-primary text-white shadow-md hover:bg-primary-container active:scale-[0.99]",
   secondary:
     "bg-surface-container-low text-secondary hover:text-on-surface active:scale-[0.99]",
   danger:

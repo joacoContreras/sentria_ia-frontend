@@ -138,7 +138,7 @@ function ForgotPasswordContent({
               type="submit"
               isLoading={isLoading}
               variant="primary"
-              className="flex-1"
+              className="flex-1 text-white"
             >
               Enviar Enlace
             </Button>

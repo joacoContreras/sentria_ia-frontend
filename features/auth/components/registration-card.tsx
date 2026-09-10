@@ -95,7 +95,7 @@ export function RegistrationCard() {
             aria-pressed={tab === "register"}
             className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
               tab === "register"
-                ? "bg-primary text-on-primary shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "text-secondary hover:text-on-surface"
             }`}
           >
@@ -108,7 +108,7 @@ export function RegistrationCard() {
             aria-pressed={tab === "login"}
             className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
               tab === "login"
-                ? "bg-primary text-on-primary shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "text-secondary hover:text-on-surface"
             }`}
           >
