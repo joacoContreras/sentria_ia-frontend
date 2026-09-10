@@ -7,12 +7,14 @@ export interface InputProps
   helperText?: string
   error?: string
   leftIcon?: React.ReactNode
+  containerClassName?: string
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
+      containerClassName,
       label,
       helperText,
       error,
@@ -28,7 +30,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || generatedId
 
     return (
-      <div className="flex flex-col gap-space-2xs w-full">
+      <div className={cn("flex flex-col gap-space-2xs w-full", containerClassName)}>
         {label && (
           <label htmlFor={inputId} className="text-label-md text-on-surface">
             {label} {required && <span className="text-error">*</span>}

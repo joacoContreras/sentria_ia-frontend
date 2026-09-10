@@ -51,13 +51,6 @@ export function SiteHeader() {
             >
               Ayuda
             </Link>
-            <button
-              type="button"
-              aria-label="Cuenta"
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-on-primary"
-            >
-              <UserRound className="h-4 w-4" aria-hidden="true" />
-            </button>
           </nav>
         </div>
       </div>

@@ -14,12 +14,14 @@ export interface SelectProps
   helperText?: string
   error?: string
   options?: SelectOption[]
+  containerClassName?: string
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   (
     {
       className,
+      containerClassName,
       label,
       helperText,
       error,
@@ -35,7 +37,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id || generatedId
 
     return (
-      <div className="flex flex-col gap-space-2xs w-full">
+      <div className={cn("flex flex-col gap-space-2xs w-full", containerClassName)}>
         {label && (
           <label htmlFor={selectId} className="text-label-md text-on-surface">
             {label} {required && <span className="text-error">*</span>}

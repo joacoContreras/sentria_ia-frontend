@@ -106,7 +106,7 @@ export function RegisterForm({
                 name="docType"
                 value={formData.docType}
                 onChange={handleInputChange}
-                className="w-28 shrink-0"
+                containerClassName="w-32 shrink-0"
                 options={[
                   { value: "DNI", label: "DNI" },
                   { value: "LC", label: "LC" },
@@ -123,6 +123,7 @@ export function RegisterForm({
                 placeholder="38.452.901"
                 value={formData.docNumber}
                 onChange={handleInputChange}
+                containerClassName="flex-1"
               />
             </div>
           </div>
@@ -135,7 +136,6 @@ export function RegisterForm({
               type="tel"
               required
               placeholder="+54 9 11 4821 0000"
-              helperText="Para confirmación vía WhatsApp"
               value={formData.phone}
               onChange={handleInputChange}
             />
@@ -275,7 +275,7 @@ export function RegisterForm({
           type="submit"
           isLoading={isLoading}
           leftIcon={<Shield className="h-5 w-5" />}
-          className="w-full"
+          className="w-full text-white"
         >
           Crear Cuenta
         </Button>
