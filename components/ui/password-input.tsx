@@ -89,6 +89,8 @@ export const PasswordInput = React.forwardRef<
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
+            aria-controls={inputId}
+            aria-pressed={showPassword}
             aria-label={
               showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
             }

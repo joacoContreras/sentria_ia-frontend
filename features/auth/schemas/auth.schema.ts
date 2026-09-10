@@ -1,22 +1,32 @@
 import type { PatientLoginInput, PatientRegistrationInput } from "@/types/auth"
 
-export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+export const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/
 export const PHONE_REGEX = /^\+?[0-9\s-]{8,20}$/
 export const DNI_REGEX = /^[0-9]{7,8}$/
-export const PASSPORT_REGEX = /^[a-zA-Z0-9]{6,12}$/
+export const PASSPORT_REGEX = /^[A-Za-z0-9]{6,12}$/
 
-export function sanitizeDocNumber(docNumber: string): string {
+export function sanitizeDocNumber(docNumber: string, docType: string = "DNI"): string {
+  if (docType === "PAS") {
+    return docNumber.trim().toUpperCase().replace(/[^A-Z0-9]/g, "")
+  }
   return docNumber.replace(/\D/g, "")
 }
 
 export function sanitizePhone(phone: string): string {
-  return phone.trim().replace(/[^\d+]/g, "")
+  const trimmed = phone.trim()
+  const hasPlus = trimmed.startsWith("+")
+  const digitsOnly = trimmed.replace(/\D/g, "")
+  return hasPlus ? `+${digitsOnly}` : digitsOnly
 }
 
 export function validateEmail(email: string): string | null {
   const trimmed = email.trim()
   if (!trimmed) {
     return "El correo electrónico es obligatorio."
+  }
+  if (trimmed.length > 254) {
+    return "El correo electrónico no puede superar los 254 caracteres."
   }
   if (!EMAIL_REGEX.test(trimmed)) {
     return "Ingrese un formato de correo electrónico válido (ej. paciente@email.com)."
@@ -30,6 +40,9 @@ export function validatePassword(password: string): string | null {
   }
   if (password.length < 8) {
     return "La contraseña debe tener al menos 8 caracteres."
+  }
+  if (password.length > 128) {
+    return "La contraseña no debe exceder los 128 caracteres."
   }
   if (!/[A-Z]/.test(password)) {
     return "Debe contener al menos una letra mayúscula."
@@ -67,9 +80,16 @@ export function validateFullName(fullName: string): string | null {
   if (trimmed.length < 3) {
     return "Ingrese un nombre y apellido válido (mínimo 3 caracteres)."
   }
+  if (trimmed.length > 100) {
+    return "El nombre y apellido no puede exceder los 100 caracteres."
+  }
   const parts = trimmed.split(/\s+/)
   if (parts.length < 2) {
     return "Por favor, ingrese al menos nombre y apellido completo."
+  }
+  // Verificar que contenga caracteres alfabéticos válidos
+  if (!/^[\p{L}\s'-]+$/u.test(trimmed)) {
+    return "El nombre solo puede contener letras, espacios, guiones o apóstrofes."
   }
   return null
 }
@@ -90,9 +110,9 @@ export function validateDocNumber(
     return null
   }
 
-  const cleanDigits = sanitizeDocNumber(trimmed)
+  const cleanDigits = sanitizeDocNumber(trimmed, docType)
   if (!DNI_REGEX.test(cleanDigits)) {
-    return "El documento debe contener entre 7 y 8 dígitos numéricos."
+    return `El ${docType} debe contener entre 7 y 8 dígitos numéricos.`
   }
 
   return null
@@ -102,6 +122,13 @@ export function validatePhone(phone: string): string | null {
   const trimmed = phone.trim()
   if (!trimmed) {
     return "El teléfono de contacto es obligatorio."
+  }
+  if (trimmed.length > 25) {
+    return "El número de teléfono es demasiado largo."
+  }
+  const digitsOnly = trimmed.replace(/\D/g, "")
+  if (digitsOnly.length < 8 || digitsOnly.length > 15) {
+    return "El número de teléfono debe tener entre 8 y 15 dígitos."
   }
   if (!PHONE_REGEX.test(trimmed)) {
     return "Ingrese un número de teléfono válido (ej. +54 9 11 4821 0000)."
@@ -125,6 +152,8 @@ export function validateCoverage(
       errors.memberId = "El número de afiliado o credencial es obligatorio."
     } else if (trimmedMemberId.length < 4) {
       errors.memberId = "El número de afiliado debe tener al menos 4 caracteres."
+    } else if (trimmedMemberId.length > 30) {
+      errors.memberId = "El número de afiliado no puede exceder los 30 caracteres."
     }
   }
 

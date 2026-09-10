@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
 export default function PatientPortalPage() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth()
+  const { user, isAuthenticated, isLoading, isHydrated, logout } = useAuth()
   const router = useRouter()
 
   const handleLogout = () => {
@@ -28,7 +28,7 @@ export default function PatientPortalPage() {
     router.push("/")
   }
 
-  if (isLoading) {
+  if (!isHydrated || isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-space-sm text-secondary">

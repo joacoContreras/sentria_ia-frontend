@@ -14,6 +14,7 @@ interface AuthContextValue {
   token: string | null
   isAuthenticated: boolean
   isLoading: boolean
+  isHydrated: boolean
   login: (credentials: PatientLoginInput) => Promise<AuthResponse>
   register: (data: PatientRegistrationInput) => Promise<AuthResponse>
   logout: () => void
@@ -32,12 +33,35 @@ const emptySession: SessionData = { user: null, token: null }
 let cachedSession: SessionData | null = null
 const listeners = new Set<() => void>()
 
+function parseSafeSession(raw: string | null): SessionData {
+  if (!raw) return emptySession
+  try {
+    const parsed = JSON.parse(raw)
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      parsed.user &&
+      typeof parsed.user === "object" &&
+      typeof parsed.user.email === "string" &&
+      typeof parsed.user.fullName === "string"
+    ) {
+      return {
+        user: parsed.user as AuthUser,
+        token: typeof parsed.token === "string" ? parsed.token : null,
+      }
+    }
+  } catch {
+    // Si la estructura del JSON es inválida o corrupta, devolver sesión vacía
+  }
+  return emptySession
+}
+
 function getSessionSnapshot(): SessionData {
   if (typeof window === "undefined") return emptySession
   if (cachedSession === null) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
-      cachedSession = saved ? JSON.parse(saved) : emptySession
+      cachedSession = parseSafeSession(saved)
     } catch {
       cachedSession = emptySession
     }
@@ -48,10 +72,14 @@ function getSessionSnapshot(): SessionData {
 function updateSession(session: SessionData) {
   cachedSession = session
   if (typeof window !== "undefined") {
-    if (session.user) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(session))
-    } else {
-      localStorage.removeItem(STORAGE_KEY)
+    try {
+      if (session.user) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(session))
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    } catch {
+      // Manejar posibles errores como almacenamiento lleno o modo privado restringido
     }
   }
   listeners.forEach((listener) => listener())
@@ -61,11 +89,7 @@ function subscribe(callback: () => void) {
   listeners.add(callback)
   const handleStorage = (e: StorageEvent) => {
     if (e.key === STORAGE_KEY) {
-      try {
-        cachedSession = e.newValue ? JSON.parse(e.newValue) : emptySession
-      } catch {
-        cachedSession = emptySession
-      }
+      cachedSession = parseSafeSession(e.newValue)
       callback()
     }
   }
@@ -76,11 +100,18 @@ function subscribe(callback: () => void) {
   }
 }
 
+const emptySubscribe = () => () => {}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const session = React.useSyncExternalStore(
     subscribe,
     getSessionSnapshot,
     () => emptySession
+  )
+  const isHydrated = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
   )
   const [isPending, setIsPending] = React.useState(false)
 
@@ -89,7 +120,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await authService.login(credentials)
       if (response.success && response.user) {
-        updateSession({ user: response.user, token: "mock-jwt-token" })
+        updateSession({
+          user: response.user,
+          token: response.token || "mock-jwt-token",
+        })
       }
       return response
     } finally {
@@ -104,7 +138,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await authService.register(data)
       if (response.success && response.user) {
-        updateSession({ user: response.user, token: "mock-jwt-token" })
+        updateSession({
+          user: response.user,
+          token: response.token || "mock-jwt-token",
+        })
       }
       return response
     } finally {
@@ -121,6 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token: session.token,
     isAuthenticated: !!session.user,
     isLoading: isPending,
+    isHydrated,
     login,
     register,
     logout,
@@ -136,3 +174,4 @@ export function useAuth(): AuthContextValue {
   }
   return context
 }
+

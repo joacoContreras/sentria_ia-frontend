@@ -113,7 +113,7 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
           type="submit"
           isLoading={isLoading}
           leftIcon={<LogIn className="h-5 w-5" />}
-          className="w-full mt-space-sm"
+          className="w-full mt-space-sm text-white"
         >
           Ingresar al Portal
         </Button>

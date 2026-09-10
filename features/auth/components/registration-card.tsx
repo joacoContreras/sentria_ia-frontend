@@ -153,7 +153,7 @@ export function RegistrationCard() {
             <div className="flex flex-col gap-space-2xs">
               <span className="text-label-sm uppercase text-primary">
                 {tab === "register"
-                  ? "Registro de Paciente (RF-01)"
+                  ? "Registro de Paciente"
                   : "Portal Pacientes"}
               </span>
               <h2 className="text-headline-md text-on-surface">

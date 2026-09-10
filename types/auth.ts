@@ -23,10 +23,11 @@ export interface AuthUser {
   fullName: string
   email: string
   docNumber: string
-  docType?: string
+  docType?: DocumentType | string
   phone?: string
   coverageProvider?: string
   memberId?: string
+  createdAt?: string
 }
 
 export interface ApiError {
@@ -39,7 +40,9 @@ export interface AuthResponse {
   success: boolean
   message: string
   user?: AuthUser
+  token?: string
   error?: string
+  statusCode?: number
 }
 
 

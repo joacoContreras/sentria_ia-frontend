@@ -422,11 +422,19 @@ export function RegisterForm({
             className="cursor-pointer select-none text-body-md text-on-surface-variant"
           >
             Acepto los{" "}
-            <a href="#" className="font-medium text-primary underline">
+            <a
+              href="#terminos"
+              onClick={(e) => e.preventDefault()}
+              className="font-medium text-primary underline"
+            >
               Términos de Servicio
             </a>{" "}
             y la{" "}
-            <a href="#" className="font-medium text-primary underline">
+            <a
+              href="#privacidad"
+              onClick={(e) => e.preventDefault()}
+              className="font-medium text-primary underline"
+            >
               Política de Privacidad de Datos Médicos (Ley 25.326)
             </a>{" "}
             para el resguardo de información clínica sensible.

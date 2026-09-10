@@ -130,3 +130,27 @@ graph TD
 1. **Evitar Monolitos:** Ningún archivo de componente debe superar ~200 líneas; si crece, se divide en subcomponentes dentro del directorio `features/[nombre]/components/`.
 2. **Validación de Formularios:** Se recomienda utilizar esquemas tipados (Zod) vinculados a `react-hook-form` al expandir los campos de validación médica.
 3. **Consistencia de Estilos:** Utilizar siempre las clases semánticas definidas en `app/globals.css` (`bg-surface`, `text-primary`, `p-space-md`, etc.) para mantener la identidad visual del proyecto.
+
+---
+
+## 6. Hoja de Ruta de Seguridad y Próxima Etapa (Roadmap)
+
+Para la siguiente etapa de desarrollo e integración con el backend productivo, se deben implementar las siguientes recomendaciones arquitectónicas:
+
+### 6.1. Migración a Cookies de Sesión `HttpOnly; Secure; SameSite=Strict`
+* **Objetivo:** Cumplimiento estricto de la **Ley 25.326 (Protección de Datos Personales)** y estándares **HIPAA / HITECH**.
+* **Detalle:** Reemplazar la persistencia del token JWT en `localStorage` por cookies emitidas directamente por el backend con los atributos `HttpOnly`, `Secure` y `SameSite=Strict`.
+* **Beneficio:** Inmunidad contra el robo o exfiltración de tokens JWT mediante ataques Cross-Site Scripting (XSS).
+
+### 6.2. Protección de Rutas mediante Middleware de Next.js (`middleware.ts`)
+* **Objetivo:** Control de acceso en el servidor antes del renderizado de páginas privadas.
+* **Detalle:** Interceptar rutas como `/portal/:path*` verificando la presencia y validez de la cookie de sesión en el borde (Edge runtime), redireccionando a `/` si el usuario no está autenticado sin parpadeos en el cliente.
+
+### 6.3. Rotación de Credenciales y Refresh Tokens
+* **Objetivo:** Minimizar la ventana de exposición de sesiones.
+* **Detalle:** Establecer tokens de acceso de corta duración (~15 minutos) combinados con endpoints de refresco silencioso (`/api/auth/refresh`) y revocación explícita en el cierre de sesión (`/api/auth/logout`).
+
+### 6.4. Escalado de Formularios con `react-hook-form` y `zod`
+* **Objetivo:** Reducción de boilerplate y validaciones asíncronas para padrones y matrículas médicas.
+* **Detalle:** Migrar los esquemas manuales de `auth.schema.ts` a esquemas Zod con validaciones cruzadas e inferencia estricta de tipos.
+
