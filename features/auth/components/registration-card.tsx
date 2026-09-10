@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { LogIn, UserPlus } from "lucide-react"
+import { LogIn, UserPlus, AlertCircle, X } from "lucide-react"
 import { LoginForm } from "./login-form"
 import { RegisterForm } from "./register-form"
 import { RegistrationSuccess } from "./registration-success"
@@ -12,6 +12,7 @@ export function RegistrationCard() {
   const [tab, setTab] = useState<"login" | "register">("register")
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [apiError, setApiError] = useState<string | null>(null)
   const [successInfo, setSuccessInfo] = useState<{
     fullName?: string
     coverageProvider?: string
@@ -20,6 +21,7 @@ export function RegistrationCard() {
 
   const handleRegister = async (data: PatientRegistrationInput) => {
     setIsLoading(true)
+    setApiError(null)
     try {
       const response = await authService.register(data)
       if (response.success) {
@@ -29,7 +31,19 @@ export function RegistrationCard() {
           email: data.email,
         })
         setIsSuccess(true)
+      } else {
+        setApiError(
+          response.error ||
+            response.message ||
+            "No se pudo completar el registro del paciente."
+        )
       }
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Error de conexión con el servidor. Intente nuevamente."
+      setApiError(message)
     } finally {
       setIsLoading(false)
     }
@@ -37,6 +51,7 @@ export function RegistrationCard() {
 
   const handleLogin = async (credentials: PatientLoginInput) => {
     setIsLoading(true)
+    setApiError(null)
     try {
       const response = await authService.login(credentials)
       if (response.success) {
@@ -44,7 +59,19 @@ export function RegistrationCard() {
           email: credentials.email,
         })
         setIsSuccess(true)
+      } else {
+        setApiError(
+          response.error ||
+            response.message ||
+            "Credenciales incorrectas o usuario no encontrado."
+        )
       }
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Error de conexión con el servidor. Intente nuevamente."
+      setApiError(message)
     } finally {
       setIsLoading(false)
     }
@@ -52,7 +79,13 @@ export function RegistrationCard() {
 
   const handleReset = () => {
     setIsSuccess(false)
+    setApiError(null)
     setSuccessInfo({})
+  }
+
+  const handleSwitchTab = (newTab: "login" | "register") => {
+    setTab(newTab)
+    handleReset()
   }
 
   return (
@@ -62,10 +95,7 @@ export function RegistrationCard() {
         <div className="flex w-full rounded-xl bg-surface-container-low p-1">
           <button
             type="button"
-            onClick={() => {
-              setTab("register")
-              handleReset()
-            }}
+            onClick={() => handleSwitchTab("register")}
             aria-pressed={tab === "register"}
             className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
               tab === "register"
@@ -78,10 +108,7 @@ export function RegistrationCard() {
           </button>
           <button
             type="button"
-            onClick={() => {
-              setTab("login")
-              handleReset()
-            }}
+            onClick={() => handleSwitchTab("login")}
             aria-pressed={tab === "login"}
             className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
               tab === "login"
@@ -93,6 +120,27 @@ export function RegistrationCard() {
             Iniciar Sesión
           </button>
         </div>
+
+        {/* Banner de error global de API */}
+        {apiError && (
+          <div
+            role="alert"
+            className="flex items-start justify-between gap-space-sm rounded-xl bg-error-container/20 border border-error/30 p-space-sm text-error"
+          >
+            <div className="flex items-start gap-space-xs">
+              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+              <span className="text-body-md font-medium">{apiError}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setApiError(null)}
+              aria-label="Cerrar notificación de error"
+              className="text-error/70 hover:text-error cursor-pointer p-0.5 rounded transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
 
         {/* Feedback visual de éxito */}
         {isSuccess ? (
@@ -130,10 +178,7 @@ export function RegistrationCard() {
               <RegisterForm
                 isLoading={isLoading}
                 onSubmit={handleRegister}
-                onSwitchToLogin={() => {
-                  setTab("login")
-                  handleReset()
-                }}
+                onSwitchToLogin={() => handleSwitchTab("login")}
               />
             )}
           </>
@@ -142,3 +187,4 @@ export function RegistrationCard() {
     </div>
   )
 }
+

@@ -9,12 +9,25 @@ import {
   Info,
   CheckCircle2,
   Shield,
+  AlertCircle,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
 import type { PatientRegistrationInput } from "@/types/auth"
+import {
+  validateRegistrationForm,
+  validateFullName,
+  validateDocNumber,
+  validatePhone,
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+  validateCoverage,
+  sanitizeDocNumber,
+  sanitizePhone,
+} from "../schemas/auth.schema"
 
 const coverageOptions = [
   { value: "", label: "Seleccione entidad...", disabled: true },
@@ -33,6 +46,7 @@ const initialRegistrationData: PatientRegistrationInput = {
   phone: "",
   email: "",
   password: "",
+  confirmPassword: "",
   coverageProvider: "",
   memberId: "",
   acceptTerms: false,
@@ -52,26 +66,132 @@ export function RegisterForm({
   const [formData, setFormData] = React.useState<PatientRegistrationInput>(
     initialRegistrationData
   )
+  const [errors, setErrors] = React.useState<
+    Partial<Record<keyof PatientRegistrationInput, string>>
+  >({})
+  const [touched, setTouched] = React.useState<
+    Partial<Record<keyof PatientRegistrationInput, boolean>>
+  >({})
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target
     const checked = (e.target as HTMLInputElement).checked
+    const nextValue = type === "checkbox" ? checked : value
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: nextValue,
+    }))
+
+    // Limpiar error del campo modificado si ya fue tocado
+    if (errors[name as keyof PatientRegistrationInput]) {
+      setErrors((prev) => {
+        const next = { ...prev }
+        delete next[name as keyof PatientRegistrationInput]
+        return next
+      })
+    }
+  }
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+    setTouched((prev) => ({ ...prev, [name]: true }))
+
+    let fieldError: string | null = null
+
+    switch (name) {
+      case "fullName":
+        fieldError = validateFullName(value)
+        break
+      case "docNumber":
+        fieldError = validateDocNumber(value, formData.docType)
+        break
+      case "phone":
+        fieldError = validatePhone(value)
+        break
+      case "email":
+        fieldError = validateEmail(value)
+        break
+      case "password":
+        fieldError = validatePassword(value)
+        if (formData.confirmPassword) {
+          const confirmErr = validateConfirmPassword(
+            value,
+            formData.confirmPassword
+          )
+          setErrors((prev) => ({ ...prev, confirmPassword: confirmErr || undefined }))
+        }
+        break
+      case "confirmPassword":
+        fieldError = validateConfirmPassword(formData.password, value)
+        break
+      case "coverageProvider":
+      case "memberId": {
+        const coverageErrors = validateCoverage(
+          name === "coverageProvider" ? value : formData.coverageProvider,
+          name === "memberId" ? value : formData.memberId
+        )
+        setErrors((prev) => ({
+          ...prev,
+          coverageProvider: coverageErrors.coverageProvider,
+          memberId: coverageErrors.memberId,
+        }))
+        return
+      }
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: fieldError || undefined,
     }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
+
+    const validation = validateRegistrationForm(formData)
+    if (!validation.isValid) {
+      setErrors(validation.errors)
+      // Marcar todos los campos como tocados para que resalten los errores
+      const allTouched: Partial<Record<keyof PatientRegistrationInput, boolean>> = {
+        fullName: true,
+        docNumber: true,
+        phone: true,
+        email: true,
+        password: true,
+        confirmPassword: true,
+        coverageProvider: true,
+        memberId: true,
+        acceptTerms: true,
+      }
+      setTouched(allTouched)
+      return
+    }
+
+    setErrors({})
+
+    // Sanitización antes de enviar al backend
+    const sanitizedData: PatientRegistrationInput = {
+      ...formData,
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim().toLowerCase(),
+      phone: sanitizePhone(formData.phone),
+      docNumber:
+        formData.docType === "PAS"
+          ? formData.docNumber.trim().toUpperCase()
+          : sanitizeDocNumber(formData.docNumber),
+      memberId: formData.memberId.trim(),
+    }
+
+    onSubmit(sanitizedData)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-space-lg">
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-lg">
       {/* Sección 1: Datos Personales */}
       <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
         <legend className="mb-space-2xs flex items-center gap-space-xs">
@@ -90,6 +210,8 @@ export function RegisterForm({
           placeholder="ej. María Florencia Gómez"
           value={formData.fullName}
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          error={touched.fullName ? errors.fullName : undefined}
         />
 
         <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
@@ -105,7 +227,13 @@ export function RegisterForm({
                 id="doc-type"
                 name="docType"
                 value={formData.docType}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  handleInputChange(e)
+                  if (touched.docNumber) {
+                    const err = validateDocNumber(formData.docNumber, e.target.value)
+                    setErrors((prev) => ({ ...prev, docNumber: err || undefined }))
+                  }
+                }}
                 containerClassName="w-32 shrink-0"
                 options={[
                   { value: "DNI", label: "DNI" },
@@ -119,10 +247,12 @@ export function RegisterForm({
                 name="docNumber"
                 type="text"
                 required
-                maxLength={11}
+                maxLength={12}
                 placeholder="38.452.901"
                 value={formData.docNumber}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
+                error={touched.docNumber ? errors.docNumber : undefined}
                 containerClassName="flex-1"
               />
             </div>
@@ -138,6 +268,8 @@ export function RegisterForm({
               placeholder="+54 9 11 4821 0000"
               value={formData.phone}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              error={touched.phone ? errors.phone : undefined}
             />
           </div>
         </div>
@@ -162,18 +294,36 @@ export function RegisterForm({
           leftIcon={<Mail className="h-5 w-5" />}
           value={formData.email}
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          error={touched.email ? errors.email : undefined}
         />
 
-        <PasswordInput
-          label="Contraseña"
-          id="register-password"
-          name="password"
-          required
-          showStrengthMeter
-          placeholder="••••••••••••"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
+        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2">
+          <PasswordInput
+            label="Contraseña"
+            id="register-password"
+            name="password"
+            required
+            showStrengthMeter
+            placeholder="••••••••••••"
+            value={formData.password}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            error={touched.password ? errors.password : undefined}
+          />
+
+          <PasswordInput
+            label="Confirmar Contraseña"
+            id="register-confirm-password"
+            name="confirmPassword"
+            required
+            placeholder="••••••••••••"
+            value={formData.confirmPassword || ""}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            error={touched.confirmPassword ? errors.confirmPassword : undefined}
+          />
+        </div>
       </fieldset>
 
       {/* Sección 3: Cobertura Sanitaria */}
@@ -194,6 +344,8 @@ export function RegisterForm({
               required
               value={formData.coverageProvider}
               onChange={handleInputChange}
+              onBlur={handleBlur}
+              error={touched.coverageProvider ? errors.coverageProvider : undefined}
               options={coverageOptions}
             />
           </div>
@@ -205,7 +357,10 @@ export function RegisterForm({
                   className="text-label-md text-on-surface"
                   htmlFor="member-id"
                 >
-                  Nº Afiliado / Credencial <span className="text-error">*</span>
+                  Nº Afiliado / Credencial{" "}
+                  {formData.coverageProvider !== "Particular" && (
+                    <span className="text-error">*</span>
+                  )}
                 </label>
                 <div className="group relative flex cursor-pointer items-center">
                   <Info
@@ -221,10 +376,17 @@ export function RegisterForm({
                 id="member-id"
                 name="memberId"
                 type="text"
-                required
-                placeholder="02-12345678-01"
+                required={formData.coverageProvider !== "Particular"}
+                disabled={formData.coverageProvider === "Particular"}
+                placeholder={
+                  formData.coverageProvider === "Particular"
+                    ? "No requerido (Particular)"
+                    : "02-12345678-01"
+                }
                 value={formData.memberId}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
+                error={touched.memberId ? errors.memberId : undefined}
               />
             </div>
           </div>
@@ -242,31 +404,40 @@ export function RegisterForm({
         </div>
       </fieldset>
 
-      {/* Términos */}
-      <div className="flex items-start gap-space-sm pt-space-xs">
-        <input
-          id="terms-check"
-          name="acceptTerms"
-          type="checkbox"
-          checked={formData.acceptTerms}
-          onChange={handleInputChange}
-          required
-          className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-primary"
-        />
-        <label
-          htmlFor="terms-check"
-          className="cursor-pointer select-none text-body-md text-on-surface-variant"
-        >
-          Acepto los{" "}
-          <a href="#" className="font-medium text-primary underline">
-            Términos de Servicio
-          </a>{" "}
-          y la{" "}
-          <a href="#" className="font-medium text-primary underline">
-            Política de Privacidad de Datos Médicos (Ley 25.326)
-          </a>{" "}
-          para el resguardo de información clínica sensible.
-        </label>
+      {/* Términos y Condiciones */}
+      <div className="flex flex-col gap-space-2xs pt-space-xs">
+        <div className="flex items-start gap-space-sm">
+          <input
+            id="terms-check"
+            name="acceptTerms"
+            type="checkbox"
+            checked={formData.acceptTerms}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            required
+            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-primary"
+          />
+          <label
+            htmlFor="terms-check"
+            className="cursor-pointer select-none text-body-md text-on-surface-variant"
+          >
+            Acepto los{" "}
+            <a href="#" className="font-medium text-primary underline">
+              Términos de Servicio
+            </a>{" "}
+            y la{" "}
+            <a href="#" className="font-medium text-primary underline">
+              Política de Privacidad de Datos Médicos (Ley 25.326)
+            </a>{" "}
+            para el resguardo de información clínica sensible.
+          </label>
+        </div>
+        {touched.acceptTerms && errors.acceptTerms && (
+          <div className="flex items-center gap-1.5 text-label-sm text-error pl-8">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <span>{errors.acceptTerms}</span>
+          </div>
+        )}
       </div>
 
       {/* CTA */}
@@ -293,3 +464,4 @@ export function RegisterForm({
     </form>
   )
 }
+

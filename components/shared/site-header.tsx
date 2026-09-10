@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Activity, ShieldCheck, UserRound } from "lucide-react"
+import { Activity, ShieldCheck } from "lucide-react"
 
 const badges = [
   { icon: ShieldCheck, label: "Plataforma Clínica Acreditada" }

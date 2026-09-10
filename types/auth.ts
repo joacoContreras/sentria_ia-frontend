@@ -7,6 +7,7 @@ export interface PatientRegistrationInput {
   phone: string
   email: string
   password: string
+  confirmPassword?: string
   coverageProvider: string
   memberId: string
   acceptTerms: boolean
@@ -15,6 +16,12 @@ export interface PatientRegistrationInput {
 export interface PatientLoginInput {
   email: string
   password: string
+}
+
+export interface ApiError {
+  message: string
+  statusCode?: number
+  fieldErrors?: Record<string, string>
 }
 
 export interface AuthResponse {
@@ -27,4 +34,6 @@ export interface AuthResponse {
     docNumber: string
     coverageProvider?: string
   }
+  error?: string
 }
+
