@@ -189,7 +189,7 @@ export function RegisterForm({
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-lg">
       {/* Sección 1: Datos Personales */}
-      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+      <div className="flex flex-col gap-space-md">
         <h3 className="text-headline-sm text-on-surface">
           1. Datos personales
         </h3>
@@ -269,7 +269,7 @@ export function RegisterForm({
       </div>
 
       {/* Sección 2: Credenciales de Acceso */}
-      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+      <div className="flex flex-col gap-space-md">
         <h3 className="text-headline-sm text-on-surface">
           2. Credenciales de acceso
         </h3>
@@ -317,7 +317,7 @@ export function RegisterForm({
       </div>
 
       {/* Sección 3: Cobertura Sanitaria */}
-      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+      <div className="flex flex-col gap-space-md">
         <h3 className="text-headline-sm text-on-surface">
           3. Cobertura sanitaria
         </h3>

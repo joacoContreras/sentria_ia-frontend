@@ -33,13 +33,6 @@ export function ValuePanel() {
     <div className="lg:col-span-5 flex flex-col gap-space-lg">
       {/* Branding & headline */}
       <div className="flex flex-col gap-space-sm items-start">
-        <div className="inline-flex items-center gap-space-xs bg-surface-container px-space-sm py-space-2xs rounded-full">
-          <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-          <Brain className="h-4 w-4 text-primary" aria-hidden="true" />
-          <span className="text-label-sm text-primary">
-            Inteligencia Clínica &amp; Triage Asistido
-          </span>
-        </div>
         <h1 className="text-headline-lg text-on-surface">
           Gestione sus consultas de salud sin esperas ni fricción administrativa
         </h1>

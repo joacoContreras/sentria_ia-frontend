@@ -20,9 +20,6 @@ export function TelemetryChart() {
             Telemetría de Triage Sentria
           </span>
         </div>
-        <span className="text-label-sm bg-surface-container-highest text-primary px-space-xs py-space-2xs rounded-full">
-          Sincronizado ESI v4
-        </span>
       </div>
 
       <div className="relative flex h-24 w-full items-center justify-center rounded-lg bg-surface-container-lowest/80 p-space-xs shadow-sm">
