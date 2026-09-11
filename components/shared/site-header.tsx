@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Activity, ShieldCheck, User } from "lucide-react"
+import { Activity, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const badges = [
@@ -64,9 +64,6 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs">
-              <User className="h-4 w-4" aria-hidden="true" />
-            </div>
           </div>
         </div>
       </div>
