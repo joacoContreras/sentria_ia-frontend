@@ -1,0 +1,178 @@
+import { Sparkles, ShieldCheck, Lock, Handshake, Clock, Smile, Layers, Activity } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+
+export function AboutHero() {
+  return (
+    <div className="relative w-full overflow-hidden">
+      {/* Top Decorative Ambient Glow */}
+      <div 
+        className="pointer-events-none absolute -top-40 right-1/4 -z-10 h-[600px] w-[600px] rounded-full bg-primary-fixed/30 blur-3xl" 
+        aria-hidden="true" 
+      />
+      <div 
+        className="pointer-events-none absolute top-20 left-10 -z-10 h-[450px] w-[450px] rounded-full bg-tertiary-fixed/25 blur-3xl" 
+        aria-hidden="true" 
+      />
+
+      <section className="relative mx-auto max-w-container-max px-gutter-mobile lg:px-gutter-desktop pt-space-2xl lg:pt-space-3xl pb-space-2xl lg:pb-space-3xl">
+        <div className="grid grid-cols-1 gap-space-xl lg:grid-cols-12 lg:items-center">
+          
+          {/* Text Column */}
+          <div className="flex flex-col items-start lg:col-span-7">
+            {/* Category Tag */}
+            <div className="mb-space-lg inline-flex items-center gap-space-xs rounded-full bg-surface-container-high px-space-md py-space-xs text-primary shadow-xs">
+              <Sparkles className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <span className="text-label-md uppercase tracking-wider font-semibold">
+                Innovación en Triage & Eficiencia Hospitalaria
+              </span>
+            </div>
+
+            {/* Brand Header */}
+            <div className="mb-space-md flex items-center gap-space-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary shadow-sm">
+                <Activity className="h-7 w-7" aria-hidden="true" />
+              </div>
+              <div>
+                <span className="block text-label-sm text-secondary uppercase tracking-widest">
+                  Manifiesto & Misión Institucional
+                </span>
+                <span className="text-headline-sm text-on-surface font-semibold">
+                  Sentria Health Systems
+                </span>
+              </div>
+            </div>
+
+            {/* Main Title */}
+            <h1 className="mb-space-lg max-w-2xl text-headline-lg lg:text-display-hero text-on-surface font-bold tracking-tight">
+              Transformamos el acceso a la salud con{" "}
+              <span className="text-primary underline decoration-primary-fixed decoration-wavy decoration-2">
+                inteligencia clínica asistida
+              </span>
+            </h1>
+
+            {/* Subheading / Description */}
+            <p className="mb-space-xl max-w-xl text-body-lg lg:text-body-xl text-on-surface-variant leading-relaxed">
+              Sentria AI nace para resolver la ineficiencia estructural, las demoras críticas en salas de espera y el ausentismo no planificado en centros hospitalarios. Optimizamos el flujo asistencial inicial mediante la automatización empática, precisa y validada del agendamiento y la clasificación previa.
+            </p>
+
+            {/* Quick Trust Tokens */}
+            <div className="flex flex-wrap items-center gap-space-sm sm:gap-space-md pt-space-xs">
+              <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
+                <ShieldCheck className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
+                <span>Validación Médica Continua</span>
+              </div>
+              <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
+                <Lock className="h-5 w-5 text-tertiary shrink-0" aria-hidden="true" />
+                <span>Arquitectura Cero-Confianza</span>
+              </div>
+              <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
+                <Handshake className="h-5 w-5 text-primary-container shrink-0" aria-hidden="true" />
+                <span>Diseño Centrado en el Paciente</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Metric & Visual Hero Mosaic */}
+          <div className="flex flex-col gap-space-md lg:col-span-5">
+            {/* Main Metric Card */}
+            <div className="relative overflow-hidden rounded-2xl bg-surface-container-lowest p-space-xl shadow-md">
+              <div 
+                className="pointer-events-none absolute -right-8 -bottom-8 h-40 w-40 rounded-full bg-primary-container/10" 
+                aria-hidden="true" 
+              />
+              <div className="mb-space-md flex items-center justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Clock className="h-7 w-7" aria-hidden="true" />
+                </div>
+                <Badge variant="primary" size="sm" className="font-bold">
+                  Telemetría Q3
+                </Badge>
+              </div>
+
+              <p className="mb-space-2xs text-display-hero text-primary font-extrabold tracking-tight">
+                -75%
+              </p>
+              <p className="mb-space-xs text-headline-sm text-on-surface font-semibold">
+                Reducción de demoras en mostrador
+              </p>
+              <p className="text-body-md text-secondary leading-relaxed">
+                Agilización comprobada en áreas de admisión de urgencias y turnos ambulatorios mediante pre-triage autónomo.
+              </p>
+
+              {/* Inline Mini Sparkline Chart */}
+              <div className="mt-space-md flex items-center justify-between rounded-xl bg-surface-container-low p-space-sm">
+                <div className="flex flex-col">
+                  <span className="text-label-sm text-secondary">
+                    Tiempo medio en recepción
+                  </span>
+                  <span className="text-headline-sm text-on-surface font-semibold">
+                    3.8 min{" "}
+                    <span className="text-label-md text-primary font-medium">
+                      (antes 22 min)
+                    </span>
+                  </span>
+                </div>
+                <svg
+                  className="h-10 w-24 text-primary"
+                  fill="none"
+                  viewBox="0 0 100 30"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 26 C 20 24, 30 18, 50 14 C 70 10, 80 4, 100 2"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeWidth="2.5"
+                  />
+                  <path
+                    d="M0 26 C 20 24, 30 18, 50 14 C 70 10, 80 4, 100 2 L 100 30 L 0 30 Z"
+                    fill="currentColor"
+                    fillOpacity="0.12"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Secondary Metric Split */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+              <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-space-lg shadow-xs">
+                <div className="mb-space-sm flex h-10 w-10 items-center justify-center rounded-lg bg-tertiary/10 text-tertiary">
+                  <Smile className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-vital-metric text-on-surface font-bold">
+                    98.4%
+                  </p>
+                  <p className="text-body-md-medium text-on-surface font-medium">
+                    Satisfacción de pacientes
+                  </p>
+                  <p className="mt-space-2xs text-label-sm text-secondary">
+                    Evaluación CSAT post-atención
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-space-lg shadow-xs">
+                <div className="mb-space-sm flex h-10 w-10 items-center justify-center rounded-lg bg-primary-container/10 text-primary">
+                  <Layers className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-vital-metric text-on-surface font-bold">
+                    +120k
+                  </p>
+                  <p className="text-body-md-medium text-on-surface font-medium">
+                    Turnos gestionados
+                  </p>
+                  <p className="mt-space-2xs text-label-sm text-secondary">
+                    Sin congestión ni fricción física
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  )
+}
