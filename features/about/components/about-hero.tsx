@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Handshake, Clock, Smile, Layers, Activity } from "lucide-react"
+import { ShieldCheck, Lock, Handshake, Activity } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export function AboutHero() {
@@ -64,32 +64,34 @@ export function AboutHero() {
           {/* Metric & Visual Hero Mosaic */}
           <div className="flex flex-col gap-space-md lg:col-span-5">
             {/* Main Metric Card */}
-            <div className="relative overflow-hidden rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl shadow-md">
+            <div className="relative overflow-hidden rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl shadow-md flex flex-col justify-between">
               <div 
                 className="pointer-events-none absolute -right-8 -bottom-8 h-40 w-40 rounded-full bg-primary-container/10" 
                 aria-hidden="true" 
               />
-              <div className="mb-space-md flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Clock className="h-7 w-7" aria-hidden="true" />
+              <div>
+                <div className="mb-space-md flex items-center justify-between">
+                  <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary">
+                    Eficiencia Operativa
+                  </span>
+                  <Badge variant="primary" size="sm" className="font-bold">
+                    Telemetría Q3
+                  </Badge>
                 </div>
-                <Badge variant="primary" size="sm" className="font-bold">
-                  Telemetría Q3
-                </Badge>
+
+                <p className="mb-space-2xs text-display-hero text-primary font-extrabold tracking-tight">
+                  -75%
+                </p>
+                <p className="mb-space-xs text-headline-sm text-on-surface font-semibold">
+                  Reducción de demoras en mostrador
+                </p>
+                <p className="text-body-md text-secondary leading-relaxed">
+                  Agilización comprobada en áreas de admisión de urgencias y turnos ambulatorios mediante pre-triage autónomo.
+                </p>
               </div>
 
-              <p className="mb-space-2xs text-display-hero text-primary font-extrabold tracking-tight">
-                -75%
-              </p>
-              <p className="mb-space-xs text-headline-sm text-on-surface font-semibold">
-                Reducción de demoras en mostrador
-              </p>
-              <p className="text-body-md text-secondary leading-relaxed">
-                Agilización comprobada en áreas de admisión de urgencias y turnos ambulatorios mediante pre-triage autónomo.
-              </p>
-
               {/* Inline Mini Sparkline Chart */}
-              <div className="mt-space-md flex items-center justify-between rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-sm">
+              <div className="mt-space-lg flex items-center justify-between rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
                 <div className="flex flex-col">
                   <span className="text-label-sm text-secondary">
                     Tiempo medio en recepción
@@ -102,7 +104,7 @@ export function AboutHero() {
                   </span>
                 </div>
                 <svg
-                  className="h-10 w-24 text-primary"
+                  className="h-10 w-24 text-primary shrink-0"
                   fill="none"
                   viewBox="0 0 100 30"
                   aria-hidden="true"
@@ -125,11 +127,11 @@ export function AboutHero() {
             {/* Secondary Metric Split */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
-                <div className="mb-space-sm flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Smile className="h-6 w-6" aria-hidden="true" />
-                </div>
+                <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-2xs">
+                  Calidad
+                </span>
                 <div>
-                  <p className="text-vital-metric text-on-surface font-bold">
+                  <p className="text-display-hero sm:text-vital-metric text-primary font-bold tracking-tight">
                     98.4%
                   </p>
                   <p className="text-body-md-medium text-on-surface font-semibold">
@@ -142,11 +144,11 @@ export function AboutHero() {
               </div>
 
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
-                <div className="mb-space-sm flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Layers className="h-6 w-6" aria-hidden="true" />
-                </div>
+                <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-2xs">
+                  Escala
+                </span>
                 <div>
-                  <p className="text-vital-metric text-on-surface font-bold">
+                  <p className="text-display-hero sm:text-vital-metric text-primary font-bold tracking-tight">
                     +120k
                   </p>
                   <p className="text-body-md-medium text-on-surface font-semibold">

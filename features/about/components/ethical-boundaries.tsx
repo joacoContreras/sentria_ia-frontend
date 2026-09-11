@@ -1,4 +1,4 @@
-import { ShieldAlert, Ban, Pill, FileText, ShieldCheck, Headphones } from "lucide-react"
+import { Ban, Pill, FileText } from "lucide-react"
 
 const boundaries = [
   {
@@ -17,9 +17,6 @@ const boundaries = [
         ni pretende reemplazar el ojo clínico y la anamnesis directa.
       </>
     ),
-    footerIcon: ShieldCheck,
-    footerColor: "text-error",
-    footerText: "Clasificación de prioridad orientativa",
   },
   {
     icon: Pill,
@@ -37,9 +34,6 @@ const boundaries = [
         . La prescripción farmacológica es potestad exclusiva e intransferible de médicos matriculados y habilitados por los entes reguladores.
       </>
     ),
-    footerIcon: Ban,
-    footerColor: "text-error",
-    footerText: "Sin módulos de dispensación activa",
   },
   {
     icon: FileText,
@@ -55,9 +49,6 @@ const boundaries = [
         para organizar la información subjetiva del paciente, facilitando una consulta presencial o telemática mucho más ágil y enriquecida con el profesional facultativo.
       </>
     ),
-    footerIcon: Headphones,
-    footerColor: "text-primary",
-    footerText: "Facilitador del acto médico real",
   },
 ]
 
@@ -68,10 +59,9 @@ export function EthicalBoundaries() {
         
         {/* Header */}
         <div className="max-w-3xl mb-space-2xl">
-          <div className="inline-flex items-center gap-space-2xs px-space-sm py-space-2xs rounded-full bg-error-container text-on-error-container font-semibold text-label-sm mb-space-sm">
-            <ShieldAlert className="h-4 w-4 shrink-0 text-error" aria-hidden="true" />
-            <span>Aviso Legal y Bioético Obligatorio</span>
-          </div>
+          <span className="mb-space-xs block text-label-sm font-semibold uppercase tracking-widest text-error">
+            Aviso Legal y Bioético
+          </span>
           <h2 className="text-headline-lg text-on-surface font-bold mb-space-xs tracking-tight">
             Fronteras Operativas y Marco Ético Asistencial
           </h2>
@@ -84,31 +74,23 @@ export function EthicalBoundaries() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
           {boundaries.map((item, index) => {
             const Icon = item.icon
-            const FooterIcon = item.footerIcon
             return (
               <div
                 key={index}
-                className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl shadow-md transition-all duration-200 hover:-translate-y-1"
+                className="flex flex-col rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl shadow-md transition-all duration-200 hover:-translate-y-1"
               >
-                <div>
-                  <div className={`mb-space-lg flex h-14 w-14 items-center justify-center rounded-2xl ${item.iconBg} ${item.iconColor}`}>
-                    <Icon className="h-8 w-8" aria-hidden="true" />
-                  </div>
-                  <div className={`mb-space-sm inline-block rounded px-space-xs py-space-2xs text-label-sm font-semibold uppercase tracking-wider ${item.badgeClass}`}>
-                    {item.badgeLabel}
-                  </div>
-                  <h3 className="mb-space-sm text-headline-sm text-on-surface font-bold">
-                    {item.title}
-                  </h3>
-                  <p className="text-body-md text-secondary leading-relaxed">
-                    {item.description}
-                  </p>
+                <div className={`mb-space-lg flex h-14 w-14 items-center justify-center rounded-2xl ${item.iconBg} ${item.iconColor}`}>
+                  <Icon className="h-8 w-8" aria-hidden="true" />
                 </div>
-
-                <div className="mt-space-lg pt-space-md bg-surface-container-low border border-outline-variant/15 rounded-xl p-space-sm flex items-center gap-space-xs text-secondary text-label-sm">
-                  <FooterIcon className={`h-[18px] w-[18px] shrink-0 ${item.footerColor}`} aria-hidden="true" />
-                  <span>{item.footerText}</span>
+                <div className={`mb-space-sm inline-block self-start rounded px-space-xs py-space-2xs text-label-sm font-semibold uppercase tracking-wider ${item.badgeClass}`}>
+                  {item.badgeLabel}
                 </div>
+                <h3 className="mb-space-sm text-headline-sm text-on-surface font-bold">
+                  {item.title}
+                </h3>
+                <p className="text-body-md text-secondary leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             )
           })}
