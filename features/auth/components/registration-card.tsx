@@ -153,17 +153,17 @@ export function RegistrationCard() {
             <div className="flex flex-col gap-space-2xs">
               <span className="text-label-sm uppercase text-primary">
                 {tab === "register"
-                  ? "Registro de Paciente"
-                  : "Portal Pacientes"}
+                  ? "Registro de paciente"
+                  : "Portal"}
               </span>
               <h2 className="text-headline-md text-on-surface">
                 {tab === "register"
-                  ? "Crear Ficha de Paciente"
-                  : "Acceso Seguro"}
+                  ? "Crear ficha de paciente"
+                  : "Acceso seguro"}
               </h2>
               <p className="text-body-md text-secondary">
                 {tab === "register"
-                  ? "Complete sus datos para vincular su historia clínica y validar su cobertura médica institucional."
+                  ? "Complete sus datos para crear un nuevo usuario y vincular su historia clínica, validando su cobertura médica institucional."
                   : "Ingrese sus credenciales de acceso para ver sus turnos y resultados médicos."}
               </p>
             </div>

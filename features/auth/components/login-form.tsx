@@ -74,7 +74,7 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
     <>
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-md">
         <Input
-          label="Correo Electrónico"
+          label="Correo electrónico"
           id="login-email"
           name="email"
           type="email"
