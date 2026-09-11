@@ -1,5 +1,4 @@
 import { ShieldCheck, Lock, Handshake, Activity } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 
 export function AboutHero() {
   return (
@@ -70,19 +69,14 @@ export function AboutHero() {
                 aria-hidden="true" 
               />
               <div>
-                <div className="mb-space-md flex items-center justify-between">
-                  <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary">
-                    Eficiencia Operativa
-                  </span>
-                  <Badge variant="primary" size="sm" className="font-bold">
-                    Telemetría Q3
-                  </Badge>
-                </div>
+                <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
+                  Eficiencia Operativa
+                </span>
 
-                <p className="mb-space-2xs text-display-hero text-primary font-extrabold tracking-tight">
+                <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
                   -75%
                 </p>
-                <p className="mb-space-xs text-headline-sm text-on-surface font-semibold">
+                <p className="mb-space-xs text-headline-sm text-on-surface font-semibold mt-space-xs">
                   Reducción de demoras en mostrador
                 </p>
                 <p className="text-body-md text-secondary leading-relaxed">
@@ -127,34 +121,34 @@ export function AboutHero() {
             {/* Secondary Metric Split */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
-                <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-2xs">
-                  Calidad
-                </span>
                 <div>
-                  <p className="text-display-hero sm:text-vital-metric text-primary font-bold tracking-tight">
+                  <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
+                    Calidad Asistencial
+                  </span>
+                  <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
                     98.4%
                   </p>
-                  <p className="text-body-md-medium text-on-surface font-semibold">
+                  <p className="text-body-md-medium text-on-surface font-semibold mt-space-xs mb-space-2xs">
                     Satisfacción de pacientes
                   </p>
-                  <p className="mt-space-2xs text-label-sm text-secondary">
+                  <p className="text-label-sm text-secondary">
                     Evaluación CSAT post-atención
                   </p>
                 </div>
               </div>
 
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
-                <span className="text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-2xs">
-                  Escala
-                </span>
                 <div>
-                  <p className="text-display-hero sm:text-vital-metric text-primary font-bold tracking-tight">
+                  <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
+                    Escala de Impacto
+                  </span>
+                  <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
                     +120k
                   </p>
-                  <p className="text-body-md-medium text-on-surface font-semibold">
+                  <p className="text-body-md-medium text-on-surface font-semibold mt-space-xs mb-space-2xs">
                     Turnos gestionados
                   </p>
-                  <p className="mt-space-2xs text-label-sm text-secondary">
+                  <p className="text-label-sm text-secondary">
                     Sin congestión ni fricción física
                   </p>
                 </div>
