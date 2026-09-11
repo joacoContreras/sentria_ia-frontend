@@ -15,7 +15,7 @@ export function SiteHeader() {
   const navLinks = [
     { href: "/", label: "Acceso", isActive: pathname === "/" },
     { href: "/sobre-nosotros", label: "Sobre Nosotros", isActive: pathname === "/sobre-nosotros" },
-    { href: "#ayuda", label: "Ayuda", isActive: false },
+    { href: "/ayuda", label: "Ayuda", isActive: pathname === "/ayuda" },
   ]
 
   return (
