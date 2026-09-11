@@ -5,7 +5,7 @@ const boundaries = [
     icon: Ban,
     iconColor: "text-error",
     iconBg: "bg-error-container/60",
-    badgeLabel: "Límite Diagnóstico",
+    badgeLabel: "Límite diagnóstico",
     badgeClass: "bg-error-container text-on-error-container",
     title: "NO realiza diagnósticos clínicos",
     description: (
@@ -22,7 +22,7 @@ const boundaries = [
     icon: Pill,
     iconColor: "text-error",
     iconBg: "bg-error-container/60",
-    badgeLabel: "Límite Farmacológico",
+    badgeLabel: "Límite farmacológico",
     badgeClass: "bg-error-container text-on-error-container",
     title: "NO prescribe medicamentos ni recetas",
     description: (
@@ -39,7 +39,7 @@ const boundaries = [
     icon: FileText,
     iconColor: "text-primary",
     iconBg: "bg-primary-fixed",
-    badgeLabel: "Puente de Consulta",
+    badgeLabel: "Puente de consulta",
     badgeClass: "bg-primary-fixed text-on-primary-fixed-variant",
     title: "NO reemplaza la consulta profesional",
     description: (
@@ -60,10 +60,10 @@ export function EthicalBoundaries() {
         {/* Header */}
         <div className="max-w-3xl mb-space-2xl">
           <span className="mb-space-xs block text-label-sm font-semibold uppercase tracking-widest text-error">
-            Aviso Legal y Bioético
+            Aviso legal y bioético
           </span>
           <h2 className="text-headline-lg text-on-surface font-bold mb-space-xs tracking-tight">
-            Fronteras Operativas y Marco Ético Asistencial
+            Fronteras operativas y marco ético asistencial
           </h2>
           <p className="text-body-lg text-secondary leading-relaxed">
             Sentria AI es una herramienta de soporte administrativo y orientación clasificatoria previa, diseñada bajo estrictos límites normativos y bioéticos. Garantizamos una demarcación nítida entre la asistencia algorítmica y la potestad clínica indelegable.

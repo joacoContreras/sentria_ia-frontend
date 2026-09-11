@@ -25,7 +25,7 @@ export function AboutHero() {
               </div>
               <div>
                 <span className="block text-label-sm font-semibold text-secondary uppercase tracking-widest">
-                  Manifiesto & Misión Institucional
+                  Manifiesto y misión institucional
                 </span>
                 <span className="text-headline-sm text-on-surface font-semibold">
                   Sentria Health Systems
@@ -47,15 +47,15 @@ export function AboutHero() {
             <div className="flex flex-wrap items-center gap-space-sm sm:gap-space-md pt-space-xs">
               <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest border border-outline-variant/30 px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
                 <ShieldCheck className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
-                <span>Validación Médica Continua</span>
+                <span>Validación médica continua</span>
               </div>
               <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest border border-outline-variant/30 px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
                 <Lock className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
-                <span>Arquitectura Cero-Confianza</span>
+                <span>Arquitectura cero-confianza</span>
               </div>
               <div className="flex items-center gap-space-xs rounded-full bg-surface-container-lowest border border-outline-variant/30 px-space-md py-space-xs text-on-surface shadow-xs text-label-md">
                 <Handshake className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
-                <span>Diseño Centrado en el Paciente</span>
+                <span>Diseño centrado en el paciente</span>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ export function AboutHero() {
               />
               <div>
                 <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
-                  Eficiencia Operativa
+                  Eficiencia operativa
                 </span>
 
                 <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
@@ -123,7 +123,7 @@ export function AboutHero() {
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
                 <div>
                   <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
-                    Calidad Asistencial
+                    Calidad asistencial
                   </span>
                   <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
                     98.4%
@@ -140,7 +140,7 @@ export function AboutHero() {
               <div className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-lg shadow-xs">
                 <div>
                   <span className="block text-label-sm font-semibold uppercase tracking-wider text-secondary mb-space-xs">
-                    Escala de Impacto
+                    Escala de impacto
                   </span>
                   <p className="mb-space-2xs text-display-hero text-primary font-bold tracking-tight leading-none">
                     +120k

@@ -14,7 +14,7 @@ export function ClinicalShowcase() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-on-background/95 via-on-background/50 to-transparent flex flex-col justify-end p-space-lg sm:p-space-xl text-surface-container-lowest">
             <span className="mb-space-2xs text-label-sm font-semibold uppercase tracking-wider text-primary-fixed">
-              Infraestructura Asistencial Moderna
+              Infraestructura asistencial moderna
             </span>
             <h3 className="text-headline-sm sm:text-headline-md font-semibold text-surface-container-lowest leading-tight max-w-xl">
               Integración fluida en sistemas de admisión hospitalaria
@@ -34,7 +34,7 @@ export function ClinicalShowcase() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-on-background/95 via-on-background/50 to-transparent flex flex-col justify-end p-space-lg sm:p-space-xl text-surface-container-lowest">
             <span className="mb-space-2xs text-label-sm font-semibold uppercase tracking-wider text-primary-fixed">
-              Tecnología de Borde
+              Tecnología de borde
             </span>
             <h3 className="text-headline-sm sm:text-headline-md font-semibold text-surface-container-lowest leading-tight">
               Telemetría de sala de espera en tiempo real

@@ -17,10 +17,10 @@ export function TechnologyPrivacy() {
       {/* Header */}
       <div className="mx-auto max-w-2xl text-center mb-space-3xl">
         <span className="mb-space-xs block text-label-sm font-semibold uppercase tracking-widest text-primary">
-          Arquitectura de Alta Confianza
+          Arquitectura de alta confianza
         </span>
         <h2 className="text-headline-lg font-bold text-on-surface tracking-tight">
-          Tecnología de Triage Responsable & Privacidad Integral
+          Tecnología de triage responsable y privacidad integral
         </h2>
         <p className="mt-space-2xs text-body-lg text-secondary">
           Combinación sinérgica de modelos adaptativos clínicos con los estándares más restrictivos de ciberseguridad sanitaria.
@@ -43,10 +43,10 @@ export function TechnologyPrivacy() {
               </div>
               <div>
                 <span className="text-label-sm font-bold uppercase tracking-wider text-primary">
-                  Algoritmia Clínica
+                  Algoritmia clínica
                 </span>
                 <h3 className="text-headline-md font-semibold text-on-surface">
-                  Triage Orientativo Asistido con IA
+                  Triage orientativo asistido con IA
                 </h3>
               </div>
             </div>
@@ -66,7 +66,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Detección de Señales de Alarma Críticas
+                    Detección de señales de alarma críticas
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Identificación prioritaria de síntomas cardinales de riesgo cardiovascular, neurológico y respiratorio para derivación física inmediata.
@@ -80,7 +80,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Procesamiento Conversacional Empático
+                    Procesamiento conversacional empático
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Interacción accesible para adultos mayores o pacientes con dolor agudo, adaptando el tono de manera serena y asertiva.
@@ -94,7 +94,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Enrutamiento Clínico Inteligente
+                    Enrutamiento clínico inteligente
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Derivación automática hacia la subespecialidad pertinente, mitigando reasignaciones de turnos erróneas.
@@ -106,10 +106,10 @@ export function TechnologyPrivacy() {
 
           <div className="flex items-center justify-between rounded-xl bg-surface-container border border-outline-variant/20 px-space-lg py-space-md">
             <span className="text-label-md font-medium text-secondary">
-              Protocolo de Referencia
+              Protocolo de referencia
             </span>
             <span className="rounded-full bg-surface-container-lowest border border-outline-variant/20 px-space-md py-space-2xs text-label-md font-bold text-primary shadow-xs">
-              ESI Nivel 1 a 5 Certificado
+              ESI nivel 1 a 5 certificado
             </span>
           </div>
         </div>
@@ -127,10 +127,10 @@ export function TechnologyPrivacy() {
               </div>
               <div>
                 <span className="text-label-sm font-bold uppercase tracking-wider text-primary">
-                  Blindaje Institucional
+                  Blindaje institucional
                 </span>
                 <h3 className="text-headline-md font-semibold text-on-surface">
-                  Privacidad y Ciberseguridad Médica
+                  Privacidad y ciberseguridad médica
                 </h3>
               </div>
             </div>
@@ -146,7 +146,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Cifrado Criptográfico E2E (AES-256)
+                    Cifrado criptográfico E2E (AES-256)
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Tanto en tránsito como en reposo, toda la información de salud protegida (PHI) permanece inaccesible para terceros y operadores.
@@ -160,7 +160,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Anonimización y Disociación Estricta
+                    Anonimización y disociación estricta
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Desacople criptográfico inmediato entre los datos demográficos personales y las respuestas clínicas del triaje orientativo.
@@ -174,7 +174,7 @@ export function TechnologyPrivacy() {
                 </div>
                 <div>
                   <h4 className="text-body-lg-medium font-semibold text-on-surface">
-                    Soberanía de Datos & Habeas Data
+                    Soberanía de datos y habeas data
                   </h4>
                   <p className="text-body-md text-secondary mt-0.5">
                     Alineación absoluta con leyes locales de protección de datos de salud y derecho irrestricto de rectificación y supresión.
@@ -186,7 +186,7 @@ export function TechnologyPrivacy() {
 
           <div className="flex items-center justify-between rounded-xl bg-surface-container border border-outline-variant/20 px-space-lg py-space-md">
             <span className="text-label-md font-medium text-secondary">
-              Estándar de Cumplimiento
+              Estándar de cumplimiento
             </span>
             <span className="rounded-full bg-surface-container-lowest border border-outline-variant/20 px-space-md py-space-2xs text-label-md font-bold text-primary shadow-xs">
               HIPAA & HITECH Compliant
@@ -201,10 +201,10 @@ export function TechnologyPrivacy() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-space-lg">
           <div>
             <span className="block text-label-sm font-semibold uppercase tracking-widest text-secondary">
-              Marcos de Auditoría y Certificación Activa
+              Marcos de auditoría y certificación activa
             </span>
             <h4 className="text-headline-sm font-semibold text-on-surface">
-              Sellos de Calidad y Cumplimiento Hospitalario
+              Sellos de calidad y cumplimiento hospitalario
             </h4>
           </div>
           <div className="flex flex-wrap items-center gap-space-md">
