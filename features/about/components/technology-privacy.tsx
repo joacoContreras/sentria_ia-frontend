@@ -16,7 +16,7 @@ export function TechnologyPrivacy() {
     <section className="mx-auto max-w-container-max px-gutter-mobile lg:px-gutter-desktop py-space-3xl lg:py-space-4xl w-full">
       {/* Header */}
       <div className="mx-auto max-w-2xl text-center mb-space-3xl">
-        <span className="mb-space-xs block text-label-md font-semibold uppercase tracking-widest text-primary">
+        <span className="mb-space-xs block text-label-sm font-semibold uppercase tracking-widest text-primary">
           Arquitectura de Alta Confianza
         </span>
         <h2 className="text-headline-lg font-bold text-on-surface tracking-tight">
@@ -31,7 +31,7 @@ export function TechnologyPrivacy() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-space-2xl items-stretch">
         
         {/* Columna A: Triage Orientativo Asistido con IA */}
-        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-container-lowest p-space-xl sm:p-space-2xl shadow-md">
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl sm:p-space-2xl shadow-md">
           <div 
             className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-bl-full bg-primary/5" 
             aria-hidden="true" 
@@ -51,7 +51,7 @@ export function TechnologyPrivacy() {
               </div>
             </div>
 
-            <p className="mb-space-xl text-body-lg leading-relaxed text-on-surface-variant">
+            <p className="mb-space-xl text-body-lg leading-relaxed text-secondary">
               Nuestros modelos están rigurosamente fundamentados en los árboles de decisión y guías del{" "}
               <strong className="text-on-surface font-semibold">
                 Emergency Severity Index (ESI v4)
@@ -60,7 +60,7 @@ export function TechnologyPrivacy() {
             </p>
 
             <div className="space-y-space-md mb-space-xl">
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <Activity className="h-5 w-5" aria-hidden="true" />
                 </div>
@@ -74,7 +74,7 @@ export function TechnologyPrivacy() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <MessageSquare className="h-5 w-5" aria-hidden="true" />
                 </div>
@@ -88,7 +88,7 @@ export function TechnologyPrivacy() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <GitFork className="h-5 w-5" aria-hidden="true" />
                 </div>
@@ -104,29 +104,29 @@ export function TechnologyPrivacy() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl bg-surface-container px-space-lg py-space-md">
-            <span className="text-label-md font-medium text-on-surface-variant">
+          <div className="flex items-center justify-between rounded-xl bg-surface-container border border-outline-variant/20 px-space-lg py-space-md">
+            <span className="text-label-md font-medium text-secondary">
               Protocolo de Referencia
             </span>
-            <span className="rounded-full bg-surface-container-lowest px-space-md py-space-2xs text-label-md font-bold text-primary shadow-xs">
+            <span className="rounded-full bg-surface-container-lowest border border-outline-variant/20 px-space-md py-space-2xs text-label-md font-bold text-primary shadow-xs">
               ESI Nivel 1 a 5 Certificado
             </span>
           </div>
         </div>
 
         {/* Columna B: Privacidad y Ciberseguridad Médica */}
-        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-container-lowest p-space-xl sm:p-space-2xl shadow-md">
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl sm:p-space-2xl shadow-md">
           <div 
-            className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-bl-full bg-tertiary/5" 
+            className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-bl-full bg-primary/5" 
             aria-hidden="true" 
           />
           <div>
             <div className="mb-space-lg flex items-center gap-space-md">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-tertiary-container text-on-tertiary-container shadow-xs">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container shadow-xs">
                 <ShieldCheck className="h-8 w-8" aria-hidden="true" />
               </div>
               <div>
-                <span className="text-label-sm font-bold uppercase tracking-wider text-tertiary">
+                <span className="text-label-sm font-bold uppercase tracking-wider text-primary">
                   Blindaje Institucional
                 </span>
                 <h3 className="text-headline-md font-semibold text-on-surface">
@@ -135,13 +135,13 @@ export function TechnologyPrivacy() {
               </div>
             </div>
 
-            <p className="mb-space-xl text-body-lg leading-relaxed text-on-surface-variant">
+            <p className="mb-space-xl text-body-lg leading-relaxed text-secondary">
               Los datos de salud demandan el nivel máximo de resguardo existente. Implementamos infraestructura soberana diseñada para blindar el secreto médico y la trazabilidad auditada de cada interacción.
             </p>
 
             <div className="space-y-space-md mb-space-xl">
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-tertiary">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <KeyRound className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <div>
@@ -154,8 +154,8 @@ export function TechnologyPrivacy() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-tertiary">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <Fingerprint className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <div>
@@ -168,8 +168,8 @@ export function TechnologyPrivacy() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low p-space-md">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-tertiary">
+              <div className="flex items-start gap-space-md rounded-xl bg-surface-container-low border border-outline-variant/15 p-space-md">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-container-highest text-primary">
                   <Scale className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <div>
@@ -184,11 +184,11 @@ export function TechnologyPrivacy() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl bg-surface-container px-space-lg py-space-md">
-            <span className="text-label-md font-medium text-on-surface-variant">
+          <div className="flex items-center justify-between rounded-xl bg-surface-container border border-outline-variant/20 px-space-lg py-space-md">
+            <span className="text-label-md font-medium text-secondary">
               Estándar de Cumplimiento
             </span>
-            <span className="rounded-full bg-surface-container-lowest px-space-md py-space-2xs text-label-md font-bold text-tertiary shadow-xs">
+            <span className="rounded-full bg-surface-container-lowest border border-outline-variant/20 px-space-md py-space-2xs text-label-md font-bold text-primary shadow-xs">
               HIPAA & HITECH Compliant
             </span>
           </div>
@@ -197,10 +197,10 @@ export function TechnologyPrivacy() {
       </div>
 
       {/* Certificaciones y Sellos Visuales Institucionales */}
-      <div className="mt-space-3xl rounded-2xl bg-surface-container-low p-space-xl">
+      <div className="mt-space-3xl rounded-2xl bg-surface-container-low border border-outline-variant/20 p-space-xl">
         <div className="flex flex-col md:flex-row items-center justify-between gap-space-lg">
           <div>
-            <span className="block text-label-sm uppercase tracking-widest text-secondary">
+            <span className="block text-label-sm font-semibold uppercase tracking-widest text-secondary">
               Marcos de Auditoría y Certificación Activa
             </span>
             <h4 className="text-headline-sm font-semibold text-on-surface">
@@ -209,7 +209,7 @@ export function TechnologyPrivacy() {
           </div>
           <div className="flex flex-wrap items-center gap-space-md">
             {/* Seal 1 */}
-            <div className="flex items-center gap-space-xs rounded-xl bg-surface-container-lowest px-space-lg py-space-sm shadow-xs">
+            <div className="flex items-center gap-space-sm rounded-xl bg-surface-container-lowest border border-outline-variant/20 px-space-lg py-space-sm shadow-xs">
               <ShieldCheck className="h-6 w-6 text-primary shrink-0" aria-hidden="true" />
               <div className="flex flex-col">
                 <span className="text-label-sm font-bold text-on-surface">
@@ -222,8 +222,8 @@ export function TechnologyPrivacy() {
             </div>
 
             {/* Seal 2 */}
-            <div className="flex items-center gap-space-xs rounded-xl bg-surface-container-lowest px-space-lg py-space-sm shadow-xs">
-              <HeartPulse className="h-6 w-6 text-tertiary shrink-0" aria-hidden="true" />
+            <div className="flex items-center gap-space-sm rounded-xl bg-surface-container-lowest border border-outline-variant/20 px-space-lg py-space-sm shadow-xs">
+              <HeartPulse className="h-6 w-6 text-primary shrink-0" aria-hidden="true" />
               <div className="flex flex-col">
                 <span className="text-label-sm font-bold text-on-surface">
                   Protocolo ESI v4
@@ -235,8 +235,8 @@ export function TechnologyPrivacy() {
             </div>
 
             {/* Seal 3 */}
-            <div className="flex items-center gap-space-xs rounded-xl bg-surface-container-lowest px-space-lg py-space-sm shadow-xs">
-              <Shield className="h-6 w-6 text-primary-container shrink-0" aria-hidden="true" />
+            <div className="flex items-center gap-space-sm rounded-xl bg-surface-container-lowest border border-outline-variant/20 px-space-lg py-space-sm shadow-xs">
+              <Shield className="h-6 w-6 text-primary shrink-0" aria-hidden="true" />
               <div className="flex flex-col">
                 <span className="text-label-sm font-bold text-on-surface">
                   ISO 27001 Ready

@@ -1,5 +1,4 @@
 import {
-  Brain,
   CalendarClock,
   Stethoscope,
   BadgeCheck,

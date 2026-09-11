@@ -18,6 +18,7 @@ const boundaries = [
       </>
     ),
     footerIcon: ShieldCheck,
+    footerColor: "text-error",
     footerText: "Clasificación de prioridad orientativa",
   },
   {
@@ -37,14 +38,15 @@ const boundaries = [
       </>
     ),
     footerIcon: Ban,
+    footerColor: "text-error",
     footerText: "Sin módulos de dispensación activa",
   },
   {
     icon: FileText,
     iconColor: "text-primary",
-    iconBg: "bg-surface-container-highest",
+    iconBg: "bg-primary-fixed",
     badgeLabel: "Puente de Consulta",
-    badgeClass: "bg-surface-container-highest text-primary",
+    badgeClass: "bg-primary-fixed text-on-primary-fixed-variant",
     title: "NO reemplaza la consulta profesional",
     description: (
       <>
@@ -54,6 +56,7 @@ const boundaries = [
       </>
     ),
     footerIcon: Headphones,
+    footerColor: "text-primary",
     footerText: "Facilitador del acto médico real",
   },
 ]
@@ -72,7 +75,7 @@ export function EthicalBoundaries() {
           <h2 className="text-headline-lg text-on-surface font-bold mb-space-xs tracking-tight">
             Fronteras Operativas y Marco Ético Asistencial
           </h2>
-          <p className="text-body-lg text-on-surface-variant leading-relaxed">
+          <p className="text-body-lg text-secondary leading-relaxed">
             Sentria AI es una herramienta de soporte administrativo y orientación clasificatoria previa, diseñada bajo estrictos límites normativos y bioéticos. Garantizamos una demarcación nítida entre la asistencia algorítmica y la potestad clínica indelegable.
           </p>
         </div>
@@ -85,25 +88,25 @@ export function EthicalBoundaries() {
             return (
               <div
                 key={index}
-                className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-space-xl shadow-md transition-all duration-200 hover:-translate-y-1"
+                className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest border border-outline-variant/20 p-space-xl shadow-md transition-all duration-200 hover:-translate-y-1"
               >
                 <div>
                   <div className={`mb-space-lg flex h-14 w-14 items-center justify-center rounded-2xl ${item.iconBg} ${item.iconColor}`}>
                     <Icon className="h-8 w-8" aria-hidden="true" />
                   </div>
-                  <div className={`mb-space-sm inline-block rounded px-space-xs py-space-2xs text-label-sm font-semibold uppercase ${item.badgeClass}`}>
+                  <div className={`mb-space-sm inline-block rounded px-space-xs py-space-2xs text-label-sm font-semibold uppercase tracking-wider ${item.badgeClass}`}>
                     {item.badgeLabel}
                   </div>
                   <h3 className="mb-space-sm text-headline-sm text-on-surface font-bold">
                     {item.title}
                   </h3>
-                  <p className="text-body-md text-on-surface-variant leading-relaxed">
+                  <p className="text-body-md text-secondary leading-relaxed">
                     {item.description}
                   </p>
                 </div>
 
-                <div className="mt-space-lg pt-space-md bg-surface-container-low/60 rounded-xl p-space-sm flex items-center gap-space-xs text-secondary text-label-sm">
-                  <FooterIcon className="h-[18px] w-[18px] text-tertiary shrink-0" aria-hidden="true" />
+                <div className="mt-space-lg pt-space-md bg-surface-container-low border border-outline-variant/15 rounded-xl p-space-sm flex items-center gap-space-xs text-secondary text-label-sm">
+                  <FooterIcon className={`h-[18px] w-[18px] shrink-0 ${item.footerColor}`} aria-hidden="true" />
                   <span>{item.footerText}</span>
                 </div>
               </div>

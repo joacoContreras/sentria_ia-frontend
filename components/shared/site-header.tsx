@@ -2,12 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Activity, ShieldCheck } from "lucide-react"
+import { Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const badges = [
-  { icon: ShieldCheck, label: "Plataforma clínica" }
-]
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -32,19 +28,7 @@ export function SiteHeader() {
               </span>
             </Link>
 
-            <ul className="hidden xl:flex items-center gap-space-sm">
-              {badges.map(({ icon: Icon, label }) => (
-                <li
-                  key={label}
-                  className="flex items-center gap-space-2xs rounded-full bg-surface-container-low px-space-sm py-space-2xs"
-                >
-                  <Icon className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
-                  <span className="text-label-sm text-on-surface-variant max-w-[9rem] leading-tight">
-                    {label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            
           </div>
 
           <div className="flex items-center gap-space-md">
