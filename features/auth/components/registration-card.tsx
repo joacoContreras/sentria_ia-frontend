@@ -113,7 +113,7 @@ export function RegistrationCard() {
             }`}
           >
             <LogIn className="h-[18px] w-[18px]" aria-hidden="true" />
-            Iniciar Sesión
+            Iniciar sesión
           </button>
         </div>
 

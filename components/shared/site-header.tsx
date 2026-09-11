@@ -6,7 +6,7 @@ import { Activity, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const badges = [
-  { icon: ShieldCheck, label: "Plataforma Clínica Acreditada" }
+  { icon: ShieldCheck, label: "Plataforma clínica" }
 ]
 
 export function SiteHeader() {

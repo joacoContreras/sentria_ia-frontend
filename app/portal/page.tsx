@@ -33,7 +33,7 @@ export default function PatientPortalPage() {
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-space-sm text-secondary">
           <Activity className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-body-md">Cargando portal del paciente...</p>
+          <p className="text-body-md">Cargando portal...</p>
         </div>
       </div>
     )
@@ -50,7 +50,7 @@ export default function PatientPortalPage() {
             Acceso no autenticado
           </h1>
           <p className="text-body-md text-secondary mb-space-lg">
-            Para acceder al Portal del Paciente debe iniciar sesión o registrar su
+            Para acceder al Portal debe iniciar sesión o registrar su
             ficha clínica.
           </p>
           <Button
@@ -58,7 +58,7 @@ export default function PatientPortalPage() {
             onClick={() => router.push("/")}
             className="w-full"
           >
-            Ir al Inicio de Sesión
+            Ir al inicio de sesión
           </Button>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function PatientPortalPage() {
             <span className="text-headline-sm text-on-surface leading-tight">
               Sentria <span className="text-primary">AI</span>
               <span className="ml-2 text-label-sm font-normal text-secondary hidden sm:inline">
-                | Portal Pacientes
+                | Portal
               </span>
             </span>
           </Link>
@@ -93,7 +93,7 @@ export default function PatientPortalPage() {
               onClick={handleLogout}
               leftIcon={<LogOut className="h-4 w-4" />}
             >
-              Cerrar Sesión
+              Cerrar sesión
             </Button>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function PatientPortalPage() {
             <div className="flex items-center gap-space-xs">
               <Badge variant="routine" className="bg-success-container/30 text-white border border-white/20">
                 <ShieldCheck className="h-3.5 w-3.5 mr-1" />
-                Cobertura Validada
+                Cobertura validada
               </Badge>
               <span className="text-label-sm opacity-80">
                 Ficha ID: {user.id.slice(0, 8)}

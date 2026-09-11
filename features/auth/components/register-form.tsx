@@ -2,13 +2,9 @@
 
 import * as React from "react"
 import {
-  IdCard,
-  Lock,
   Mail,
-  ShieldPlus,
   Info,
   CheckCircle2,
-  Shield,
   AlertCircle,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -193,21 +189,18 @@ export function RegisterForm({
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-lg">
       {/* Sección 1: Datos Personales */}
-      <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-        <legend className="mb-space-2xs flex items-center gap-space-xs">
-          <IdCard className="h-5 w-5 text-primary" aria-hidden="true" />
-          <span className="text-headline-sm text-on-surface">
-            1. Datos Personales
-          </span>
-        </legend>
+      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+        <h3 className="text-headline-sm text-on-surface">
+          1. Datos personales
+        </h3>
 
         <Input
-          label="Nombre y Apellido completo"
+          label="Nombre y apellido completo"
           id="full-name"
           name="fullName"
           type="text"
           required
-          placeholder="ej. María Florencia Gómez"
+          placeholder="Ej. María Florencia Gómez"
           value={formData.fullName}
           onChange={handleInputChange}
           onBlur={handleBlur}
@@ -220,7 +213,7 @@ export function RegisterForm({
               className="text-label-md text-on-surface"
               htmlFor="doc-number"
             >
-              Tipo y Nº de Documento <span className="text-error">*</span>
+              Tipo y Nº de documento <span className="text-error">*</span>
             </label>
             <div className="flex gap-space-xs">
               <Select
@@ -260,7 +253,7 @@ export function RegisterForm({
 
           <div className="sm:col-span-5">
             <Input
-              label="Teléfono Móvil"
+              label="Teléfono móvil"
               id="phone-mobile"
               name="phone"
               type="tel"
@@ -273,19 +266,16 @@ export function RegisterForm({
             />
           </div>
         </div>
-      </fieldset>
+      </div>
 
       {/* Sección 2: Credenciales de Acceso */}
-      <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-        <legend className="mb-space-2xs flex items-center gap-space-xs">
-          <Lock className="h-5 w-5 text-primary" aria-hidden="true" />
-          <span className="text-headline-sm text-on-surface">
-            2. Credenciales de Acceso
-          </span>
-        </legend>
+      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+        <h3 className="text-headline-sm text-on-surface">
+          2. Credenciales de acceso
+        </h3>
 
         <Input
-          label="Correo Electrónico"
+          label="Correo electrónico"
           id="register-email"
           name="email"
           type="email"
@@ -313,7 +303,7 @@ export function RegisterForm({
           />
 
           <PasswordInput
-            label="Confirmar Contraseña"
+            label="Confirmar contraseña"
             id="register-confirm-password"
             name="confirmPassword"
             required
@@ -324,21 +314,18 @@ export function RegisterForm({
             error={touched.confirmPassword ? errors.confirmPassword : undefined}
           />
         </div>
-      </fieldset>
+      </div>
 
       {/* Sección 3: Cobertura Sanitaria */}
-      <fieldset className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-md">
-        <legend className="mb-space-2xs flex items-center gap-space-xs">
-          <ShieldPlus className="h-5 w-5 text-primary" aria-hidden="true" />
-          <span className="text-headline-sm text-on-surface">
-            3. Cobertura Sanitaria
-          </span>
-        </legend>
+      <div className="flex flex-col gap-space-md rounded-xl bg-surface-container-low/40 p-space-lg sm:p-space-xl">
+        <h3 className="text-headline-sm text-on-surface">
+          3. Cobertura sanitaria
+        </h3>
 
         <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
           <div className="sm:col-span-6">
             <Select
-              label="Obra Social o Prepaga"
+              label="Obra social o prepaga"
               id="coverage-provider"
               name="coverageProvider"
               required
@@ -402,7 +389,7 @@ export function RegisterForm({
             del financiador. No requiere copias físicas.
           </span>
         </div>
-      </fieldset>
+      </div>
 
       {/* Términos y Condiciones */}
       <div className="flex flex-col gap-space-2xs pt-space-xs">
@@ -453,10 +440,9 @@ export function RegisterForm({
         <Button
           type="submit"
           isLoading={isLoading}
-          leftIcon={<Shield className="h-5 w-5" />}
           className="w-full text-white"
         >
-          Crear Cuenta
+          Crear cuenta
         </Button>
         <div className="pt-space-2xs text-center">
           <span className="text-body-md text-secondary">¿Ya tienes cuenta? </span>
