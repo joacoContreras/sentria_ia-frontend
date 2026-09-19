@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { SearchX, RotateCcw } from "lucide-react"
 import { FAQCategoryId } from "@/types/help"
 import { FAQ_ITEMS } from "../data/faq-data"
 import { FAQCategoriesNav } from "./faq-categories-nav"
@@ -50,7 +49,9 @@ export function FAQSection({ searchQuery, onResetSearch }: FAQSectionProps) {
       if (!query) return true
 
       const matchesTitle = item.title.toLowerCase().includes(query)
-      const matchesBadge = item.badgeLabel.toLowerCase().includes(query)
+      const matchesBadge = item.badgeLabel
+        ? item.badgeLabel.toLowerCase().includes(query)
+        : false
       const matchesSubBadge = item.badgeSubLabel
         ? item.badgeSubLabel.toLowerCase().includes(query)
         : false
@@ -93,7 +94,6 @@ export function FAQSection({ searchQuery, onResetSearch }: FAQSectionProps) {
                 title={item.title}
                 badgeLabel={item.badgeLabel}
                 badgeSubLabel={item.badgeSubLabel}
-                icon={item.icon}
                 isOpen={openItemId === item.id}
                 onToggle={() => handleToggle(item.id)}
               >
@@ -102,19 +102,13 @@ export function FAQSection({ searchQuery, onResetSearch }: FAQSectionProps) {
             ))
           ) : (
             /* No Results Fallback Item */
-            <div className="bg-surface-container-lowest rounded-xl p-space-2xl text-center shadow-xs border border-outline-variant/20 space-y-space-md">
-              <div className="w-16 h-16 rounded-full bg-surface-container mx-auto flex items-center justify-center text-secondary">
-                <SearchX className="h-8 w-8" aria-hidden="true" />
-              </div>
-
+            <div className="bg-surface-container-lowest rounded-xl p-space-xl sm:p-space-2xl text-center shadow-2xs border border-outline-variant/15 space-y-space-md">
               <div className="space-y-space-2xs">
-                <h4 className="text-headline-sm text-on-surface font-semibold">
-                  No encontramos coincidencias para esa búsqueda
+                <h4 className="text-title-lg text-on-surface font-semibold">
+                  No se encontraron resultados
                 </h4>
                 <p className="text-body-md text-secondary max-w-md mx-auto leading-relaxed">
-                  Intente con términos más generales como &quot;turnos&quot;,
-                  &quot;guardia&quot;, &quot;estudios&quot; o consulte
-                  directamente a nuestra mesa de ayuda.
+                  Intente con términos como &quot;turnos&quot;, &quot;guardia&quot;, &quot;estudios&quot; o elija una de las categorías temáticas.
                 </p>
               </div>
 
@@ -122,10 +116,9 @@ export function FAQSection({ searchQuery, onResetSearch }: FAQSectionProps) {
                 variant="primary"
                 size="md"
                 onClick={handleResetFilters}
-                leftIcon={<RotateCcw className="h-4 w-4" />}
                 className="mx-auto"
               >
-                Restablecer Filtros
+                Ver todas las consultas
               </Button>
             </div>
           )}

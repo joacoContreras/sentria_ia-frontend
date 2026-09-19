@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: import("react").Rea
     <html
       lang="es"
       className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-on-background">
         <AuthProvider>{children}</AuthProvider>

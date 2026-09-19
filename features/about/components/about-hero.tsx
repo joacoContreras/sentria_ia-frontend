@@ -92,9 +92,6 @@ export function AboutHero() {
                   </span>
                   <span className="text-headline-sm text-on-surface font-semibold">
                     3.8 min{" "}
-                    <span className="text-label-md text-primary font-medium">
-                      (antes 22 min)
-                    </span>
                   </span>
                 </div>
                 <svg
