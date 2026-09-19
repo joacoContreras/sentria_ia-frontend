@@ -116,7 +116,7 @@ export function FAQSection({ searchQuery, onResetSearch }: FAQSectionProps) {
                 variant="primary"
                 size="md"
                 onClick={handleResetFilters}
-                className="mx-auto"
+                className="mx-auto text-white"
               >
                 Ver todas las consultas
               </Button>
