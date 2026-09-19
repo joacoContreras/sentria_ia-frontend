@@ -44,9 +44,6 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  turbopack: {
-    root: "/home/joa/repos/sentria_ia-frontend",
-  },
   async headers() {
     return [
       {
