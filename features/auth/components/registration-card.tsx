@@ -177,9 +177,13 @@ export function RegistrationCard() {
       </div>
 
       {/* Nota de seguridad y privacidad al pie */}
-      <div className="flex items-center justify-center gap-1.5 text-label-xs text-secondary text-center">
-        <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
-        <span>Conexión cifrada de extremo a extremo · Ley 25.326 de Protección de Datos Personales</span>
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-label-xs text-secondary text-center px-space-xs">
+        <span className="inline-flex items-center gap-1.5 font-medium">
+          <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
+          <span>Conexión cifrada de extremo a extremo</span>
+        </span>
+        <span className="hidden sm:inline text-outline-variant/60" aria-hidden="true">·</span>
+        <span>Ley 25.326 de Protección de Datos Personales</span>
       </div>
     </div>
   )

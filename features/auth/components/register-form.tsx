@@ -288,7 +288,7 @@ export function RegisterForm({
           error={touched.email ? errors.email : undefined}
         />
 
-        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 items-start">
           <PasswordInput
             label="Contraseña"
             id="register-password"
