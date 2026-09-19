@@ -37,10 +37,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id || generatedId
 
     return (
-      <div className={cn("flex flex-col gap-space-2xs w-full", containerClassName)}>
+      <div className={cn("flex flex-col gap-1.5 w-full", containerClassName)}>
         {label && (
-          <label htmlFor={selectId} className="text-label-md text-on-surface">
-            {label} {required && <span className="text-error">*</span>}
+          <label
+            htmlFor={selectId}
+            className="text-xs font-semibold text-slate-600 tracking-wide uppercase"
+          >
+            {label} {required && <span className="text-error font-bold ml-0.5">*</span>}
           </label>
         )}
 
@@ -50,8 +53,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             required={required}
             className={cn(
-              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface shadow-sm appearance-none cursor-pointer px-space-md pr-10 transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
-              error ? "ring-2 ring-error focus:ring-error" : "",
+              "w-full h-11 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 appearance-none cursor-pointer pl-3.5 pr-10 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed",
+              error
+                ? "border-error text-error focus:border-error focus:ring-error/10"
+                : "hover:border-slate-300",
               className
             )}
             {...props}
@@ -70,15 +75,15 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           </select>
 
           <ChevronDown
-            className="pointer-events-none absolute right-space-md h-5 w-5 text-secondary"
+            className="pointer-events-none absolute right-3.5 h-4 w-4 text-slate-400"
             aria-hidden="true"
           />
         </div>
 
         {error ? (
-          <span className="text-label-sm text-error">{error}</span>
+          <p className="text-xs font-medium text-error mt-0.5">{error}</p>
         ) : helperText ? (
-          <span className="text-label-sm text-secondary">{helperText}</span>
+          <p className="text-xs text-slate-500 mt-0.5">{helperText}</p>
         ) : null}
       </div>
     )

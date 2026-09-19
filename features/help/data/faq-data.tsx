@@ -5,7 +5,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
   { id: "all", label: "Todas las Consultas" },
   { id: "guardia", label: "Atención en Guardia" },
   { id: "sedes", label: "Sedes y Estudios" },
-  { id: "ia", label: "Asistente Sentria AI" },
+  { id: "ia", label: "Asistencia Digital" },
 ]
 
 export const QUICK_SEARCH_PILLS = [
@@ -190,7 +190,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     id: "ia-agente-turnos",
     categories: ["ia"],
     title: "¿Cómo interactúo con el asistente para agendar o cancelar un turno?",
-    badgeLabel: "Asistente Sentria AI",
+    badgeLabel: "Asistencia Digital",
     keywords: [
       "asistente",
       "ia",

@@ -12,19 +12,19 @@ export interface ButtonProps
 
 const variantStyles = {
   primary:
-    "bg-primary text-white shadow-2xs hover:bg-primary-container active:scale-[0.99] font-medium",
+    "bg-primary text-white shadow-2xs hover:bg-primary-container active:scale-[0.985] font-medium transition-all duration-150",
   secondary:
-    "bg-surface-container-low text-on-surface border border-outline-variant/30 hover:bg-surface-container hover:border-outline-variant/50 active:scale-[0.99] font-medium",
+    "bg-slate-100/80 text-slate-800 border border-slate-200/80 hover:bg-slate-200/60 hover:text-slate-900 active:scale-[0.985] font-medium transition-all duration-150",
   danger:
-    "bg-error text-white shadow-2xs hover:opacity-90 active:scale-[0.99] font-medium",
+    "bg-error text-white shadow-2xs hover:bg-red-700 active:scale-[0.985] font-medium transition-all duration-150",
   ghost:
-    "text-secondary hover:text-on-surface hover:bg-surface-container/70 font-medium",
+    "text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium transition-all duration-150",
 }
 
 const sizeStyles = {
-  sm: "h-9 px-space-sm text-label-sm rounded-lg gap-space-2xs",
-  md: "h-11 px-space-md text-label-md rounded-xl gap-space-xs",
-  lg: "h-12 px-space-lg text-label-lg rounded-xl gap-space-xs",
+  sm: "h-9 px-3 text-xs rounded-lg gap-1.5",
+  md: "h-10 px-4 text-sm rounded-xl gap-2",
+  lg: "h-11 px-5 text-sm font-semibold rounded-xl gap-2",
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

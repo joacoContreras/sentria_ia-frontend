@@ -187,12 +187,14 @@ export function RegisterForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-lg">
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
       {/* Sección 1: Datos Personales */}
-      <div className="flex flex-col gap-space-md">
-        <h3 className="text-headline-sm text-on-surface">
-          1. Datos personales
-        </h3>
+      <div className="flex flex-col gap-4">
+        <div className="border-b border-slate-100 pb-1">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            1. Datos personales
+          </span>
+        </div>
 
         <Input
           label="Nombre y apellido completo"
@@ -207,15 +209,15 @@ export function RegisterForm({
           error={touched.fullName ? errors.fullName : undefined}
         />
 
-        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
-          <div className="flex flex-col gap-space-2xs sm:col-span-7">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
+          <div className="flex flex-col gap-1.5 sm:col-span-7">
             <label
-              className="text-label-md text-on-surface"
+              className="text-xs font-semibold text-slate-600 tracking-wide uppercase"
               htmlFor="doc-number"
             >
-              Tipo y Nº de documento <span className="text-error">*</span>
+              Tipo y Nº de documento <span className="text-error font-bold ml-0.5">*</span>
             </label>
-            <div className="flex gap-space-xs">
+            <div className="flex gap-2">
               <Select
                 id="doc-type"
                 name="docType"
@@ -227,7 +229,7 @@ export function RegisterForm({
                     setErrors((prev) => ({ ...prev, docNumber: err || undefined }))
                   }
                 }}
-                containerClassName="w-32 shrink-0"
+                containerClassName="w-28 shrink-0"
                 options={[
                   { value: "DNI", label: "DNI" },
                   { value: "LC", label: "LC" },
@@ -269,10 +271,12 @@ export function RegisterForm({
       </div>
 
       {/* Sección 2: Credenciales de Acceso */}
-      <div className="flex flex-col gap-space-md">
-        <h3 className="text-headline-sm text-on-surface">
-          2. Credenciales de acceso
-        </h3>
+      <div className="flex flex-col gap-4">
+        <div className="border-b border-slate-100 pb-1">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            2. Credenciales de acceso
+          </span>
+        </div>
 
         <Input
           label="Correo electrónico"
@@ -281,14 +285,14 @@ export function RegisterForm({
           type="email"
           required
           placeholder="paciente@email.com"
-          leftIcon={<Mail className="h-5 w-5" />}
+          leftIcon={<Mail className="h-4 w-4" />}
           value={formData.email}
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={touched.email ? errors.email : undefined}
         />
 
-        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 items-start">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-start">
           <PasswordInput
             label="Contraseña"
             id="register-password"
@@ -317,12 +321,14 @@ export function RegisterForm({
       </div>
 
       {/* Sección 3: Cobertura Sanitaria */}
-      <div className="flex flex-col gap-space-md">
-        <h3 className="text-headline-sm text-on-surface">
-          3. Cobertura sanitaria
-        </h3>
+      <div className="flex flex-col gap-4">
+        <div className="border-b border-slate-100 pb-1">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            3. Cobertura médica
+          </span>
+        </div>
 
-        <div className="grid grid-cols-1 gap-space-md sm:grid-cols-12">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
           <div className="sm:col-span-6">
             <Select
               label="Obra social o prepaga"
@@ -338,24 +344,24 @@ export function RegisterForm({
           </div>
 
           <div className="sm:col-span-6">
-            <div className="flex flex-col gap-space-2xs">
-              <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between min-h-[1.25rem]">
                 <label
-                  className="text-label-md text-on-surface"
+                  className="text-xs font-semibold text-slate-600 tracking-wide uppercase"
                   htmlFor="member-id"
                 >
-                  Nº Afiliado / Credencial{" "}
+                  Nº Afiliado{" "}
                   {formData.coverageProvider !== "Particular" && (
-                    <span className="text-error">*</span>
+                    <span className="text-error font-bold ml-0.5">*</span>
                   )}
                 </label>
                 <div className="group relative flex cursor-pointer items-center">
                   <Info
-                    className="h-4 w-4 text-secondary hover:text-primary"
+                    className="h-3.5 w-3.5 text-slate-400 hover:text-primary transition-colors"
                     aria-hidden="true"
                   />
-                  <div className="absolute bottom-full right-0 z-20 mb-2 hidden w-64 rounded-lg bg-inverse-surface p-space-xs text-label-sm text-inverse-on-surface shadow-xl group-hover:block">
-                    Ubicado al frente de su credencial plástica o digital (10 a 16 dígitos).
+                  <div className="absolute bottom-full right-0 z-30 mb-2 hidden w-56 rounded-xl bg-slate-900/95 backdrop-blur-md p-2.5 text-xs text-white shadow-xl group-hover:block pointer-events-none">
+                    Ubicado al frente de su credencial plástica o digital.
                   </div>
                 </div>
               </div>
@@ -379,21 +385,20 @@ export function RegisterForm({
           </div>
         </div>
 
-        <div className="flex items-start gap-space-xs rounded-xl bg-primary-fixed/30 p-space-sm">
+        <div className="flex items-start gap-2.5 rounded-xl bg-teal-50/70 border border-teal-100/80 p-3 text-xs text-teal-800 leading-relaxed">
           <CheckCircle2
-            className="h-5 w-5 shrink-0 text-primary"
+            className="h-4 w-4 shrink-0 text-primary mt-0.5"
             aria-hidden="true"
           />
-          <span className="text-body-md text-on-primary-fixed-variant">
-            Tu cobertura se verificará automáticamente al guardar con el padrón
-            del financiador. No requiere copias físicas.
+          <span>
+            Su cobertura se verificará automáticamente con el padrón del prestador sin necesidad de presentar credencial física.
           </span>
         </div>
       </div>
 
       {/* Términos y Condiciones */}
-      <div className="flex flex-col gap-space-2xs pt-space-xs">
-        <div className="flex items-start gap-space-sm">
+      <div className="flex flex-col gap-1.5 pt-1">
+        <div className="flex items-start gap-3">
           <input
             id="terms-check"
             name="acceptTerms"
@@ -402,41 +407,43 @@ export function RegisterForm({
             onChange={handleInputChange}
             onBlur={handleBlur}
             required
-            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-primary"
+            className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-primary accent-primary focus:ring-primary/20"
           />
           <label
             htmlFor="terms-check"
-            className="cursor-pointer select-none text-body-md text-on-surface-variant"
+            className="cursor-pointer select-none text-xs sm:text-sm text-slate-600 leading-relaxed"
           >
             Acepto los{" "}
             <a
-              href="#terminos"
-              onClick={(e) => e.preventDefault()}
-              className="font-medium text-primary underline"
+              href="/terminos-clinicos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary underline hover:text-primary-container"
             >
-              Términos de Servicio
+              Términos Clínicos
             </a>{" "}
             y la{" "}
             <a
-              href="#privacidad"
-              onClick={(e) => e.preventDefault()}
-              className="font-medium text-primary underline"
+              href="/privacidad-medica"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary underline hover:text-primary-container"
             >
-              Política de Privacidad de Datos Médicos (Ley 25.326)
+              Política de Privacidad Médica (Ley 25.326)
             </a>{" "}
-            para el resguardo de información clínica sensible.
+            para el resguardo de información clínica.
           </label>
         </div>
         {touched.acceptTerms && errors.acceptTerms && (
-          <div className="flex items-center gap-1.5 text-label-sm text-error pl-8">
-            <AlertCircle className="h-4 w-4 shrink-0" />
+          <div className="flex items-center gap-1 text-xs text-error pl-7">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             <span>{errors.acceptTerms}</span>
           </div>
         )}
       </div>
 
       {/* CTA */}
-      <div className="flex flex-col gap-space-sm pt-space-xs">
+      <div className="flex flex-col gap-3 pt-2">
         <Button
           type="submit"
           isLoading={isLoading}
@@ -444,14 +451,14 @@ export function RegisterForm({
         >
           Crear cuenta
         </Button>
-        <div className="pt-space-2xs text-center">
-          <span className="text-body-md text-secondary">¿Ya tienes cuenta? </span>
+        <div className="text-center">
+          <span className="text-xs text-slate-500">¿Ya tienes una cuenta? </span>
           <button
             type="button"
             onClick={onSwitchToLogin}
-            className="text-label-lg text-primary hover:underline cursor-pointer"
+            className="text-xs font-semibold text-primary hover:underline cursor-pointer"
           >
-            Inicia sesión
+            Iniciar sesión
           </button>
         </div>
       </div>

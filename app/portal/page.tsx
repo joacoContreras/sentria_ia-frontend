@@ -13,7 +13,6 @@ import {
   User,
   AlertCircle,
   ArrowRight,
-  Sparkles,
 } from "lucide-react"
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { Button } from "@/components/ui/button"
@@ -128,9 +127,9 @@ export default function PatientPortalPage() {
               <Button
                 variant="secondary"
                 className="bg-white text-primary hover:bg-white/90 shadow-md w-full"
-                leftIcon={<Sparkles className="h-4 w-4 text-primary" />}
+                leftIcon={<Stethoscope className="h-4 w-4 text-primary" />}
               >
-                Triage con IA
+                Triage Clínico
               </Button>
             </Link>
           </div>
@@ -208,7 +207,7 @@ export default function PatientPortalPage() {
                 Evaluación Clínica
               </h2>
               <p className="text-body-md text-secondary">
-                ¿Presenta algún síntoma? Inicie una consulta de orientación médica asistida por IA.
+                ¿Presenta algún síntoma? Inicie una consulta de orientación médica asistida digitalmente.
               </p>
             </div>
             <div className="pt-space-md border-t border-outline-variant/30 mt-space-md">

@@ -25,21 +25,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    // Generamos un id por defecto si no se pasa uno, para asegurar accesibilidad (label -> input)
     const generatedId = React.useId()
     const inputId = id || generatedId
 
     return (
-      <div className={cn("flex flex-col gap-space-2xs w-full", containerClassName)}>
+      <div className={cn("flex flex-col gap-1.5 w-full", containerClassName)}>
         {label && (
-          <label htmlFor={inputId} className="text-label-md text-on-surface">
-            {label} {required && <span className="text-error">*</span>}
+          <label
+            htmlFor={inputId}
+            className="text-xs font-semibold text-slate-600 tracking-wide uppercase"
+          >
+            {label} {required && <span className="text-error font-bold ml-0.5">*</span>}
           </label>
         )}
 
         <div className="relative flex items-center w-full">
           {leftIcon && (
-            <div className="pointer-events-none absolute left-space-md flex items-center text-outline">
+            <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400">
               {leftIcon}
             </div>
           )}
@@ -49,9 +51,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             required={required}
             className={cn(
-              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
-              leftIcon ? "pl-12 pr-space-md" : "px-space-md",
-              error ? "ring-2 ring-error focus:ring-error" : "",
+              "w-full h-11 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed",
+              leftIcon ? "pl-10 pr-3.5" : "px-3.5",
+              error
+                ? "border-error text-error placeholder:text-error/40 focus:border-error focus:ring-error/10"
+                : "hover:border-slate-300",
               className
             )}
             {...props}
@@ -59,9 +63,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error ? (
-          <span className="text-label-sm text-error">{error}</span>
+          <p className="text-xs font-medium text-error mt-0.5">{error}</p>
         ) : helperText ? (
-          <span className="text-label-sm text-secondary">{helperText}</span>
+          <p className="text-xs text-slate-500 mt-0.5">{helperText}</p>
         ) : null}
       </div>
     )
@@ -69,3 +73,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 
 Input.displayName = "Input"
+

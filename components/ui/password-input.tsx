@@ -57,11 +57,14 @@ export const PasswordInput = React.forwardRef<
     const hasNumber = /[0-9]/.test(passwordString)
 
     return (
-      <div className={cn("flex flex-col gap-space-2xs w-full", containerClassName)}>
+      <div className={cn("flex flex-col gap-1.5 w-full", containerClassName)}>
         {label && (
-          <div className="flex items-center justify-between min-h-[1.5rem]">
-            <label htmlFor={inputId} className="text-label-md text-on-surface">
-              {label} {required && <span className="text-error">*</span>}
+          <div className="flex items-center justify-between min-h-[1.25rem]">
+            <label
+              htmlFor={inputId}
+              className="text-xs font-semibold text-slate-600 tracking-wide uppercase"
+            >
+              {label} {required && <span className="text-error font-bold ml-0.5">*</span>}
             </label>
             {showStrengthMeter && (
               <div className="group relative flex items-center">
@@ -69,27 +72,27 @@ export const PasswordInput = React.forwardRef<
                   type="button"
                   tabIndex={-1}
                   aria-label="Requisitos de contraseña segura"
-                  className="flex items-center gap-1 text-label-xs text-secondary hover:text-primary transition-colors cursor-help p-0.5 rounded focus:outline-none"
+                  className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-primary transition-colors cursor-help py-0.5 rounded focus:outline-none"
                 >
-                  <Info className="h-4 w-4" aria-hidden="true" />
+                  <Info className="h-3.5 w-3.5" aria-hidden="true" />
                   <span className="hidden sm:inline font-medium">Requisitos</span>
                 </button>
-                <div className="absolute bottom-full right-0 z-30 mb-2 hidden w-64 rounded-xl bg-inverse-surface p-space-sm text-inverse-on-surface shadow-xl group-hover:block group-focus-within:block pointer-events-none">
-                  <p className="text-label-sm font-semibold mb-1.5 text-white">
-                    Requisitos de contraseña:
+                <div className="absolute bottom-full right-0 z-30 mb-2 hidden w-60 rounded-xl bg-slate-900/95 backdrop-blur-md p-3 text-white shadow-xl group-hover:block group-focus-within:block pointer-events-none text-xs">
+                  <p className="font-semibold mb-1.5 text-slate-200">
+                    Requisitos mínimos:
                   </p>
-                  <ul className="space-y-1 text-label-xs text-inverse-on-surface/90">
+                  <ul className="space-y-1 text-slate-300">
                     <li className={cn("flex items-center gap-1.5", hasMinLength && "text-emerald-400 font-medium")}>
-                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasMinLength ? "opacity-100" : "opacity-30")} />
+                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasMinLength ? "opacity-100" : "opacity-40")} />
                       Mínimo 8 caracteres
                     </li>
                     <li className={cn("flex items-center gap-1.5", hasUppercase && "text-emerald-400 font-medium")}>
-                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasUppercase ? "opacity-100" : "opacity-30")} />
-                      Al menos una mayúscula (A-Z)
+                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasUppercase ? "opacity-100" : "opacity-40")} />
+                      Al menos una mayúscula
                     </li>
                     <li className={cn("flex items-center gap-1.5", hasNumber && "text-emerald-400 font-medium")}>
-                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasNumber ? "opacity-100" : "opacity-30")} />
-                      Al menos un número (0-9)
+                      <Check className={cn("h-3.5 w-3.5 shrink-0", hasNumber ? "opacity-100" : "opacity-40")} />
+                      Al menos un número
                     </li>
                   </ul>
                 </div>
@@ -100,7 +103,7 @@ export const PasswordInput = React.forwardRef<
 
         <div className="relative flex items-center w-full">
           <KeyRound
-            className="pointer-events-none absolute left-space-md h-5 w-5 text-outline"
+            className="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-400"
             aria-hidden="true"
           />
 
@@ -112,8 +115,10 @@ export const PasswordInput = React.forwardRef<
             value={value}
             onChange={onChange}
             className={cn(
-              "w-full h-12 rounded-xl bg-surface-container-lowest text-body-md text-on-surface placeholder:text-outline shadow-sm pl-12 pr-12 transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
-              error ? "ring-2 ring-error focus:ring-error" : "",
+              "w-full h-11 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 pl-10 pr-10 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed",
+              error
+                ? "border-error text-error placeholder:text-error/40 focus:border-error focus:ring-error/10"
+                : "hover:border-slate-300",
               className
             )}
             {...props}
@@ -127,31 +132,31 @@ export const PasswordInput = React.forwardRef<
             aria-label={
               showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
             }
-            className="absolute right-space-md text-secondary hover:text-on-surface focus:outline-none cursor-pointer"
+            className="absolute right-3.5 text-slate-400 hover:text-slate-700 focus:outline-none cursor-pointer p-0.5 rounded transition-colors"
           >
             {showPassword ? (
-              <EyeOff className="h-5 w-5" aria-hidden="true" />
+              <EyeOff className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <Eye className="h-5 w-5" aria-hidden="true" />
+              <Eye className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
         </div>
 
         {showStrengthMeter && passwordString.length > 0 && (
-          <div className="mt-space-2xs grid grid-cols-4 gap-1.5">
+          <div className="mt-1 grid grid-cols-4 gap-1.5">
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className={`h-1.5 rounded-full transition-colors duration-200 ${
+                className={`h-1 rounded-full transition-colors duration-200 ${
                   i < score
                     ? score <= 1
-                      ? "bg-error"
+                      ? "bg-rose-500"
                       : score <= 2
                       ? "bg-amber-500"
                       : score <= 3
                       ? "bg-primary"
-                      : "bg-emerald-600"
-                    : "bg-surface-container-highest"
+                      : "bg-emerald-500"
+                    : "bg-slate-200"
                 }`}
               />
             ))}
@@ -159,9 +164,9 @@ export const PasswordInput = React.forwardRef<
         )}
 
         {error ? (
-          <span className="text-label-sm text-error">{error}</span>
+          <p className="text-xs font-medium text-error mt-0.5">{error}</p>
         ) : helperText ? (
-          <span className="text-label-sm text-secondary">{helperText}</span>
+          <p className="text-xs text-slate-500 mt-0.5">{helperText}</p>
         ) : null}
       </div>
     )

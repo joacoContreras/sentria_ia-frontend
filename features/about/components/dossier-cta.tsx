@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export function DossierCta() {
   return (
     <section className="mx-auto max-w-container-max px-gutter-mobile lg:px-gutter-desktop pb-space-3xl lg:pb-space-4xl w-full">
@@ -15,18 +17,18 @@ export function DossierCta() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-space-sm shrink-0 w-full sm:w-auto">
-          <a
-            href="#dossier"
+          <Link
+            href="/protocolo-criptografico"
             className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-white px-space-lg py-space-sm font-semibold text-label-md text-primary shadow-2xs hover:bg-surface-container transition-all active:scale-[0.98]"
           >
-            Descargar dossier clínico (PDF)
-          </a>
-          <a
-            href="#contacto-etico"
+            Ver protocolo técnico y seguridad
+          </Link>
+          <Link
+            href="/ayuda#correo-soporte"
             className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-white/15 border border-white/30 px-space-lg py-space-sm font-semibold text-label-md text-white hover:bg-white/25 transition-all active:scale-[0.98]"
           >
             Contactar al comité ético
-          </a>
+          </Link>
         </div>
       </div>
     </section>

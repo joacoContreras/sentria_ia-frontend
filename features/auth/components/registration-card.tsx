@@ -84,18 +84,18 @@ export function RegistrationCard() {
   }
 
   return (
-    <div className="w-full flex flex-col gap-space-md">
-      <div className="flex flex-col gap-space-lg rounded-2xl bg-surface-container-lowest p-space-lg sm:p-space-xl border border-outline-variant/15 shadow-2xs">
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex flex-col gap-6 rounded-2xl bg-white p-6 sm:p-8 border border-slate-200/80 shadow-xs">
         {/* Tab Switcher */}
-        <div className="flex w-full rounded-xl bg-surface-container p-1 border border-outline-variant/15">
+        <div className="flex w-full rounded-xl bg-slate-100/90 p-1 border border-slate-200/50">
           <button
             type="button"
             onClick={() => handleSwitchTab("register")}
             aria-pressed={tab === "register"}
-            className={`flex flex-1 items-center justify-center rounded-lg py-space-xs text-label-md transition-all cursor-pointer font-medium ${
+            className={`flex flex-1 items-center justify-center rounded-lg py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
               tab === "register"
-                ? "bg-primary text-white shadow-2xs font-semibold"
-                : "text-secondary hover:text-on-surface hover:bg-surface-container-high/60"
+                ? "bg-white text-slate-900 shadow-xs"
+                : "text-slate-500 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
             Crear cuenta
@@ -104,10 +104,10 @@ export function RegistrationCard() {
             type="button"
             onClick={() => handleSwitchTab("login")}
             aria-pressed={tab === "login"}
-            className={`flex flex-1 items-center justify-center rounded-lg py-space-xs text-label-md transition-all cursor-pointer font-medium ${
+            className={`flex flex-1 items-center justify-center rounded-lg py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
               tab === "login"
-                ? "bg-primary text-white shadow-2xs font-semibold"
-                : "text-secondary hover:text-on-surface hover:bg-surface-container-high/60"
+                ? "bg-white text-slate-900 shadow-xs"
+                : "text-slate-500 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
             Iniciar sesión
@@ -118,19 +118,19 @@ export function RegistrationCard() {
         {apiError && (
           <div
             role="alert"
-            className="flex items-start justify-between gap-space-sm rounded-xl bg-error-container/20 border border-error/30 p-space-sm text-error"
+            className="flex items-start justify-between gap-3 rounded-xl bg-red-50 border border-red-200 p-3 text-red-700"
           >
-            <div className="flex items-start gap-space-xs">
-              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-              <span className="text-body-md font-medium">{apiError}</span>
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-red-600" />
+              <span className="text-xs font-medium">{apiError}</span>
             </div>
             <button
               type="button"
               onClick={() => setApiError(null)}
               aria-label="Cerrar notificación de error"
-              className="text-error/70 hover:text-error cursor-pointer p-0.5 rounded transition-colors"
+              className="text-red-500 hover:text-red-700 cursor-pointer p-0.5 rounded transition-colors"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
             </button>
           </div>
         )}
@@ -147,19 +147,19 @@ export function RegistrationCard() {
         ) : (
           <>
             {/* Header del formulario */}
-            <div className="flex flex-col gap-space-2xs">
-              <span className="text-label-sm uppercase font-semibold tracking-wider text-primary">
-                {tab === "register" ? "Atención asistencial digital" : "Portal de Pacientes"}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[11px] uppercase font-semibold tracking-wider text-primary">
+                {tab === "register" ? "Ficha de Paciente" : "Portal de Pacientes"}
               </span>
-              <h1 className="text-headline-md font-bold text-on-surface">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 {tab === "register"
                   ? "Crear ficha de paciente"
-                  : "Acceso seguro"}
+                  : "Acceso a su cuenta"}
               </h1>
-              <p className="text-body-md text-secondary">
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 {tab === "register"
-                  ? "Complete sus datos para crear un nuevo usuario y vincular su historia clínica con cobertura médica institucional."
-                  : "Ingrese sus credenciales para consultar turnos, diagnósticos e iniciar su triage clínico."}
+                  ? "Complete sus datos personales y cobertura para gestionar sus consultas e historial clínico."
+                  : "Ingrese sus datos de acceso para consultar turnos, resultados e indicaciones médicas."}
               </p>
             </div>
 
@@ -177,12 +177,12 @@ export function RegistrationCard() {
       </div>
 
       {/* Nota de seguridad y privacidad al pie */}
-      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-label-xs text-secondary text-center px-space-xs">
-        <span className="inline-flex items-center gap-1.5 font-medium">
-          <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
-          <span>Conexión cifrada de extremo a extremo</span>
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-slate-400 text-center px-2">
+        <span className="inline-flex items-center gap-1.5">
+          <ShieldCheck className="h-3.5 w-3.5 text-primary/70 shrink-0" />
+          <span>Conexión encriptada de extremo a extremo</span>
         </span>
-        <span className="hidden sm:inline text-outline-variant/60" aria-hidden="true">·</span>
+        <span className="hidden sm:inline text-slate-300" aria-hidden="true">·</span>
         <span>Ley 25.326 de Protección de Datos Personales</span>
       </div>
     </div>

@@ -44,7 +44,7 @@ function ForgotPasswordContent({
 
   return (
     <div
-      className="relative w-full max-w-md rounded-2xl bg-surface-container-lowest p-space-lg shadow-2xl transition-all"
+      className="relative w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-xl border border-slate-200/80 transition-all"
       onClick={(e) => e.stopPropagation()}
       role="dialog"
       aria-modal="true"
@@ -54,69 +54,68 @@ function ForgotPasswordContent({
         type="button"
         onClick={onClose}
         aria-label="Cerrar modal"
-        className="absolute right-space-md top-space-md text-secondary hover:text-on-surface cursor-pointer p-1 rounded-lg"
+        className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-colors"
       >
-        <X className="h-5 w-5" />
+        <X className="h-4 w-4" />
       </button>
 
       {isSent ? (
-        <div className="flex flex-col items-center text-center gap-space-md py-space-sm">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <CheckCircle2 className="h-8 w-8" />
+        <div className="flex flex-col items-center text-center gap-4 py-2">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-50 text-primary">
+            <CheckCircle2 className="h-6 w-6" />
           </div>
-          <div className="flex flex-col gap-space-2xs">
+          <div className="flex flex-col gap-1">
             <h3
               id="forgot-password-title"
-              className="text-headline-sm text-on-surface"
+              className="text-lg font-bold text-slate-900"
             >
-              Instrucciones Enviadas
+              Instrucciones enviadas
             </h3>
-            <p className="text-body-md text-secondary">
-              Hemos enviado un enlace de restablecimiento seguro a{" "}
-              <strong className="text-on-surface">{email}</strong>. Revise su
-              bandeja de entrada o spam.
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              Hemos enviado un enlace de recuperación seguro a{" "}
+              <strong className="text-slate-800">{email}</strong>. Revise su
+              bandeja de entrada.
             </p>
           </div>
           <Button
             type="button"
             variant="primary"
             onClick={onClose}
-            className="w-full mt-space-xs"
+            className="w-full mt-2"
           >
             Entendido
           </Button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-md">
-          <div className="flex items-center gap-space-xs text-primary">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-              <KeyRound className="h-5 w-5" />
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+          <div className="flex items-center gap-2.5 text-primary">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-primary">
+              <KeyRound className="h-4 w-4" />
             </div>
             <div>
               <h3
                 id="forgot-password-title"
-                className="text-headline-sm text-on-surface"
+                className="text-base font-bold text-slate-900 leading-tight"
               >
-                Recuperar Contraseña
+                Recuperar contraseña
               </h3>
-              <span className="text-label-sm text-secondary">
-                Portal Seguro de Pacientes
+              <span className="text-xs text-slate-500">
+                Portal de Pacientes
               </span>
             </div>
           </div>
 
-          <p className="text-body-md text-secondary">
-            Ingrese el correo electrónico registrado con su ficha clínica y le
-            enviaremos las instrucciones de restablecimiento.
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Ingrese el correo electrónico registrado y le enviaremos las instrucciones para restablecer su contraseña de acceso.
           </p>
 
           <Input
-            label="Correo Electrónico"
+            label="Correo electrónico"
             id="reset-email"
             type="email"
             required
             placeholder="paciente@email.com"
-            leftIcon={<Mail className="h-5 w-5" />}
+            leftIcon={<Mail className="h-4 w-4" />}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
@@ -125,7 +124,7 @@ function ForgotPasswordContent({
             error={error || undefined}
           />
 
-          <div className="flex gap-space-sm pt-space-2xs">
+          <div className="flex gap-2.5 pt-1">
             <Button
               type="button"
               variant="secondary"
@@ -140,7 +139,7 @@ function ForgotPasswordContent({
               variant="primary"
               className="flex-1 text-white"
             >
-              Enviar Enlace
+              Enviar enlace
             </Button>
           </div>
         </form>

@@ -72,7 +72,7 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-space-md">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <Input
           label="Correo electrónico"
           id="login-email"
@@ -80,42 +80,44 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
           type="email"
           required
           placeholder="paciente@email.com"
-          leftIcon={<Mail className="h-5 w-5" />}
+          leftIcon={<Mail className="h-4 w-4" />}
           value={formData.email}
           onChange={handleChange}
           onBlur={handleBlur}
           error={touched.email ? errors.email : undefined}
         />
 
-        <PasswordInput
-          label="Contraseña"
-          id="login-password"
-          name="password"
-          required
-          placeholder="••••••••••••"
-          value={formData.password}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.password ? errors.password : undefined}
-        />
+        <div className="flex flex-col gap-1.5">
+          <PasswordInput
+            label="Contraseña"
+            id="login-password"
+            name="password"
+            required
+            placeholder="••••••••••••"
+            value={formData.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.password ? errors.password : undefined}
+          />
 
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={() => setIsForgotModalOpen(true)}
-            className="text-label-sm text-primary hover:underline cursor-pointer"
-          >
-            ¿Olvidó su contraseña?
-          </button>
+          <div className="flex justify-end pt-1">
+            <button
+              type="button"
+              onClick={() => setIsForgotModalOpen(true)}
+              className="text-xs text-primary hover:underline cursor-pointer font-medium"
+            >
+              ¿Olvidó su contraseña?
+            </button>
+          </div>
         </div>
 
         <Button
           type="submit"
           isLoading={isLoading}
-          leftIcon={<LogIn className="h-5 w-5" />}
-          className="w-full mt-space-sm text-white"
+          leftIcon={<LogIn className="h-4 w-4" />}
+          className="w-full mt-2 text-white"
         >
-          Ingresar al Portal
+          Iniciar sesión
         </Button>
       </form>
 

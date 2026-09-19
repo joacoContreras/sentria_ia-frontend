@@ -22,31 +22,29 @@ export function RegistrationSuccess({
   const router = useRouter()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-space-md py-space-xl text-center animate-fade-in">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <CheckCircle2 className="h-10 w-10" aria-hidden="true" />
+    <div className="flex flex-col items-center justify-center gap-4 py-8 text-center animate-fade-in">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-teal-50 text-primary">
+        <CheckCircle2 className="h-7 w-7" aria-hidden="true" />
       </div>
-      <div className="flex flex-col gap-space-2xs">
-        <h3 className="text-headline-md text-on-surface">
-          {tab === "register" ? "¡Ficha Clínica Creada!" : "¡Bienvenido de vuelta!"}
+      <div className="flex flex-col gap-1.5">
+        <h3 className="text-xl font-bold text-slate-900">
+          {tab === "register" ? "Ficha creada con éxito" : "Sesión iniciada"}
         </h3>
-        <p className="text-body-md text-secondary max-w-md">
+        <p className="text-sm text-slate-500 max-w-sm leading-relaxed">
           {tab === "register"
-            ? `Se ha registrado exitosamente a ${fullName || "el paciente"}. Su credencial ${
-                coverageProvider || "médica"
-              } está siendo validada.`
-            : `Has iniciado sesión correctamente con ${email}.`}
+            ? `Se ha registrado exitosamente a ${fullName || "el paciente"}. Ya puede acceder a su portal.`
+            : `Ha ingresado correctamente con la cuenta ${email}.`}
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-space-sm w-full max-w-xs mt-space-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full max-w-xs mt-2">
         <Button
           variant="primary"
           onClick={() => router.push("/portal")}
           rightIcon={<ArrowRight className="h-4 w-4" />}
-          className="w-full"
+          className="w-full text-white"
         >
-          Ingresar a mi Portal
+          Ingresar al Portal
         </Button>
         <Button variant="secondary" onClick={onReset} className="w-full">
           Cerrar

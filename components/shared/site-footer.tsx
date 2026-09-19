@@ -2,9 +2,9 @@ import Link from "next/link"
 import { Siren, Phone } from "lucide-react"
 
 const links = [
-  { label: "Términos Clínicos", href: "#terminos" },
-  { label: "Privacidad Médica", href: "#privacidad" },
-  { label: "Protocolo Criptográfico", href: "#protocolo" },
+  { label: "Términos Clínicos", href: "/terminos-clinicos" },
+  { label: "Privacidad Médica", href: "/privacidad-medica" },
+  { label: "Protocolo Criptográfico", href: "/protocolo-criptografico" },
 ]
 
 export function SiteFooter() {
