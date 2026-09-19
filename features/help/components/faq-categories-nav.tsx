@@ -50,7 +50,7 @@ export function FAQCategoriesNav({
                   "w-full flex items-center justify-between px-space-md py-space-sm rounded-lg text-label-md transition-all text-left cursor-pointer",
                   isSelected
                     ? "bg-surface-container-high text-primary font-semibold shadow-2xs"
-                    : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                    : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
                 )}
               >
                 <span>{label}</span>

@@ -12,13 +12,13 @@ export interface ButtonProps
 
 const variantStyles = {
   primary:
-    "bg-primary text-white shadow-md hover:bg-primary-container active:scale-[0.99]",
+    "bg-primary text-white shadow-2xs hover:bg-primary-container active:scale-[0.99] font-medium",
   secondary:
-    "bg-surface-container-low text-secondary hover:text-on-surface active:scale-[0.99]",
+    "bg-surface-container-low text-on-surface border border-outline-variant/30 hover:bg-surface-container hover:border-outline-variant/50 active:scale-[0.99] font-medium",
   danger:
-    "bg-error text-on-error shadow-sm hover:opacity-95 active:scale-[0.99]",
+    "bg-error text-white shadow-2xs hover:opacity-90 active:scale-[0.99] font-medium",
   ghost:
-    "text-secondary hover:text-on-surface hover:bg-surface-container/50",
+    "text-secondary hover:text-on-surface hover:bg-surface-container/70 font-medium",
 }
 
 const sizeStyles = {

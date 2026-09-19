@@ -23,14 +23,14 @@ export function SupportContactPanel() {
           <div className="flex flex-col sm:flex-row items-center gap-space-sm w-full lg:w-auto shrink-0">
             <Link
               href="#chat-soporte"
-              className="w-full sm:w-auto inline-flex items-center justify-center bg-surface-container-high text-primary text-label-md px-space-lg py-space-sm rounded-lg hover:bg-surface-container transition-all active:scale-[0.98] font-medium"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-surface-container text-primary text-label-md px-space-lg py-space-sm rounded-lg hover:bg-surface-container-high border border-outline-variant/30 transition-all active:scale-[0.98] font-medium"
             >
               Iniciar chat de ayuda
             </Link>
 
             <Link
               href="mailto:soporte@sentria.ai"
-              className="w-full sm:w-auto inline-flex items-center justify-center bg-primary text-on-primary text-label-md px-space-lg py-space-sm rounded-lg hover:bg-primary-container transition-all shadow-2xs active:scale-[0.98] font-medium"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-primary text-white text-label-md px-space-lg py-space-sm rounded-lg hover:bg-primary-container transition-all shadow-2xs active:scale-[0.98] font-medium"
             >
               Enviar correo a soporte
             </Link>

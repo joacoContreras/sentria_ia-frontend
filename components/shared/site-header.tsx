@@ -40,7 +40,7 @@ export function SiteHeader() {
                   className={cn(
                     "px-space-md py-space-xs rounded-lg text-label-md transition-colors",
                     link.isActive
-                      ? "bg-secondary-container text-on-secondary-fixed font-semibold"
+                      ? "bg-primary text-white font-semibold shadow-2xs"
                       : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
                   )}
                 >

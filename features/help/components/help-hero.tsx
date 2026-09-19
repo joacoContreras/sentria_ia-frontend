@@ -67,7 +67,7 @@ export function HelpHero({
             <button
               type="button"
               onClick={onSearchSubmit}
-              className="bg-primary text-on-primary text-label-md px-space-md py-space-xs rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] cursor-pointer shrink-0 font-medium"
+              className="bg-primary text-white text-label-md px-space-md py-space-xs rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] cursor-pointer shrink-0 font-medium"
             >
               Buscar
             </button>
@@ -83,7 +83,7 @@ export function HelpHero({
                 key={pill}
                 type="button"
                 onClick={() => onSelectPill(pill)}
-                className="px-space-sm py-space-3xs rounded-full bg-surface-container-lowest text-label-xs text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all border border-outline-variant/20 cursor-pointer"
+                className="px-space-sm py-space-3xs rounded-full bg-surface-container-lowest text-label-xs text-on-surface-variant hover:bg-surface-container hover:text-primary hover:border-primary/40 transition-all border border-outline-variant/20 cursor-pointer"
               >
                 {pill}
               </button>

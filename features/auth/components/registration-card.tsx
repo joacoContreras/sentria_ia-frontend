@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { LogIn, UserPlus, AlertCircle, X } from "lucide-react"
+import { AlertCircle, X } from "lucide-react"
 import { LoginForm } from "./login-form"
 import { RegisterForm } from "./register-form"
 import { RegistrationSuccess } from "./registration-success"
@@ -86,33 +86,31 @@ export function RegistrationCard() {
 
   return (
     <div className="lg:col-span-7">
-      <div className="flex flex-col gap-space-lg rounded-2xl bg-surface-container-lowest p-space-lg lg:p-space-xl shadow-xl">
+      <div className="flex flex-col gap-space-lg rounded-2xl bg-surface-container-lowest p-space-lg sm:p-space-xl border border-outline-variant/15 shadow-2xs">
         {/* Tab Switcher */}
-        <div className="flex w-full rounded-xl bg-surface-container-low p-1">
+        <div className="flex w-full rounded-xl bg-surface-container p-1 border border-outline-variant/15">
           <button
             type="button"
             onClick={() => handleSwitchTab("register")}
             aria-pressed={tab === "register"}
-            className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
+            className={`flex flex-1 items-center justify-center rounded-lg py-space-xs text-label-md transition-all cursor-pointer font-medium ${
               tab === "register"
-                ? "bg-primary text-white shadow-sm"
-                : "text-secondary hover:text-on-surface"
+                ? "bg-primary text-white shadow-2xs font-semibold"
+                : "text-secondary hover:text-on-surface hover:bg-surface-container-high/60"
             }`}
           >
-            <UserPlus className="h-[18px] w-[18px]" aria-hidden="true" />
-            Registrarse
+            Crear cuenta
           </button>
           <button
             type="button"
             onClick={() => handleSwitchTab("login")}
             aria-pressed={tab === "login"}
-            className={`flex flex-1 items-center justify-center gap-space-xs rounded-lg py-space-xs text-label-lg transition-all cursor-pointer ${
+            className={`flex flex-1 items-center justify-center rounded-lg py-space-xs text-label-md transition-all cursor-pointer font-medium ${
               tab === "login"
-                ? "bg-primary text-white shadow-sm"
-                : "text-secondary hover:text-on-surface"
+                ? "bg-primary text-white shadow-2xs font-semibold"
+                : "text-secondary hover:text-on-surface hover:bg-surface-container-high/60"
             }`}
           >
-            <LogIn className="h-[18px] w-[18px]" aria-hidden="true" />
             Iniciar sesión
           </button>
         </div>

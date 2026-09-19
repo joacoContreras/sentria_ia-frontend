@@ -34,7 +34,7 @@ export function FAQAccordionItem({
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="w-full flex items-center justify-between p-space-md sm:p-space-lg text-left gap-space-md cursor-pointer hover:bg-surface-container-low/50 transition-colors"
+        className="w-full flex items-center justify-between p-space-md sm:p-space-lg text-left gap-space-md cursor-pointer hover:bg-surface-container/40 transition-colors"
       >
         <div className="space-y-space-3xs pr-space-xs">
           {badgeLabel && (

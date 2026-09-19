@@ -11,18 +11,21 @@ const pulsePath =
 
 export function TelemetryChart() {
   return (
-    <div className="relative bg-surface-container-low p-space-lg rounded-xl overflow-hidden shadow-sm">
-      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary-fixed-dim/30 blur-2xl pointer-events-none" />
-      <div className="flex items-center justify-between gap-space-sm mb-space-md">
+    <div className="bg-surface-container-low p-space-md sm:p-space-lg rounded-xl border border-outline-variant/15 shadow-2xs">
+      <div className="flex items-center justify-between gap-space-sm mb-space-sm">
         <div className="flex items-center gap-space-xs">
-          <HeartPulse className="h-5 w-5 text-primary" aria-hidden="true" />
-          <span className="text-label-md text-on-surface">
+          <HeartPulse className="h-4 w-4 text-primary" aria-hidden="true" />
+          <span className="text-label-sm font-semibold text-on-surface">
             Telemetría de Triage Sentria
           </span>
         </div>
+        <div className="flex items-center gap-space-2xs rounded-full bg-surface-container px-space-xs py-0.5 text-label-xs text-secondary">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span>4 min promedio</span>
+        </div>
       </div>
 
-      <div className="relative flex h-24 w-full items-center justify-center rounded-lg bg-surface-container-lowest/80 p-space-xs shadow-sm">
+      <div className="relative flex h-20 w-full items-center justify-center rounded-lg bg-surface-container-lowest p-space-xs border border-outline-variant/10 shadow-2xs">
         <svg
           className="h-full w-full text-primary"
           fill="none"
@@ -31,7 +34,7 @@ export function TelemetryChart() {
           aria-hidden="true"
         >
           <path
-            className="opacity-30"
+            className="opacity-25"
             d={pulsePath}
             stroke="currentColor"
             strokeLinecap="round"
@@ -44,7 +47,7 @@ export function TelemetryChart() {
             strokeDasharray="80 260"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2.5}
+            strokeWidth={2}
           >
             <animate
               attributeName="stroke-dashoffset"
@@ -54,24 +57,18 @@ export function TelemetryChart() {
             />
           </path>
         </svg>
-        <div className="absolute right-3 top-2 flex items-center gap-space-2xs rounded bg-surface-container px-space-xs py-1">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary-container" />
-          <span className="text-label-sm text-on-surface-variant">
-            4 min prom.
-          </span>
-        </div>
       </div>
 
       <div className="mt-space-sm grid grid-cols-3 gap-space-xs text-center">
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="rounded-lg bg-surface-container-lowest p-space-xs shadow-sm"
+            className="rounded-lg bg-surface-container-lowest p-space-xs border border-outline-variant/10 shadow-2xs"
           >
-            <span className="block text-vital-metric text-primary">
+            <span className="block text-title-lg sm:text-vital-metric text-primary font-bold">
               {m.value}
             </span>
-            <span className="block truncate text-label-sm text-secondary">
+            <span className="block truncate text-label-xs text-secondary mt-0.5">
               {m.label}
             </span>
           </div>
@@ -80,3 +77,4 @@ export function TelemetryChart() {
     </div>
   )
 }
+
