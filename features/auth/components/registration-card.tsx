@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AlertCircle, X } from "lucide-react"
+import { AlertCircle, X, ShieldCheck } from "lucide-react"
 import { LoginForm } from "./login-form"
 import { RegisterForm } from "./register-form"
 import { RegistrationSuccess } from "./registration-success"
@@ -72,7 +72,6 @@ export function RegistrationCard() {
     }
   }
 
-
   const handleReset = () => {
     setIsSuccess(false)
     setApiError(null)
@@ -85,7 +84,7 @@ export function RegistrationCard() {
   }
 
   return (
-    <div className="lg:col-span-7">
+    <div className="w-full flex flex-col gap-space-md">
       <div className="flex flex-col gap-space-lg rounded-2xl bg-surface-container-lowest p-space-lg sm:p-space-xl border border-outline-variant/15 shadow-2xs">
         {/* Tab Switcher */}
         <div className="flex w-full rounded-xl bg-surface-container p-1 border border-outline-variant/15">
@@ -149,20 +148,18 @@ export function RegistrationCard() {
           <>
             {/* Header del formulario */}
             <div className="flex flex-col gap-space-2xs">
-              <span className="text-label-sm uppercase text-primary">
-                {tab === "register"
-                  ? "Registro de paciente"
-                  : "Portal"}
+              <span className="text-label-sm uppercase font-semibold tracking-wider text-primary">
+                {tab === "register" ? "Atención asistencial digital" : "Portal de Pacientes"}
               </span>
-              <h2 className="text-headline-md text-on-surface">
+              <h1 className="text-headline-md font-bold text-on-surface">
                 {tab === "register"
                   ? "Crear ficha de paciente"
                   : "Acceso seguro"}
-              </h2>
+              </h1>
               <p className="text-body-md text-secondary">
                 {tab === "register"
-                  ? "Complete sus datos para crear un nuevo usuario y vincular su historia clínica, validando su cobertura médica institucional."
-                  : "Ingrese sus credenciales de acceso para ver sus turnos y resultados médicos."}
+                  ? "Complete sus datos para crear un nuevo usuario y vincular su historia clínica con cobertura médica institucional."
+                  : "Ingrese sus credenciales para consultar turnos, diagnósticos e iniciar su triage clínico."}
               </p>
             </div>
 
@@ -178,7 +175,12 @@ export function RegistrationCard() {
           </>
         )}
       </div>
+
+      {/* Nota de seguridad y privacidad al pie */}
+      <div className="flex items-center justify-center gap-1.5 text-label-xs text-secondary text-center">
+        <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
+        <span>Conexión cifrada de extremo a extremo · Ley 25.326 de Protección de Datos Personales</span>
+      </div>
     </div>
   )
 }
-
