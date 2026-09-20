@@ -1,0 +1,40 @@
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+
+export const metadata: Metadata = {
+  title: "Sentria AI | Registro de Paciente",
+  description:
+    "Acceso directo al ecosistema asistencial Sentria AI. Centralice su historial médico, turnos hospitalarios y validaciones de cobertura en tiempo real.",
+};
+
+import { AuthProvider } from "@/features/auth/hooks/use-auth";
+
+export default function RootLayout({ children }: { children: import("react").ReactNode }) {
+  return (
+    <html
+      lang="es"
+      className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col bg-background text-on-background">
+        <AuthProvider>{children}</AuthProvider>
+        <Analytics />
+      </body>
+    </html>
+  );
+}
+
