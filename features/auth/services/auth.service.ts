@@ -147,14 +147,24 @@ export const authService = {
           }
         }
 
+        const parsedUser = result.user as AuthResponse["user"] | undefined
+        if (!parsedUser && !result.id && !result.email) {
+          return {
+            success: false,
+            message: "Respuesta de autenticación incompleta del servidor.",
+            error: "Formato de respuesta inválido: faltan datos de usuario.",
+            statusCode: response.status,
+          }
+        }
+
         return {
           success: true,
           message: (typeof result.message === "string" && result.message) || "Autenticación correcta",
-          user: (result.user as AuthResponse["user"]) || {
+          user: parsedUser || {
             id: typeof result.id === "string" ? result.id : crypto.randomUUID(),
-            fullName: "Paciente Registrado",
+            fullName: typeof result.fullName === "string" ? result.fullName : credentials.email.split("@")[0],
             email: credentials.email,
-            docNumber: "12.345.678",
+            docNumber: typeof result.docNumber === "string" ? result.docNumber : "",
           },
           token: typeof result.token === "string" ? result.token : undefined,
           statusCode: response.status,

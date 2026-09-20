@@ -27,6 +27,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const generatedId = React.useId()
     const inputId = id || generatedId
+    const errorId = `${inputId}-error`
+    const helperId = `${inputId}-helper`
+    const describedBy = error
+      ? errorId
+      : helperText
+        ? helperId
+        : props["aria-describedby"]
 
     return (
       <div className={cn("flex flex-col gap-1.5 w-full", containerClassName)}>
@@ -50,6 +57,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             required={required}
+            aria-invalid={error ? "true" : props["aria-invalid"]}
+            aria-describedby={describedBy}
             className={cn(
               "w-full h-11 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed",
               leftIcon ? "pl-10 pr-3.5" : "px-3.5",
@@ -63,9 +72,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error ? (
-          <p className="text-xs font-medium text-error mt-0.5">{error}</p>
+          <p id={errorId} role="alert" className="text-xs font-medium text-error mt-0.5">{error}</p>
         ) : helperText ? (
-          <p className="text-xs text-slate-500 mt-0.5">{helperText}</p>
+          <p id={helperId} className="text-xs text-slate-500 mt-0.5">{helperText}</p>
         ) : null}
       </div>
     )

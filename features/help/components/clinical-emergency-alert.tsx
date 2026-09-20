@@ -23,12 +23,18 @@ export function ClinicalEmergencyAlert() {
             </p>
           </div>
 
-          <div className="flex-shrink-0 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-xs shrink-0 w-full sm:w-auto">
+            <a
+              href="tel:107"
+              className="inline-flex items-center justify-center bg-error text-on-error text-label-md px-space-md py-space-sm rounded-lg hover:opacity-90 transition-all font-semibold shadow-2xs active:scale-[0.98]"
+            >
+              SAME (107)
+            </a>
             <a
               href="tel:911"
-              className="w-full sm:w-auto inline-flex items-center justify-center bg-error text-on-error text-label-md px-space-lg py-space-sm rounded-lg hover:opacity-90 transition-all font-semibold shadow-2xs active:scale-[0.98]"
+              className="inline-flex items-center justify-center bg-error/90 text-on-error text-label-md px-space-md py-space-sm rounded-lg hover:opacity-90 transition-all font-semibold shadow-2xs active:scale-[0.98]"
             >
-              Llamar a Emergencias (911 / 107)
+              Emergencias (911)
             </a>
           </div>
         </div>

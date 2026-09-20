@@ -45,6 +45,7 @@ export function HelpHero({
             <input
               id="faq-search-input"
               type="text"
+              aria-label="Buscar en preguntas frecuentes y trámites"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onKeyDown={handleKeyDown}

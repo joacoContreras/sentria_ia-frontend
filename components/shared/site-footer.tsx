@@ -30,7 +30,7 @@ export function SiteFooter() {
             className="flex shrink-0 items-center gap-space-xs rounded-full bg-error px-space-lg py-space-xs text-label-lg text-on-error hover:opacity-95 transition-opacity"
           >
             <Phone className="h-[18px] w-[18px]" aria-hidden="true" />
-            Llamar 911 / 112 Directo
+            Llamar 911 Directo
           </a>
         </div>
 

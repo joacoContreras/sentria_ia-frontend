@@ -122,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success && response.user) {
         updateSession({
           user: response.user,
-          token: response.token || "mock-jwt-token",
+          token: response.token || null,
         })
       }
       return response
@@ -140,7 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success && response.user) {
         updateSession({
           user: response.user,
-          token: response.token || "mock-jwt-token",
+          token: response.token || null,
         })
       }
       return response

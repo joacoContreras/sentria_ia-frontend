@@ -32,7 +32,9 @@ export function RegistrationSuccess({
         </h3>
         <p className="text-sm text-slate-500 max-w-sm leading-relaxed">
           {tab === "register"
-            ? `Se ha registrado exitosamente a ${fullName || "el paciente"}. Ya puede acceder a su portal.`
+            ? `Se ha registrado exitosamente a ${fullName || "el paciente"}${
+                coverageProvider ? ` (${coverageProvider})` : ""
+              }. Ya puede acceder a su portal.`
             : `Ha ingresado correctamente con la cuenta ${email}.`}
         </p>
       </div>

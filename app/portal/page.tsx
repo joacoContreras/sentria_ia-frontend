@@ -123,14 +123,12 @@ export default function PatientPortalPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-space-xs shrink-0">
-            <Link href="#triage">
-              <Button
-                variant="secondary"
-                className="bg-white text-primary hover:bg-white/90 shadow-md w-full"
-                leftIcon={<Stethoscope className="h-4 w-4 text-primary" />}
-              >
-                Triage Clínico
-              </Button>
+            <Link
+              href="/ayuda"
+              className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-white/90 shadow-md font-semibold h-10 px-4 text-sm rounded-xl transition-all active:scale-[0.985]"
+            >
+              <Stethoscope className="h-4 w-4 text-primary" />
+              Triage y Ayuda
             </Link>
           </div>
         </section>
@@ -188,8 +186,14 @@ export default function PatientPortalPage() {
               </p>
             </div>
             <div className="pt-space-md border-t border-outline-variant/30 mt-space-md">
-              <Button variant="primary" size="sm" className="w-full">
-                Solicitar Nuevo Turno
+              <Button
+                variant="secondary"
+                size="sm"
+                className="w-full opacity-75 cursor-not-allowed"
+                disabled
+                title="Módulo de agendamiento disponible próximamente"
+              >
+                Solicitar Nuevo Turno (Próximamente)
               </Button>
             </div>
           </div>
@@ -211,14 +215,13 @@ export default function PatientPortalPage() {
               </p>
             </div>
             <div className="pt-space-md border-t border-outline-variant/30 mt-space-md">
-              <Button
-                variant="primary"
-                size="sm"
-                className="w-full"
-                rightIcon={<ArrowRight className="h-4 w-4" />}
+              <Link
+                href="/ayuda"
+                className="inline-flex items-center justify-center gap-1.5 bg-primary text-white shadow-2xs hover:bg-primary-container active:scale-[0.985] font-medium transition-all h-9 px-3 text-xs rounded-lg w-full"
               >
-                Iniciar Triage
-              </Button>
+                Iniciar Triage en Ayuda
+                <ArrowRight className="h-4 w-4 ml-1" />
+              </Link>
             </div>
           </div>
         </div>

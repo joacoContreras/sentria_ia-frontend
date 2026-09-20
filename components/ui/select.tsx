@@ -35,6 +35,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ) => {
     const generatedId = React.useId()
     const selectId = id || generatedId
+    const errorId = `${selectId}-error`
+    const helperId = `${selectId}-helper`
+    const describedBy = error
+      ? errorId
+      : helperText
+        ? helperId
+        : props["aria-describedby"]
 
     return (
       <div className={cn("flex flex-col gap-1.5 w-full", containerClassName)}>
@@ -52,6 +59,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             ref={ref}
             required={required}
+            aria-invalid={error ? "true" : props["aria-invalid"]}
+            aria-describedby={describedBy}
             className={cn(
               "w-full h-11 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 appearance-none cursor-pointer pl-3.5 pr-10 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed",
               error
@@ -81,9 +90,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         </div>
 
         {error ? (
-          <p className="text-xs font-medium text-error mt-0.5">{error}</p>
+          <p id={errorId} role="alert" className="text-xs font-medium text-error mt-0.5">{error}</p>
         ) : helperText ? (
-          <p className="text-xs text-slate-500 mt-0.5">{helperText}</p>
+          <p id={helperId} className="text-xs text-slate-500 mt-0.5">{helperText}</p>
         ) : null}
       </div>
     )
