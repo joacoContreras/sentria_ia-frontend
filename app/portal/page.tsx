@@ -54,7 +54,7 @@ export default function PatientPortalPage() {
           </p>
           <Button
             variant="primary"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/acceso")}
             className="w-full"
           >
             Ir al inicio de sesión
