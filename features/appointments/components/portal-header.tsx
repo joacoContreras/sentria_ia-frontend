@@ -25,12 +25,14 @@ export function PortalHeader({
   const displayName = user?.fullName || "María Florencia Gómez"
   const displayDocNumber = user?.docNumber ? `DNI ${user.docNumber}` : "DNI 38.452.901"
 
-  const isMisTurnosActive = activeSection === "turnos" && activeTab === "upcoming"
+  const isMisTurnosActive = activeSection === "turnos"
+  const isTriageActive = activeSection === "triage"
+  const isHistorialActive = activeSection === "historial"
   const isAyudaActive = activeSection === "ayuda"
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/30"
+      className="fixed top-0 left-0 right-0 z-40 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-surface-container"
       role="banner"
     >
       <div className="h-20 max-w-container-max mx-auto px-gutter-mobile lg:px-gutter-desktop flex items-center justify-between gap-space-lg">
@@ -46,9 +48,14 @@ export function PortalHeader({
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-on-primary shadow-xs group-hover:bg-primary-container transition-colors">
             <Activity className="h-5 w-5" aria-hidden="true" />
           </div>
-          <span className="font-headline-sm text-headline-sm text-primary font-semibold tracking-tight">
-            Sentria AI
-          </span>
+          <div className="flex flex-col">
+            <span className="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none font-bold">
+              Sentria AI
+            </span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-0.5">
+              Portal Pacientes
+            </span>
+          </div>
         </button>
 
         {/* Primary Navigation within Portal Context */}
@@ -57,49 +64,60 @@ export function PortalHeader({
             type="button"
             onClick={() => {
               onSelectSection("turnos")
-              onSelectTab("upcoming")
+              if (activeTab !== "upcoming") {
+                onSelectTab("upcoming")
+              }
             }}
             className={cn(
-              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer",
+              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
               isMisTurnosActive
-                ? "bg-primary-container text-on-primary font-semibold shadow-xs"
-                : "text-slate-700 hover:bg-surface-container-high hover:text-on-surface font-medium"
+                ? "bg-primary-container text-on-primary-container shadow-xs"
+                : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-medium"
             )}
             aria-current={isMisTurnosActive ? "page" : undefined}
           >
             Mis Turnos
           </button>
 
-          {/* Triage & Síntomas - Deshabilitado (Próximamente) */}
+          {/* Triage & Síntomas */}
           <button
             type="button"
-            disabled
-            aria-disabled="true"
-            title="Módulo de Triage en desarrollo (Próximamente)"
-            className="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-slate-400 opacity-50 cursor-not-allowed select-none"
+            onClick={() => onSelectSection("triage")}
+            className={cn(
+              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
+              isTriageActive
+                ? "bg-primary-container text-on-primary-container shadow-xs"
+                : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-medium"
+            )}
+            aria-current={isTriageActive ? "page" : undefined}
           >
-            Triage & Síntomas
+            Triage &amp; Síntomas
           </button>
 
-          {/* Historial Clínico - Deshabilitado (Próximamente) */}
+          {/* Historial Clínico */}
           <button
             type="button"
-            disabled
-            aria-disabled="true"
-            title="Historial Clínico en desarrollo (Próximamente)"
-            className="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-slate-400 opacity-50 cursor-not-allowed select-none"
+            onClick={() => onSelectSection("historial")}
+            className={cn(
+              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
+              isHistorialActive
+                ? "bg-primary-container text-on-primary-container shadow-xs"
+                : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-medium"
+            )}
+            aria-current={isHistorialActive ? "page" : undefined}
           >
             Historial Clínico
           </button>
 
+          {/* Centro de Ayuda */}
           <button
             type="button"
             onClick={() => onSelectSection("ayuda")}
             className={cn(
-              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer",
+              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
               isAyudaActive
-                ? "bg-primary-container text-on-primary font-semibold shadow-xs"
-                : "text-slate-700 hover:bg-surface-container-high hover:text-on-surface font-medium"
+                ? "bg-primary-container text-on-primary-container shadow-xs"
+                : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-medium"
             )}
             aria-current={isAyudaActive ? "page" : undefined}
           >
@@ -111,30 +129,27 @@ export function PortalHeader({
         <div className="flex items-center gap-space-md shrink-0">
           <div
             aria-label={`Perfil de paciente: ${displayName}, ${displayDocNumber}`}
-            className="hidden sm:flex items-center gap-space-sm pl-space-sm"
-            role="region"
+            className="hidden sm:flex flex-col text-right"
           >
-            <div className="flex flex-col text-right">
-              <span className="font-body-md-medium text-body-md-medium text-on-surface font-semibold truncate max-w-[180px]">
-                {displayName}
-              </span>
-              <span className="font-label-sm text-label-sm text-slate-600">
+            <span className="font-label-lg text-label-lg text-on-surface font-semibold leading-tight truncate max-w-[200px]">
+              {displayName}
+            </span>
+            <div className="flex items-center justify-end gap-space-2xs mt-0.5">
+              <span className="font-label-sm text-label-sm text-on-surface-variant">
                 {displayDocNumber}
               </span>
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full font-label-sm text-[10px] bg-secondary-container text-on-secondary-container font-medium">
+                Verificada
+              </span>
             </div>
-            <div className="relative">
-              <div
-                aria-label={`Perfil de paciente: ${displayName}`}
-                className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs"
-                role="img"
-              >
-                <User className="h-4 w-4" />
-              </div>
-              <span
-                className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary-fixed ring-2 ring-surface-container-lowest"
-                title="En línea"
-              />
-            </div>
+          </div>
+
+          <div
+            aria-label={`Perfil de ${displayName}`}
+            className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs"
+            role="img"
+          >
+            <User className="h-4 w-4" aria-hidden="true" />
           </div>
 
           {/* Logout Button */}

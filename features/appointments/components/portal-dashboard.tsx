@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { FileText, ArrowRight } from "lucide-react"
 import { useAppointments } from "../hooks/use-appointments"
 import { PortalHeader } from "./portal-header"
 import { PatientHeroBanner } from "./patient-hero-banner"
@@ -11,8 +12,11 @@ import { AppointmentCanceledCard } from "./appointment-canceled-card"
 import { ClinicalSidebar } from "./clinical-sidebar"
 import { CancelAppointmentModal } from "./cancel-appointment-modal"
 import { RescheduleAppointmentModal } from "./reschedule-appointment-modal"
+import { BookAppointmentModal } from "./book-appointment-modal"
 import { PortalToast } from "./portal-toast"
 import { PortalFooter } from "./portal-footer"
+import { MedicalHistoryView } from "@/features/medical-history/components/medical-history-view"
+import { TriageView } from "@/features/triage/components/triage-view"
 import { HelpView } from "@/features/help/components/help-view"
 import { ClinicalTermsView } from "@/features/legal/components/clinical-terms-view"
 import { MedicalPrivacyView } from "@/features/legal/components/medical-privacy-view"
@@ -36,9 +40,13 @@ export function PortalDashboard() {
     nextAppointment,
     cancelModalAppointment,
     rescheduleModalAppointment,
+    isBookModalOpen,
+    bookModalSpecialty,
+    bookModalDoctor,
     toast,
     switchSection,
     switchTab,
+    navigateToHistory,
     openCancelModal,
     closeCancelModal,
     confirmCancel,
@@ -46,9 +54,15 @@ export function PortalDashboard() {
     openRescheduleModal,
     closeRescheduleModal,
     confirmReschedule,
-    triggerNewAppointmentNotice,
+    openBookModal,
+    closeBookModal,
+    confirmBookAppointment,
     dismissToast,
+    showToast,
   } = useAppointments()
+
+  // Simplified history in Mis Turnos showing the last 2-3 items
+  const simplifiedHistory = historyAppointments.slice(0, 3)
 
   return (
     <div className="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -77,14 +91,14 @@ export function PortalDashboard() {
         {/* Toast Notification Container */}
         <PortalToast toast={toast} onDismiss={dismissToast} />
 
-        {/* SECTION 1: TURNOS Y CONSULTAS */}
+        {/* SECTION 1: MIS TURNOS */}
         {activeSection === "turnos" && (
           <div className="flex flex-col w-full animate-in fade-in duration-200">
             {/* Hero & Patient Context Banner */}
             <PatientHeroBanner
               activeCount={activeAppointmentsCount}
               nextAppointment={nextAppointment}
-              onNewAppointment={triggerNewAppointmentNotice}
+              onNewAppointment={() => openBookModal()}
             />
 
             {/* Main Body: Filtered Queue & Clinical Details */}
@@ -101,7 +115,7 @@ export function PortalDashboard() {
                     onTabChange={switchTab}
                   />
 
-                  {/* TAB PANEL 1: Próximos Turnos (CA1, CA2, CA3, CA4) */}
+                  {/* TAB PANEL 1: Próximos Turnos */}
                   {activeTab === "upcoming" && (
                     <div
                       id="panel-upcoming"
@@ -114,6 +128,13 @@ export function PortalDashboard() {
                           <p className="font-body-lg">
                             No tienes turnos pendientes en este momento.
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => openBookModal()}
+                            className="mt-3 inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-container transition-all cursor-pointer shadow-sm"
+                          >
+                            Agendar un Turno
+                          </button>
                         </div>
                       ) : (
                         upcomingAppointments.map((appointment) => (
@@ -129,7 +150,7 @@ export function PortalDashboard() {
                     </div>
                   )}
 
-                  {/* TAB PANEL 2: Historial y Pasados */}
+                  {/* TAB PANEL 2: Historial y Pasados (Simplificado con enlace a Historial Clínico completo) */}
                   {activeTab === "history" && (
                     <div
                       id="panel-history"
@@ -137,19 +158,61 @@ export function PortalDashboard() {
                       aria-labelledby="tab-history"
                       className="flex flex-col gap-space-md animate-in fade-in duration-150"
                     >
-                      {historyAppointments.length === 0 ? (
+                      {simplifiedHistory.length === 0 ? (
                         <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-slate-600">
                           <p className="font-body-lg">
                             No tienes historial de consultas pasadas.
                           </p>
                         </div>
                       ) : (
-                        historyAppointments.map((appointment) => (
-                          <AppointmentHistoryCard
-                            key={appointment.id}
-                            appointment={appointment}
-                          />
-                        ))
+                        <>
+                          <div className="flex items-center justify-between px-1">
+                            <span className="font-label-sm text-label-sm text-outline font-semibold uppercase tracking-wider">
+                              Últimas consultas registradas ({simplifiedHistory.length})
+                            </span>
+                            <button
+                              type="button"
+                              onClick={navigateToHistory}
+                              className="font-label-sm text-label-sm text-primary font-bold hover:underline cursor-pointer inline-flex items-center gap-1"
+                            >
+                              Ver Historia Clínica Completa
+                              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                            </button>
+                          </div>
+
+                          {simplifiedHistory.map((appointment) => (
+                            <AppointmentHistoryCard
+                              key={appointment.id}
+                              appointment={appointment}
+                              onViewSummary={() => navigateToHistory()}
+                            />
+                          ))}
+
+                          {/* Banner explicativo y CTA a Historia Clínica */}
+                          <div className="mt-space-sm p-space-lg rounded-2xl bg-surface-container-low border border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+                            <div className="flex items-start gap-space-md">
+                              <div className="w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shrink-0 mt-0.5">
+                                <FileText className="h-5 w-5" aria-hidden="true" />
+                              </div>
+                              <div className="flex flex-col">
+                                <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+                                  Expediente Clínico Digital Completo
+                                </h3>
+                                <p className="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                                  Consulta diagnósticos, evoluciones, recetas descargables, órdenes médicas e informes de laboratorio en tu Historia Clínica.
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={navigateToHistory}
+                              className="px-space-lg h-11 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold inline-flex items-center justify-center gap-space-2xs transition-all shadow-sm shrink-0 cursor-pointer"
+                            >
+                              <span>Ver Historial Clínico</span>
+                              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                            </button>
+                          </div>
+                        </>
                       )}
                     </div>
                   )}
@@ -187,14 +250,34 @@ export function PortalDashboard() {
           </div>
         )}
 
-        {/* SECTION 2: CENTRO DE AYUDA Y ASISTENCIA DENTRO DEL PORTAL */}
+        {/* SECTION 2: TRIAGE Y SÍNTOMAS */}
+        {activeSection === "triage" && (
+          <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
+            <TriageView
+              onOpenBookAppointment={openBookModal}
+              onShowToast={showToast}
+            />
+          </div>
+        )}
+
+        {/* SECTION 3: HISTORIAL CLÍNICO */}
+        {activeSection === "historial" && (
+          <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
+            <MedicalHistoryView
+              onBookAppointmentWithDoctor={openBookModal}
+              onShowToast={showToast}
+            />
+          </div>
+        )}
+
+        {/* SECTION 4: CENTRO DE AYUDA Y ASISTENCIA DENTRO DEL PORTAL */}
         {activeSection === "ayuda" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <HelpView />
           </div>
         )}
 
-        {/* SECTION 3: SEDE MÉDICA Y TELEMÉTRICA CENTRAL */}
+        {/* SECTION 5: SEDE MÉDICA Y TELEMÉTRICA CENTRAL */}
         {activeSection === "sede" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <AboutHero />
@@ -205,21 +288,21 @@ export function PortalDashboard() {
           </div>
         )}
 
-        {/* SECTION 4: TÉRMINOS CLÍNICOS */}
+        {/* SECTION 6: TÉRMINOS CLÍNICOS */}
         {activeSection === "terminos" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <ClinicalTermsView />
           </div>
         )}
 
-        {/* SECTION 5: PRIVACIDAD MÉDICA */}
+        {/* SECTION 7: PRIVACIDAD MÉDICA */}
         {activeSection === "privacidad" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <MedicalPrivacyView />
           </div>
         )}
 
-        {/* SECTION 6: PROTOCOLO CRIPTOGRÁFICO */}
+        {/* SECTION 8: PROTOCOLO CRIPTOGRÁFICO */}
         {activeSection === "protocolo" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <CryptoProtocolView />
@@ -244,6 +327,14 @@ export function PortalDashboard() {
         availableDates={availableDates}
         onClose={closeRescheduleModal}
         onConfirm={confirmReschedule}
+      />
+
+      <BookAppointmentModal
+        isOpen={isBookModalOpen}
+        initialSpecialty={bookModalSpecialty}
+        initialDoctor={bookModalDoctor}
+        onClose={closeBookModal}
+        onConfirm={confirmBookAppointment}
       />
     </div>
   )

@@ -6,6 +6,7 @@ import {
   AppointmentTab,
   PortalSection,
   AvailableDateOption,
+  BookAppointmentInput,
   ToastNotification,
 } from "@/types/appointments"
 import { appointmentService } from "../services/appointment.service"
@@ -20,6 +21,9 @@ export function useAppointments() {
   // Modals state
   const [cancelModalAppointment, setCancelModalAppointment] = useState<Appointment | null>(null)
   const [rescheduleModalAppointment, setRescheduleModalAppointment] = useState<Appointment | null>(null)
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false)
+  const [bookModalSpecialty, setBookModalSpecialty] = useState<string | undefined>(undefined)
+  const [bookModalDoctor, setBookModalDoctor] = useState<string | undefined>(undefined)
 
   // Toast state
   const [toast, setToast] = useState<ToastNotification | null>(null)
@@ -35,12 +39,12 @@ export function useAppointments() {
     setToast(null)
   }, [])
 
-  // Auto-dismiss toast after 4.2s
+  // Auto-dismiss toast after 4.5s
   useEffect(() => {
     if (!toast) return
     const timer = setTimeout(() => {
       setToast(null)
-    }, 4200)
+    }, 4500)
     return () => clearTimeout(timer)
   }, [toast])
 
@@ -100,9 +104,11 @@ export function useAppointments() {
 
   // Closest next appointment
   const nextAppointment = useMemo(() => {
-    return appointments.find(
-      (a) => a.isNext && !a.isCancelledInSession && a.status === "confirmado"
-    ) || appointments.find((a) => a.status === "confirmado" && !a.isCancelledInSession)
+    return (
+      appointments.find(
+        (a) => a.isNext && !a.isCancelledInSession && a.status === "confirmado"
+      ) || appointments.find((a) => a.status === "confirmado" && !a.isCancelledInSession)
+    )
   }, [appointments])
 
   // Section switcher
@@ -128,10 +134,10 @@ export function useAppointments() {
     [showToast]
   )
 
-  // Navigate to history tab directly
+  // Navigate to history section directly
   const handleNavigateToHistory = useCallback(() => {
-    setActiveSection("turnos")
-    setActiveTab("history")
+    setActiveSection("historial")
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }, [])
 
   // Cancel flow
@@ -212,8 +218,8 @@ export function useAppointments() {
         )
         setRescheduleModalAppointment(null)
         showToast(
-          "Cita Reprogramada",
-          `Nuevo turno confirmado para ${newDate} - ${newTime}.`,
+          "Cita Reprogramada con Éxito",
+          `Nuevo turno confirmado para ${newDate} - ${newTime}. Se envió confirmación por SMS y correo electrónico.`,
           "verified",
           "success"
         )
@@ -224,16 +230,39 @@ export function useAppointments() {
     [showToast]
   )
 
-  // Notice for new appointment / triage
-  const handleTriggerNewAppointmentNotice = useCallback(() => {
-    setActiveSection("ayuda")
-    showToast(
-      "Asistente Clínico IA",
-      "Iniciando triaje clínico inteligente para asignación de especialista...",
-      "smart_toy",
-      "info"
-    )
-  }, [showToast])
+  // Book new appointment flow
+  const handleOpenBookModal = useCallback((specialty?: string, doctor?: string) => {
+    setBookModalSpecialty(specialty)
+    setBookModalDoctor(doctor)
+    setIsBookModalOpen(true)
+  }, [])
+
+  const handleCloseBookModal = useCallback(() => {
+    setIsBookModalOpen(false)
+    setBookModalSpecialty(undefined)
+    setBookModalDoctor(undefined)
+  }, [])
+
+  const handleConfirmBookAppointment = useCallback(
+    async (input: BookAppointmentInput) => {
+      try {
+        const { appointment: newApt } = await appointmentService.bookAppointment(input)
+        setAppointments((prev) => [newApt, ...prev])
+        setIsBookModalOpen(false)
+        setActiveSection("turnos")
+        setActiveTab("upcoming")
+        showToast(
+          "Turno Agendado con Éxito",
+          `Cita médica confirmada con ${newApt.doctorName} para ${newApt.displayDate} a las ${newApt.displayTime}.`,
+          "event_available",
+          "success"
+        )
+      } catch {
+        showToast("Error", "No se pudo agendar el turno", "error", "error")
+      }
+    },
+    [showToast]
+  )
 
   return {
     appointments,
@@ -249,6 +278,9 @@ export function useAppointments() {
     nextAppointment,
     cancelModalAppointment,
     rescheduleModalAppointment,
+    isBookModalOpen,
+    bookModalSpecialty,
+    bookModalDoctor,
     toast,
     switchSection: handleSwitchSection,
     switchTab: handleSwitchTab,
@@ -260,7 +292,9 @@ export function useAppointments() {
     openRescheduleModal: handleOpenRescheduleModal,
     closeRescheduleModal: handleCloseRescheduleModal,
     confirmReschedule: handleConfirmReschedule,
-    triggerNewAppointmentNotice: handleTriggerNewAppointmentNotice,
+    openBookModal: handleOpenBookModal,
+    closeBookModal: handleCloseBookModal,
+    confirmBookAppointment: handleConfirmBookAppointment,
     dismissToast,
     showToast,
   }

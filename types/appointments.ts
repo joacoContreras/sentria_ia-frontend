@@ -12,6 +12,8 @@ export type AppointmentTab = "upcoming" | "history" | "canceled"
 
 export type PortalSection =
   | "turnos"
+  | "triage"
+  | "historial"
   | "ayuda"
   | "sede"
   | "terminos"
@@ -52,6 +54,8 @@ export interface AvailableDateOption {
   id: string
   dateKey: string
   label: string
+  dayName: string
+  dateMetric: string
   dateDisplay: string
   slotsCount: number
   slots: AvailableTimeSlot[]
@@ -66,6 +70,18 @@ export interface RescheduleAppointmentInput {
   appointmentId: string
   newDate: string
   newTime: string
+}
+
+export interface BookAppointmentInput {
+  specialty: string
+  doctorName: string
+  doctorLicense?: string
+  venue: string
+  venueAddress?: string
+  dateDisplay: string
+  timeDisplay: string
+  coverageProvider: string
+  reason?: string
 }
 
 export interface ToastNotification {

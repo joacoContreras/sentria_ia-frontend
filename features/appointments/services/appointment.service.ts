@@ -1,6 +1,7 @@
 import {
   Appointment,
   AvailableDateOption,
+  BookAppointmentInput,
   CancelAppointmentInput,
   RescheduleAppointmentInput,
 } from "@/types/appointments"
@@ -24,46 +25,82 @@ const INITIAL_APPOINTMENTS: Appointment[] = [
     rule: "gestion_habilitada",
     status: "confirmado",
     isCancelledInSession: false,
-    isNext: false,
-  },
-  {
-    id: "apt-mendez-02",
-    doctorName: "Dra. Valeria Méndez",
-    doctorLicense: "M.N. 98.415",
-    specialty: "Traumatología y Ortopedia",
-    appointmentDate: "2024-10-21T09:15:00Z",
-    displayDate: "Mañana Viernes",
-    displayTime: "09:15 hs",
-    relativeTime: "Faltan 18 horas",
-    venue: "Sede Las Heras (Cons. 12)",
-    venueAddress: "Av. Las Heras 2390, CABA",
-    coverageProvider: "OSDE 310 • Copago $0",
-    coverageStatus: "Orden médica cargada",
-    rule: "bloqueado_24h",
-    status: "confirmado",
-    isCancelledInSession: false,
     isNext: true,
   },
   {
-    id: "apt-soria-hist-03",
-    doctorName: "Dra. Camila Soria",
-    doctorLicense: "M.N. 87.210",
-    specialty: "Dermatología Quirúrgica",
-    appointmentDate: "2024-09-12T11:00:00Z",
-    displayDate: "12 de Septiembre 2024",
-    displayTime: "11:00 hs",
-    relativeTime: "Hace 1 mes",
-    venue: "Sede Central Belgrano (Cons. 108)",
-    venueAddress: "Av. Cabildo 1845, CABA",
+    id: "apt-soria-02",
+    doctorName: "Dra. Lucía Soria",
+    doctorLicense: "M.N. 98.412",
+    specialty: "Dermatología General",
+    appointmentDate: "2024-11-05T10:15:00Z",
+    displayDate: "Martes 05 de Noviembre",
+    displayTime: "10:15 hs",
+    relativeTime: "En 12 días",
+    venue: "Centro Médico Palermo",
+    venueAddress: "Av. Santa Fe 3200, CABA",
+    coverageProvider: "OSDE 310 • Copago $0",
+    coverageStatus: "Vigente",
+    rule: "gestion_habilitada",
+    status: "confirmado",
+    isCancelledInSession: false,
+    isNext: false,
+  },
+  {
+    id: "apt-pando-03",
+    doctorName: "Bioq. Horacio Pando",
+    doctorLicense: "M.N. 44.192",
+    specialty: "Perfil Lipídico y Glucemia",
+    appointmentDate: "2024-11-08T07:45:00Z",
+    displayDate: "Viernes 08 de Noviembre",
+    displayTime: "07:45 hs",
+    relativeTime: "En 15 días",
+    venue: "Unidad Analítica San Isidro",
+    venueAddress: "Av. Libertador 16200, San Isidro",
+    coverageProvider: "OSDE 310",
+    coverageStatus: "Orden validada",
+    rule: "gestion_habilitada",
+    status: "confirmado",
+    isCancelledInSession: false,
+    isNext: false,
+  },
+  {
+    id: "apt-mendez-prev-04",
+    doctorName: "Dra. Valeria Méndez",
+    doctorLicense: "M.N. 104.551",
+    specialty: "Traumatología y Ortopedia",
+    appointmentDate: "2024-07-04T10:15:00Z",
+    displayDate: "04 de Julio de 2024",
+    displayTime: "10:15 hs",
+    relativeTime: "Hace 3 meses",
+    venue: "Sede Las Heras (Cons. 12)",
+    venueAddress: "Av. Las Heras 2390, CABA",
     coverageProvider: "OSDE 310",
     coverageStatus: "Cubierto 100%",
     rule: "gestion_habilitada",
     status: "atendido",
-    clinicalNote: "Atendido • Informe de biopsia disponible",
+    clinicalNote: "Tendinopatía rotuliana leve • Kinesioterapia 10 sesiones",
     summaryReportAvailable: true,
   },
   {
-    id: "apt-paz-canc-04",
+    id: "apt-benitez-prev-05",
+    doctorName: "Dr. Esteban Benítez",
+    doctorLicense: "M.N. 87.319",
+    specialty: "Clínica Médica",
+    appointmentDate: "2024-03-15T09:00:00Z",
+    displayDate: "15 de Marzo de 2024",
+    displayTime: "09:00 hs",
+    relativeTime: "Hace 7 meses",
+    venue: "Teleconsulta Sentria",
+    venueAddress: "Atención Virtual HD",
+    coverageProvider: "OSDE 310",
+    coverageStatus: "Finalizada",
+    rule: "gestion_habilitada",
+    status: "atendido",
+    clinicalNote: "Cuadro rinofaríngeo estacional • Reposo 48hs",
+    summaryReportAvailable: true,
+  },
+  {
+    id: "apt-paz-canc-06",
     doctorName: "Dr. Martín Paz",
     doctorLicense: "M.N. 79.112",
     specialty: "Oftalmología General",
@@ -81,41 +118,67 @@ const INITIAL_APPOINTMENTS: Appointment[] = [
   },
 ]
 
-const MOCK_AVAILABLE_DATES: AvailableDateOption[] = [
+export const MOCK_AVAILABLE_DATES: AvailableDateOption[] = [
   {
-    id: "date-1",
-    dateKey: "2024-10-28",
-    label: "Lun 28 Oct",
-    dateDisplay: "Lunes 28 de Octubre",
-    slotsCount: 3,
+    id: "date-vie-25",
+    dateKey: "vie-25",
+    label: "Viernes 25 Oct",
+    dayName: "Viernes",
+    dateMetric: "25 Oct",
+    dateDisplay: "Viernes 25 de Octubre",
+    slotsCount: 6,
     slots: [
       { id: "s-1", time: "09:00 hs", period: "morning" },
-      { id: "s-2", time: "10:30 hs", period: "morning" },
-      { id: "s-3", time: "14:00 hs", period: "afternoon" },
+      { id: "s-2", time: "09:45 hs", period: "morning" },
+      { id: "s-3", time: "11:15 hs", period: "morning" },
+      { id: "s-4", time: "14:30 hs", period: "afternoon" },
+      { id: "s-5", time: "16:00 hs", period: "afternoon" },
+      { id: "s-6", time: "17:15 hs", period: "afternoon" },
     ],
   },
   {
-    id: "date-2",
-    dateKey: "2024-10-29",
-    label: "Mar 29 Oct",
-    dateDisplay: "Martes 29 de Octubre",
-    slotsCount: 2,
-    slots: [
-      { id: "s-4", time: "14:00 hs", period: "afternoon" },
-      { id: "s-5", time: "16:15 hs", period: "afternoon" },
-    ],
-  },
-  {
-    id: "date-3",
-    dateKey: "2024-10-31",
-    label: "Jue 31 Oct",
-    dateDisplay: "Jueves 31 de Octubre",
+    id: "date-lun-28",
+    dateKey: "lun-28",
+    label: "Lunes 28 Oct",
+    dayName: "Lunes",
+    dateMetric: "28 Oct",
+    dateDisplay: "Lunes 28 de Octubre",
     slotsCount: 4,
     slots: [
-      { id: "s-6", time: "09:00 hs", period: "morning" },
-      { id: "s-7", time: "10:30 hs", period: "morning" },
-      { id: "s-8", time: "16:15 hs", period: "afternoon" },
-      { id: "s-9", time: "17:45 hs", period: "afternoon" },
+      { id: "s-7", time: "09:00 hs", period: "morning" },
+      { id: "s-8", time: "10:30 hs", period: "morning" },
+      { id: "s-9", time: "14:30 hs", period: "afternoon" },
+      { id: "s-10", time: "16:00 hs", period: "afternoon" },
+    ],
+  },
+  {
+    id: "date-mar-29",
+    dateKey: "mar-29",
+    label: "Martes 29 Oct",
+    dayName: "Martes",
+    dateMetric: "29 Oct",
+    dateDisplay: "Martes 29 de Octubre",
+    slotsCount: 3,
+    slots: [
+      { id: "s-11", time: "09:45 hs", period: "morning" },
+      { id: "s-12", time: "14:30 hs", period: "afternoon" },
+      { id: "s-13", time: "16:00 hs", period: "afternoon" },
+    ],
+  },
+  {
+    id: "date-mie-30",
+    dateKey: "mie-30",
+    label: "Miércoles 30 Oct",
+    dayName: "Miércoles",
+    dateMetric: "30 Oct",
+    dateDisplay: "Miércoles 30 de Octubre",
+    slotsCount: 5,
+    slots: [
+      { id: "s-14", time: "09:00 hs", period: "morning" },
+      { id: "s-15", time: "11:15 hs", period: "morning" },
+      { id: "s-16", time: "14:30 hs", period: "afternoon" },
+      { id: "s-17", time: "16:00 hs", period: "afternoon" },
+      { id: "s-18", time: "17:15 hs", period: "afternoon" },
     ],
   },
 ]
@@ -128,7 +191,6 @@ class AppointmentService {
    * En producción conectará con GET /api/patient/appointments
    */
   async getAppointments(): Promise<Appointment[]> {
-    // Simula pequeña latencia asíncrona
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...this.appointments])
@@ -137,8 +199,7 @@ class AppointmentService {
   }
 
   /**
-   * Obtiene las opciones de fechas y turnos disponibles para reprogramar
-   * En producción conectará con GET /api/patient/appointments/available-slots?doctorId=...
+   * Obtiene las opciones de fechas y turnos disponibles para reprogramar o agendar
    */
   async getAvailableSlots(): Promise<AvailableDateOption[]> {
     return new Promise((resolve) => {
@@ -150,7 +211,6 @@ class AppointmentService {
 
   /**
    * Cancela un turno (>24 hs)
-   * En producción conectará con PUT/POST /api/patient/appointments/:id/cancel
    */
   async cancelAppointment(input: CancelAppointmentInput): Promise<{ success: boolean; appointment: Appointment }> {
     return new Promise((resolve, reject) => {
@@ -174,7 +234,6 @@ class AppointmentService {
 
   /**
    * Restaura un turno previamente cancelado en la sesión
-   * En producción conectará con POST /api/patient/appointments/:id/restore
    */
   async restoreAppointment(appointmentId: string): Promise<{ success: boolean; appointment: Appointment }> {
     return new Promise((resolve, reject) => {
@@ -198,7 +257,6 @@ class AppointmentService {
 
   /**
    * Reprograma un turno médico
-   * En producción conectará con PUT /api/patient/appointments/:id/reschedule
    */
   async rescheduleAppointment(
     input: RescheduleAppointmentInput
@@ -221,6 +279,37 @@ class AppointmentService {
 
       this.appointments[index] = updated
       resolve({ success: true, appointment: updated })
+    })
+  }
+
+  /**
+   * Agenda un nuevo turno médico
+   */
+  async bookAppointment(
+    input: BookAppointmentInput
+  ): Promise<{ success: boolean; appointment: Appointment }> {
+    return new Promise((resolve) => {
+      const newAppointment: Appointment = {
+        id: `apt-new-${Date.now()}`,
+        doctorName: input.doctorName,
+        doctorLicense: input.doctorLicense || "M.N. 104.892",
+        specialty: input.specialty,
+        appointmentDate: new Date().toISOString(),
+        displayDate: input.dateDisplay,
+        displayTime: input.timeDisplay,
+        relativeTime: "Nuevo turno",
+        venue: input.venue,
+        venueAddress: input.venueAddress || "Av. Cabildo 1845, CABA",
+        coverageProvider: input.coverageProvider || "OSDE 310 • Copago $0",
+        coverageStatus: "Autorizado en línea",
+        rule: "gestion_habilitada",
+        status: "confirmado",
+        isCancelledInSession: false,
+        isNext: false,
+      }
+
+      this.appointments = [newAppointment, ...this.appointments]
+      resolve({ success: true, appointment: newAppointment })
     })
   }
 }

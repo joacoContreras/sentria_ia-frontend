@@ -24,7 +24,7 @@ export function AppointmentTabs({
     <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-surface-container-high pb-space-xs gap-3">
       {/* Tab Buttons */}
       <div aria-label="Filtro de citas médicas" className="flex flex-wrap gap-2" role="tablist">
-        {/* Próximos Turnos (Activo) */}
+        {/* Próximos Turnos */}
         <button
           id="tab-upcoming"
           type="button"
@@ -34,29 +34,35 @@ export function AppointmentTabs({
           tabIndex={activeTab === "upcoming" ? 0 : -1}
           onClick={() => onTabChange("upcoming")}
           className={cn(
-            "px-space-md py-space-xs rounded-lg font-label-lg text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer",
+            "px-space-md py-space-xs rounded-lg font-label-lg text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
             activeTab === "upcoming"
-              ? "bg-primary-container text-white font-semibold shadow-xs"
+              ? "bg-primary-container text-on-primary-container shadow-xs"
               : "text-slate-700 hover:bg-surface-container hover:text-on-surface font-medium"
           )}
         >
           Próximos Turnos ({upcomingCount})
         </button>
 
-        {/* Historial y Pasados - Deshabilitado (Próximamente) */}
+        {/* Historial y Pasados */}
         <button
           id="tab-history"
           type="button"
           role="tab"
-          disabled
-          aria-disabled="true"
-          title="Historial de consultas disponible próximamente"
-          className="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-slate-400 opacity-50 cursor-not-allowed select-none"
+          aria-selected={activeTab === "history"}
+          aria-controls="panel-history"
+          tabIndex={activeTab === "history" ? 0 : -1}
+          onClick={() => onTabChange("history")}
+          className={cn(
+            "px-space-md py-space-xs rounded-lg font-label-lg text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
+            activeTab === "history"
+              ? "bg-primary-container text-on-primary-container shadow-xs"
+              : "text-slate-700 hover:bg-surface-container hover:text-on-surface font-medium"
+          )}
         >
           Historial y Pasados ({historyCount})
         </button>
 
-        {/* Cancelados (Activo) */}
+        {/* Cancelados */}
         <button
           id="tab-canceled"
           type="button"
@@ -66,9 +72,9 @@ export function AppointmentTabs({
           tabIndex={activeTab === "canceled" ? 0 : -1}
           onClick={() => onTabChange("canceled")}
           className={cn(
-            "px-space-md py-space-xs rounded-lg font-label-lg text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer",
+            "px-space-md py-space-xs rounded-lg font-label-lg text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
             activeTab === "canceled"
-              ? "bg-primary-container text-white font-semibold shadow-xs"
+              ? "bg-primary-container text-on-primary-container shadow-xs"
               : "text-slate-700 hover:bg-surface-container hover:text-on-surface font-medium"
           )}
         >
