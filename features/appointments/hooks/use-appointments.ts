@@ -11,10 +11,10 @@ import {
 } from "@/types/appointments"
 import { appointmentService } from "../services/appointment.service"
 
-export function useAppointments() {
+export function useAppointments(initialSection: PortalSection = "turnos") {
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [availableDates, setAvailableDates] = useState<AvailableDateOption[]>([])
-  const [activeSection, setActiveSection] = useState<PortalSection>("turnos")
+  const [activeSection, setActiveSection] = useState<PortalSection>(initialSection)
   const [activeTab, setActiveTab] = useState<AppointmentTab>("upcoming")
   const [isLoading, setIsLoading] = useState(true)
 

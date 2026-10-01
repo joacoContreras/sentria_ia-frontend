@@ -26,8 +26,14 @@ import { ClinicalShowcase } from "@/features/about/components/clinical-showcase"
 import { EthicalBoundaries } from "@/features/about/components/ethical-boundaries"
 import { TechnologyPrivacy } from "@/features/about/components/technology-privacy"
 import { DossierCta } from "@/features/about/components/dossier-cta"
+import { SettingsView } from "@/features/settings/components/settings-view"
+import { PortalSection } from "@/types/appointments"
 
-export function PortalDashboard() {
+interface PortalDashboardProps {
+  initialSection?: PortalSection
+}
+
+export function PortalDashboard({ initialSection = "turnos" }: PortalDashboardProps) {
   const {
     availableDates,
     activeSection,
@@ -59,7 +65,7 @@ export function PortalDashboard() {
     confirmBookAppointment,
     dismissToast,
     showToast,
-  } = useAppointments()
+  } = useAppointments(initialSection)
 
   // Simplified history in Mis Turnos showing the last 2-3 items
   const simplifiedHistory = historyAppointments.slice(0, 3)
@@ -306,6 +312,16 @@ export function PortalDashboard() {
         {activeSection === "protocolo" && (
           <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
             <CryptoProtocolView />
+          </div>
+        )}
+
+        {/* SECTION 9: CONFIGURACIÓN DE LA CUENTA */}
+        {activeSection === "configuracion" && (
+          <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
+            <SettingsView
+              onShowToast={showToast}
+              onNavigate={(sec) => switchSection(sec)}
+            />
           </div>
         )}
       </main>

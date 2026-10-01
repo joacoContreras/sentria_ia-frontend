@@ -19,6 +19,7 @@ export type PortalSection =
   | "terminos"
   | "privacidad"
   | "protocolo"
+  | "configuracion"
 
 export interface Appointment {
   id: string

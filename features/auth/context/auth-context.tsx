@@ -10,17 +10,17 @@ import type {
 } from "@/types/auth"
 
 const DEV_USER: AuthUser = {
-    id: "dev-001",
-    fullName: "Developer Sentria",
-    email: "dev@sentria.ai",
-    docNumber: "99.999.999",
-    docType: "DNI",
-    coverageProvider: "Modo Desarrollador (OSDE 410)",
-    phone: "+54 11 9999-9999",
-    memberId: "DEV-9999"
+  id: "dev-001",
+  fullName: "Developer Sentria",
+  email: "dev@sentria.ai",
+  docNumber: "99.999.999",
+  docType: "DNI",
+  coverageProvider: "Modo Desarrollador (OSDE 410)",
+  phone: "+54 11 9999-9999",
+  memberId: "DEV-9999",
+  avatarUrl:
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBwmdIBDTsdmh-7ASi7R-cesxbsLdC6MYc7RQ58gYBq9BqJM7Y9q91dVmL3x2GSntiqRELL7s4-vYiSuoJLqk_g6jqMwXufQ2NngDFDbxHJ0sua3hQl6a8Tsr9JUHUGXraFdso9nuIf55qTKXMYZvBSXBM3bndUy0O02139COPIJDsF5kxmzCmT7-0rmI9BK5dntzFLrgTWPWMGdCeOWrYrRBfnmF2Jhp0fppHtQ8lFnWsLzI-7BJ0",
 }
-
-
 
 interface AuthContextValue {
   user: AuthUser | null
@@ -30,6 +30,7 @@ interface AuthContextValue {
   isHydrated: boolean
   login: (credentials: PatientLoginInput) => Promise<AuthResponse>
   register: (data: PatientRegistrationInput) => Promise<AuthResponse>
+  updateUser: (userData: Partial<AuthUser>) => void
   logout: () => void
 }
 
@@ -171,6 +172,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const updateUser = (userData: Partial<AuthUser>) => {
+    if (effectiveUser) {
+      updateSession({
+        user: { ...effectiveUser, ...userData },
+        token: effectiveToken,
+      })
+    }
+  }
+
   const logout = () => {
     updateSession({ user: null, token: null })
   }
@@ -183,6 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isHydrated,
     login,
     register,
+    updateUser,
     logout,
   }
 

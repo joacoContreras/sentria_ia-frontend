@@ -1,9 +1,9 @@
 "use client"
 
 import React from "react"
-import { Activity, User, LogOut } from "lucide-react"
+import { Activity } from "lucide-react"
 import { useAuth } from "@/features/auth/hooks/use-auth"
-import { Button } from "@/components/ui/button"
+import { UserMenuDropdown } from "@/components/shared/user-menu-dropdown"
 import { AppointmentTab, PortalSection } from "@/types/appointments"
 import { cn } from "@/lib/utils"
 
@@ -21,9 +21,6 @@ export function PortalHeader({
   onSelectTab,
 }: PortalHeaderProps) {
   const { user, logout } = useAuth()
-
-  const displayName = user?.fullName || "María Florencia Gómez"
-  const displayDocNumber = user?.docNumber ? `DNI ${user.docNumber}` : "DNI 38.452.901"
 
   const isMisTurnosActive = activeSection === "turnos"
   const isTriageActive = activeSection === "triage"
@@ -125,44 +122,13 @@ export function PortalHeader({
           </button>
         </nav>
 
-        {/* Patient Profile Widget & Actions */}
+        {/* Patient Profile Widget & User Menu Dropdown */}
         <div className="flex items-center gap-space-md shrink-0">
-          <div
-            aria-label={`Perfil de paciente: ${displayName}, ${displayDocNumber}`}
-            className="hidden sm:flex flex-col text-right"
-          >
-            <span className="font-label-lg text-label-lg text-on-surface font-semibold leading-tight truncate max-w-[200px]">
-              {displayName}
-            </span>
-            <div className="flex items-center justify-end gap-space-2xs mt-0.5">
-              <span className="font-label-sm text-label-sm text-on-surface-variant">
-                {displayDocNumber}
-              </span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full font-label-sm text-[10px] bg-secondary-container text-on-secondary-container font-medium">
-                Verificada
-              </span>
-            </div>
-          </div>
-
-          <div
-            aria-label={`Avatar de ${displayName}`}
-            className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs shrink-0"
-            role="img"
-          >
-            <User className="h-4 w-4" aria-hidden="true" />
-          </div>
-
-          {/* Logout Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={logout}
-            className="text-on-surface-variant hover:text-error hover:bg-error-container/20 font-label-md"
-            title="Cerrar sesión"
-            leftIcon={<LogOut className="h-4 w-4" />}
-          >
-            <span className="hidden md:inline">Salir</span>
-          </Button>
+          <UserMenuDropdown
+            user={user}
+            onNavigateToSettings={() => onSelectSection("configuracion")}
+            onLogout={logout}
+          />
         </div>
       </div>
     </header>

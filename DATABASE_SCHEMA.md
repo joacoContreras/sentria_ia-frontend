@@ -27,6 +27,12 @@ erDiagram
         string password_hash
         string coverage_provider
         string member_id
+        string avatar_url
+        date birth_date
+        string gender
+        string address
+        boolean two_factor_enabled
+        jsonb notification_preferences
         boolean is_active
         timestamp terms_accepted_at
         timestamp created_at
@@ -134,6 +140,12 @@ Representa la ficha clínica y credencial de acceso del paciente. Mapea directam
 | `password_hash` | `VARCHAR(255)` | **NOT NULL** | `formData.password` | Hash seguro (bcrypt / Argon2id) |
 | `coverage_provider` | `VARCHAR(60)` | **NOT NULL**, Enum: `'OSDE', 'Swiss Medical', 'Galeno', 'Medife', 'Omint', 'Particular'` | `formData.coverageProvider` | Cobertura médica u obra social |
 | `member_id` | `VARCHAR(60)` | **NULLABLE** (requerido si `coverage_provider != 'Particular'`) | `formData.memberId` | Nº de credencial / afiliado |
+| `avatar_url` | `TEXT` | **NULLABLE** | `user.avatarUrl` / `settings.avatarUrl` | URL segura o base64 de la fotografía médica de credencial y avatar del paciente |
+| `birth_date` | `DATE` | **NULLABLE** | `settings.birthDate` | Fecha de nacimiento oficial validada por RENAPER |
+| `gender` | `VARCHAR(30)` | **NULLABLE** | `settings.gender` | Género oficial validado por RENAPER (`'femenino'`, `'masculino'`, etc.) |
+| `address` | `VARCHAR(255)` | **NULLABLE** | `settings.address` | Domicilio habitual declarado del paciente |
+| `two_factor_enabled` | `BOOLEAN` | **DEFAULT `TRUE`** | `settings.twoFactorEnabled` | Estado de autenticación en dos pasos (2FA) |
+| `notification_preferences` | `JSONB` | **DEFAULT `'{"whatsapp": true, "email": true, "fast_slot": true}'`** | `settings.preferences` | Preferencias de alertas de turnos, recetas y avisos por WhatsApp/Email |
 | `is_active` | `BOOLEAN` | **DEFAULT `TRUE`** | — | Permite deshabilitar temporalmente la cuenta |
 | `terms_accepted_at` | `TIMESTAMP` | **NOT NULL** | `formData.acceptTerms` | Fecha y hora de aceptación legal (Ley 25.326) |
 | `created_at` | `TIMESTAMP` | **DEFAULT `NOW()`** | `createdAt` | Fecha de creación de la ficha |
@@ -290,6 +302,12 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     coverage_provider VARCHAR(60) NOT NULL,
     member_id VARCHAR(60),
+    avatar_url TEXT,
+    birth_date DATE,
+    gender VARCHAR(30),
+    address VARCHAR(255),
+    two_factor_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    notification_preferences JSONB NOT NULL DEFAULT '{"whatsapp": true, "email": true, "fast_slot": true}'::jsonb,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     terms_accepted_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
