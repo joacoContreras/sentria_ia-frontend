@@ -165,15 +165,15 @@ function RescheduleAppointmentContent({
       {/* MODAL BODY CONTENT */}
       <div className="p-space-xl space-y-space-xl overflow-y-auto max-h-[calc(85vh-160px)]">
         {/* 2. CITA ACTUAL A REPROGRAMAR (HIGHLIGHTED CLINICAL PANEL) */}
-        <div className="bg-surface-container-low rounded-xl p-space-lg">
+        <div className="bg-surface-container-low/70 border border-outline-variant/20 rounded-2xl p-4 sm:p-5">
           <div className="flex items-center justify-between gap-space-sm mb-space-sm">
-            <div className="flex items-center gap-space-2xs">
-              <span className="inline-block w-2 h-2 rounded-full bg-error" />
-              <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-error" aria-hidden="true" />
+              <span className="text-xs uppercase tracking-wider text-outline font-semibold">
                 Cita Actual a Liberar
               </span>
             </div>
-            <span className="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-medium">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-surface-container-high/60 text-on-surface-variant border border-outline-variant/30 font-medium">
               {appointment.coverageProvider.split("•")[0]?.trim() || "OSDE 310"}
             </span>
           </div>
@@ -183,7 +183,7 @@ function RescheduleAppointmentContent({
               <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
                 {appointment.specialty}
               </h3>
-              <p className="font-body-md-medium text-body-md-medium text-on-surface-variant">
+              <p className="text-sm text-on-surface-variant mt-0.5">
                 {appointment.doctorName}{" "}
                 {appointment.doctorLicense && (
                   <span className="font-normal text-outline text-xs">
@@ -194,11 +194,11 @@ function RescheduleAppointmentContent({
             </div>
 
             <div className="sm:text-right flex flex-col sm:items-end gap-0.5">
-              <div className="inline-flex items-center gap-1.5 font-label-lg text-label-lg text-error font-semibold">
-                <CalendarOff className="h-4 w-4 text-error" aria-hidden="true" />
+              <div className="inline-flex items-center gap-1.5 text-xs text-error font-semibold">
+                <CalendarOff className="h-3.5 w-3.5 text-error" aria-hidden="true" />
                 <span>{appointment.displayDate}</span>
               </div>
-              <span className="font-body-md text-body-md text-on-surface-variant">
+              <span className="text-xs text-on-surface-variant">
                 {appointment.displayTime} • {appointment.venue}
               </span>
             </div>
@@ -208,26 +208,26 @@ function RescheduleAppointmentContent({
         {/* 3. NUEVA SELECCIÓN DE FECHA Y HORARIO */}
         <div className="space-y-space-lg">
           {/* Manteniendo Profesional Asignado */}
-          <div className="flex items-center justify-between p-space-md rounded-xl bg-surface-container">
-            <div className="flex items-center gap-space-sm">
-              <div className="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
-                <Stethoscope className="h-5 w-5 text-on-primary-container" aria-hidden="true" />
+          <div className="flex items-center justify-between p-3.5 rounded-xl bg-surface-container-low/60 border border-outline-variant/20">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center font-bold border border-outline-variant/20">
+                <Stethoscope className="h-4 w-4 text-primary" aria-hidden="true" />
               </div>
               <div>
-                <p className="font-label-md text-label-md text-on-surface font-semibold">
+                <p className="text-xs text-on-surface font-semibold">
                   Manteniendo profesional asignado
                 </p>
-                <p className="font-body-md text-body-md text-on-surface-variant">
+                <p className="text-xs text-on-surface-variant mt-0.5">
                   {appointment.doctorName} • {appointment.venue.split("(")[0]?.trim() || "Consultorios Sede Belgrano"}
                 </p>
               </div>
             </div>
-            <Lock className="h-5 w-5 text-primary hidden sm:block" aria-hidden="true" />
+            <Lock className="h-4 w-4 text-outline hidden sm:block" aria-hidden="true" />
           </div>
 
           {/* Selector de Fechas (Pestañas accesibles) */}
           <fieldset className="border-0 p-0 m-0">
-            <legend className="block font-label-md text-label-md text-on-surface font-semibold mb-space-xs">
+            <legend className="block text-sm text-on-surface font-semibold mb-2">
               Seleccionar Nueva Fecha Disponible
             </legend>
             <div
@@ -246,32 +246,32 @@ function RescheduleAppointmentContent({
                     tabIndex={isSelected ? 0 : -1}
                     onClick={() => handleSelectDate(dateOption)}
                     className={cn(
-                      "date-tab flex flex-col items-center justify-center py-space-sm px-space-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all cursor-pointer",
+                      "date-tab flex flex-col items-center justify-center py-2.5 px-space-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all cursor-pointer border",
                       isSelected
-                        ? "bg-primary text-on-primary shadow-sm"
-                        : "bg-surface-container hover:bg-surface-container-high text-on-surface"
+                        ? "bg-surface-container-lowest text-on-surface border-2 border-primary shadow-xs"
+                        : "bg-surface-container-low/70 hover:bg-surface-container text-on-surface border-outline-variant/20"
                     )}
                   >
                     <span
                       className={cn(
-                        "font-label-sm text-label-sm uppercase tracking-wider",
-                        isSelected ? "opacity-90 font-semibold" : "text-on-surface-variant"
+                        "text-xs uppercase tracking-wider font-semibold",
+                        isSelected ? "text-primary" : "text-outline"
                       )}
                     >
                       {dateOption.dayName || dateOption.label.split(" ")[0]}
                     </span>
                     <span
                       className={cn(
-                        "font-vital-metric text-[20px] leading-tight my-0.5",
-                        isSelected ? "text-on-primary font-bold" : "text-on-surface font-semibold"
+                        "text-base leading-tight my-0.5 font-bold",
+                        isSelected ? "text-on-surface" : "text-on-surface"
                       )}
                     >
                       {dateOption.dateMetric || dateOption.label.split(" ").slice(1).join(" ")}
                     </span>
                     <span
                       className={cn(
-                        "font-label-sm text-[11px]",
-                        isSelected ? "opacity-90" : "text-on-surface-variant"
+                        "text-[10px] font-medium",
+                        isSelected ? "text-primary font-semibold" : "text-outline"
                       )}
                     >
                       {dateOption.slotsCount} turnos disp.
@@ -287,8 +287,8 @@ function RescheduleAppointmentContent({
             {/* Turno Mañana */}
             {morningSlots.length > 0 && (
               <div>
-                <div className="flex items-center gap-1.5 text-on-surface-variant font-label-sm uppercase tracking-wider mb-space-xs font-semibold">
-                  <Sun className="h-4 w-4" aria-hidden="true" />
+                <div className="flex items-center gap-1.5 text-outline text-[11px] uppercase tracking-wider mb-2 font-semibold">
+                  <Sun className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>Turno Mañana</span>
                 </div>
                 <div
@@ -307,14 +307,14 @@ function RescheduleAppointmentContent({
                         tabIndex={isSlotActive ? 0 : -1}
                         onClick={() => setSelectedTimeSlot(slot.time)}
                         className={cn(
-                          "time-slot-btn h-12 rounded-xl font-label-lg text-label-lg flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer",
+                          "time-slot-btn h-11 rounded-xl text-xs flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer border",
                           isSlotActive
-                            ? "bg-primary text-on-primary shadow-md ring-2 ring-primary ring-offset-2 gap-1.5 font-semibold"
-                            : "bg-surface-container hover:bg-surface-container-high text-on-surface font-medium"
+                            ? "bg-primary text-on-primary font-semibold shadow-xs border-primary gap-1"
+                            : "bg-surface-container-lowest text-on-surface hover:bg-surface-container border-outline-variant/20 font-medium"
                         )}
                       >
                         {isSlotActive && (
-                          <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-on-primary" aria-hidden="true" />
                         )}
                         <span>{slot.time}</span>
                       </button>
@@ -327,8 +327,8 @@ function RescheduleAppointmentContent({
             {/* Turno Tarde */}
             {afternoonSlots.length > 0 && (
               <div>
-                <div className="flex items-center gap-1.5 text-on-surface-variant font-label-sm uppercase tracking-wider mb-space-xs font-semibold">
-                  <Sunset className="h-4 w-4" aria-hidden="true" />
+                <div className="flex items-center gap-1.5 text-outline text-[11px] uppercase tracking-wider mb-2 font-semibold">
+                  <Sunset className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>Turno Tarde</span>
                 </div>
                 <div
@@ -348,14 +348,14 @@ function RescheduleAppointmentContent({
                         tabIndex={isSlotActive ? 0 : -1}
                         onClick={() => setSelectedTimeSlot(slot.time)}
                         className={cn(
-                          "time-slot-btn h-12 rounded-xl font-label-lg text-label-lg flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer",
+                          "time-slot-btn h-11 rounded-xl text-xs flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer border",
                           isSlotActive
-                            ? "bg-primary text-on-primary shadow-md ring-2 ring-primary ring-offset-2 gap-1.5 font-semibold"
-                            : "bg-surface-container hover:bg-surface-container-high text-on-surface font-medium"
+                            ? "bg-primary text-on-primary font-semibold shadow-xs border-primary gap-1"
+                            : "bg-surface-container-lowest text-on-surface hover:bg-surface-container border-outline-variant/20 font-medium"
                         )}
                       >
                         {isSlotActive && (
-                          <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-on-primary" aria-hidden="true" />
                         )}
                         <span>{slot.time}</span>
                       </button>
@@ -370,14 +370,14 @@ function RescheduleAppointmentContent({
           <div
             aria-live="polite"
             role="status"
-            className="p-space-md rounded-xl bg-secondary-container/40 flex items-start gap-space-sm border border-primary/20"
+            className="p-3.5 rounded-xl bg-surface-container-low flex items-start gap-3 border border-outline-variant/20"
           >
-            <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+            <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="font-body-md-medium text-body-md-medium text-primary leading-tight font-semibold">
+              <p className="text-xs text-primary font-semibold leading-tight">
                 Horario disponible sin solapamiento
               </p>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-0.5">
+              <p className="text-xs text-on-surface-variant mt-0.5">
                 Verificado contra tu agenda médica y órdenes de laboratorio vigentes para el{" "}
                 <strong className="text-on-surface font-semibold">
                   {activeDateOption?.dateDisplay || "día seleccionado"}
@@ -451,7 +451,7 @@ export function RescheduleAppointmentModal({
       aria-describedby="modal-reschedule-desc"
       aria-modal="true"
       role="dialog"
-      className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-gutter-mobile sm:p-gutter-desktop overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-inverse-surface/45 backdrop-blur-md flex items-center justify-center p-gutter-mobile sm:p-gutter-desktop overflow-y-auto animate-in fade-in duration-200"
     >
       <RescheduleAppointmentContent
         appointment={appointment}

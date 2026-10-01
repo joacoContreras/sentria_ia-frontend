@@ -3,14 +3,12 @@
 import React, { useState, useMemo } from "react"
 import {
   Activity,
-  AlertTriangle,
   Building2,
   Calendar,
   CheckCircle2,
   ChevronDown,
   Clock,
   Download,
-  Droplet,
   Eye,
   FileEdit,
   FileText,
@@ -20,7 +18,6 @@ import {
   Receipt,
   RotateCcw,
   Search,
-  ShieldCheck,
   SlidersHorizontal,
   Stethoscope,
   Video,
@@ -150,10 +147,10 @@ export function MedicalHistoryView({
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg mb-space-2xl">
           <div className="flex flex-col max-w-3xl">
             <div className="inline-flex items-center gap-space-2xs text-primary font-label-md text-label-md uppercase tracking-wider mb-space-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-primary" />
+              <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
               Expediente Clínico Digital
             </div>
-            <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">
               Historial Clínico y Consultas Médicas
             </h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant mt-space-2xs">
@@ -165,7 +162,7 @@ export function MedicalHistoryView({
               type="button"
               onClick={handleDownloadConsolidatedPdf}
               aria-label="Descargar historial consolidado en formato PDF"
-              className="inline-flex items-center justify-center gap-space-xs px-space-lg h-12 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary active:scale-95 cursor-pointer font-semibold"
+              className="inline-flex items-center justify-center gap-space-xs px-space-lg h-12 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary active:scale-95 cursor-pointer font-semibold border border-outline-variant/30"
             >
               <Download className="h-5 w-5 text-primary" aria-hidden="true" />
               <span>Descargar Historial Consolidado (PDF)</span>
@@ -222,7 +219,7 @@ export function MedicalHistoryView({
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Buscar por profesional, diagnóstico o motivo de consulta..."
                       aria-label="Buscar consultas por profesional, diagnóstico o motivo"
-                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-lowest border-0 ring-1 ring-outline-variant focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface placeholder:text-outline transition-all"
+                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low border-0 ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface placeholder:text-outline transition-all"
                     />
                   </div>
                 </div>
@@ -240,7 +237,7 @@ export function MedicalHistoryView({
                       id="filter-specialty"
                       value={specialtyFilter}
                       onChange={(e) => setSpecialtyFilter(e.target.value)}
-                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-lowest ring-1 ring-outline-variant focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
+                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-low ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
                     >
                       <option value="">Todas las especialidades</option>
                       <option value="cardio">Cardiología</option>
@@ -269,13 +266,12 @@ export function MedicalHistoryView({
                       id="filter-period"
                       value={periodFilter}
                       onChange={(e) => setPeriodFilter(e.target.value)}
-                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-lowest ring-1 ring-outline-variant focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
+                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-low ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
                     >
                       <option value="all">Últimos 6 meses</option>
                       <option value="30days">Últimos 30 días</option>
                       <option value="2024">Año 2024</option>
                       <option value="2023">Año 2023</option>
-                      <option value="custom">Personalizado</option>
                     </select>
                     <Calendar
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none h-5 w-5"
@@ -297,7 +293,7 @@ export function MedicalHistoryView({
                       id="filter-location"
                       value={locationFilter}
                       onChange={(e) => setLocationFilter(e.target.value)}
-                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-lowest ring-1 ring-outline-variant focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
+                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-low ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
                     >
                       <option value="">Todas las sedes</option>
                       <option value="belgrano">Sede Central Belgrano</option>
@@ -324,7 +320,7 @@ export function MedicalHistoryView({
                       id="filter-status"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
-                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-lowest ring-1 ring-outline-variant focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
+                      className="w-full h-12 pl-4 pr-10 rounded-xl bg-surface-container-low ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface appearance-none transition-all cursor-pointer border-0"
                     >
                       <option value="">Atendido / Finalizado</option>
                       <option value="pending">Estudios Pendientes</option>
@@ -339,31 +335,52 @@ export function MedicalHistoryView({
               </form>
 
               {/* Barra de Acciones de Filtrado */}
-              <div className="flex items-center justify-between pt-space-xs">
+              <div className="flex items-center justify-between pt-space-xs border-t border-surface-container">
                 <div className="flex items-center gap-space-xs flex-wrap">
                   <span className="font-label-sm text-label-sm text-outline">Filtros Activos:</span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-fixed text-on-secondary-fixed font-semibold">
-                    {periodFilter === "all" ? "Últimos 6 meses" : periodFilter === "2024" ? "2024" : periodFilter === "2023" ? "2023" : periodFilter}
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-fixed text-on-secondary-fixed font-semibold">
-                    Finalizadas
-                  </span>
+                  {periodFilter !== "all" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-container text-on-secondary-container font-semibold">
+                      {periodFilter === "2024" ? "Año 2024" : periodFilter === "2023" ? "Año 2023" : "Últimos 30 días"}
+                    </span>
+                  )}
+                  {specialtyFilter && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-container text-on-secondary-container font-semibold">
+                      {specialtyFilter === "cardio" ? "Cardiología" : specialtyFilter === "trauma" ? "Traumatología" : specialtyFilter === "clinica" ? "Clínica Médica" : specialtyFilter}
+                    </span>
+                  )}
+                  {locationFilter && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-container text-on-secondary-container font-semibold">
+                      {locationFilter === "belgrano" ? "Sede Belgrano" : locationFilter === "las-heras" ? "Sede Las Heras" : "Teleconsulta"}
+                    </span>
+                  )}
+                  {statusFilter && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-secondary-container text-on-secondary-container font-semibold">
+                      {statusFilter === "pending" ? "Estudios Pendientes" : "Interconsulta"}
+                    </span>
+                  )}
+                  {!specialtyFilter && !locationFilter && !statusFilter && periodFilter === "all" && !searchQuery && (
+                    <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">
+                      Vista general (Últimos 6 meses)
+                    </span>
+                  )}
                 </div>
-                <button
-                  type="button"
-                  id="reset-filters"
-                  onClick={handleResetFilters}
-                  className="font-label-md text-label-md text-primary hover:text-primary-container inline-flex items-center gap-1 transition-colors px-2 py-1 rounded focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-semibold"
-                >
-                  <RotateCcw className="h-4 w-4" aria-hidden="true" />
-                  Limpiar Filtros
-                </button>
+                {(specialtyFilter || locationFilter || statusFilter || periodFilter !== "all" || searchQuery) && (
+                  <button
+                    type="button"
+                    id="reset-filters"
+                    onClick={handleResetFilters}
+                    className="font-label-md text-label-md text-primary hover:text-primary-container inline-flex items-center gap-1 transition-colors px-2 py-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-semibold"
+                  >
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    Restablecer
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Listado de Tarjetas de Consultas */}
             {filteredConsultations.length === 0 ? (
-              <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-slate-600">
+              <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-on-surface-variant">
                 <p className="font-body-lg">
                   No se encontraron consultas con los filtros seleccionados.
                 </p>
@@ -383,7 +400,7 @@ export function MedicalHistoryView({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-space-md pb-space-md">
                     <div className="flex items-start gap-space-md">
-                      <div className="w-12 h-12 rounded-xl bg-primary-container/10 text-primary flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-primary-container/15 text-primary flex items-center justify-center shrink-0">
                         {getSpecialtyIcon(c.specialtySlug)}
                       </div>
                       <div className="flex flex-col">
@@ -404,7 +421,7 @@ export function MedicalHistoryView({
                       </div>
                     </div>
 
-                    <div className="flex sm:flex-col items-start sm:items-end justify-between gap-space-2xs sm:text-right bg-surface-container-low sm:bg-transparent p-space-sm sm:p-0 rounded-xl">
+                    <div className="flex sm:flex-col items-start sm:items-end justify-between gap-space-2xs sm:text-right bg-surface-container-low sm:bg-transparent p-space-sm sm:p-0 rounded-xl border border-outline-variant/20 sm:border-0">
                       <div className="flex items-center gap-1 text-on-surface font-label-md text-label-md font-semibold">
                         <Calendar className="h-4 w-4 text-outline" aria-hidden="true" />
                         {c.dateDisplay}
@@ -427,7 +444,7 @@ export function MedicalHistoryView({
                   </div>
 
                   {/* Diagnóstico e Indicaciones */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md bg-surface-container-low rounded-xl p-space-md sm:p-space-lg my-space-md">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md bg-surface-container-low rounded-xl p-space-md sm:p-space-lg my-space-md border border-outline-variant/20">
                     <div className="flex flex-col gap-space-2xs">
                       <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline flex items-center gap-1 font-semibold">
                         <FileText className="h-4 w-4 text-primary" aria-hidden="true" />
@@ -457,9 +474,9 @@ export function MedicalHistoryView({
 
                   {/* Métricas de la Consulta si existen */}
                   {c.vitals && (
-                    <div className="flex flex-wrap items-center gap-space-md py-space-xs text-on-surface-variant">
+                    <div className="flex flex-wrap items-center gap-space-sm py-space-xs text-on-surface-variant">
                       {c.vitals.bloodPressure && (
-                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1.5 rounded-lg">
+                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1 rounded-lg border border-outline-variant/20">
                           <span className="font-label-sm text-label-sm text-outline">Tensión:</span>
                           <span className="font-label-md text-label-md text-on-surface font-semibold">
                             {c.vitals.bloodPressure}
@@ -467,7 +484,7 @@ export function MedicalHistoryView({
                         </div>
                       )}
                       {c.vitals.heartRate && (
-                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1.5 rounded-lg">
+                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1 rounded-lg border border-outline-variant/20">
                           <span className="font-label-sm text-label-sm text-outline">Frecuencia:</span>
                           <span className="font-label-md text-label-md text-on-surface font-semibold">
                             {c.vitals.heartRate}
@@ -475,7 +492,7 @@ export function MedicalHistoryView({
                         </div>
                       )}
                       {c.vitals.spO2 && (
-                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1.5 rounded-lg">
+                        <div className="flex items-center gap-space-2xs bg-surface-container px-3 py-1 rounded-lg border border-outline-variant/20">
                           <span className="font-label-sm text-label-sm text-outline">SpO2:</span>
                           <span className="font-label-md text-label-md text-on-surface font-semibold">
                             {c.vitals.spO2}
@@ -485,17 +502,18 @@ export function MedicalHistoryView({
                     </div>
                   )}
 
-                  {/* Acciones de la Tarjeta */}
-                  <div className="flex flex-wrap items-center justify-between gap-space-sm pt-space-md mt-space-sm border-t border-surface-container">
+                  {/* Acciones de la Tarjeta con Jerarquía Clara */}
+                  <div className="flex flex-wrap items-center justify-between gap-space-md pt-space-md mt-space-sm border-t border-surface-container">
+                    {/* Documentos y Estudios Clínicos */}
                     <div className="flex flex-wrap items-center gap-space-xs">
                       {c.actions.hasClinicalSummary && (
                         <button
                           type="button"
                           onClick={() => handleActionClick("Resumen Clínico", `${c.specialty} - ${c.doctorName}`)}
-                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
+                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-medium border border-outline-variant/30"
                         >
-                          <Eye className="h-4 w-4" aria-hidden="true" />
-                          <span>Ver Resumen Clínico</span>
+                          <Eye className="h-4 w-4 text-primary" aria-hidden="true" />
+                          <span>Resumen Clínico</span>
                         </button>
                       )}
 
@@ -503,10 +521,10 @@ export function MedicalHistoryView({
                         <button
                           type="button"
                           onClick={() => handleActionClick("Receta Médica", `Indicación de ${c.doctorName}`)}
-                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
+                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-medium border border-outline-variant/30"
                         >
-                          <Receipt className="h-4 w-4" aria-hidden="true" />
-                          <span>Descargar Receta</span>
+                          <Receipt className="h-4 w-4 text-primary" aria-hidden="true" />
+                          <span>Receta</span>
                         </button>
                       )}
 
@@ -514,10 +532,10 @@ export function MedicalHistoryView({
                         <button
                           type="button"
                           onClick={() => handleActionClick("Orden Médica", `Estudio / Kinesiología`)}
-                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
+                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-medium border border-outline-variant/30"
                         >
-                          <Receipt className="h-4 w-4" aria-hidden="true" />
-                          <span>Ver Orden Médica</span>
+                          <FileText className="h-4 w-4 text-primary" aria-hidden="true" />
+                          <span>Orden Médica</span>
                         </button>
                       )}
 
@@ -525,22 +543,23 @@ export function MedicalHistoryView({
                         <button
                           type="button"
                           onClick={() => handleActionClick("Certificado de Reposo", "Reposo 48hs")}
-                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
+                          className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-medium border border-outline-variant/30"
                         >
-                          <Download className="h-4 w-4" aria-hidden="true" />
-                          <span>Descargar Certificado de Reposo</span>
+                          <Download className="h-4 w-4 text-primary" aria-hidden="true" />
+                          <span>Certificado</span>
                         </button>
                       )}
                     </div>
 
+                    {/* Acción Primaria: Reagendar / Solicitar Turno */}
                     {c.actions.canBookDirect && onBookAppointmentWithDoctor && (
                       <button
                         type="button"
                         onClick={() => onBookAppointmentWithDoctor(c.doctorName, c.specialty)}
-                        className="inline-flex items-center gap-space-2xs px-space-md h-10 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none cursor-pointer font-semibold"
+                        className="inline-flex items-center gap-space-2xs px-space-lg h-10 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary cursor-pointer font-semibold active:scale-98 ml-auto"
                       >
                         <Calendar className="h-4 w-4" aria-hidden="true" />
-                        <span>Solicitar Nuevo Turno con {c.doctorName}</span>
+                        <span>Solicitar Turno con {c.doctorName}</span>
                       </button>
                     )}
                   </div>
@@ -549,7 +568,7 @@ export function MedicalHistoryView({
             )}
 
             {/* Paginación Simplificada / Carga de Historial Previo */}
-            <div className="flex items-center justify-between py-space-sm text-on-surface-variant font-label-md text-label-md">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-space-sm py-space-sm text-on-surface-variant font-label-md text-label-md">
               <span>
                 Mostrando {filteredConsultations.length} de {hasLoaded2023 ? 5 : 8} atenciones registradas
               </span>
@@ -558,7 +577,7 @@ export function MedicalHistoryView({
                   <button
                     type="button"
                     onClick={handleLoadMore2023}
-                    className="px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
+                    className="px-space-lg py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-semibold border border-outline-variant/30"
                   >
                     Cargar consultas de 2023
                   </button>
@@ -571,147 +590,105 @@ export function MedicalHistoryView({
             </div>
           </section>
 
-          {/* Columna Lateral: Ficha de Resumen Médico del Paciente */}
+          {/* Columna Lateral: Ficha del Paciente (Minimalista y Serena) */}
           <aside
-            aria-label="Ficha de resumen clínico del paciente"
-            className="lg:col-span-4 flex flex-col gap-space-xl"
+            aria-label="Ficha clínica del paciente"
+            className="lg:col-span-4 flex flex-col gap-space-lg"
             role="complementary"
           >
-            {/* Tarjeta Ficha Médica */}
             <div className="bg-surface-container-lowest rounded-2xl p-space-lg sm:p-space-xl shadow-sm flex flex-col gap-space-lg sticky top-28 border border-outline-variant/30">
-              <div className="flex items-center justify-between pb-space-xs">
-                <div className="flex items-center gap-space-xs">
-                  <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-on-primary-container" aria-hidden="true" />
-                  </div>
-                  <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
-                    Ficha de Resumen
-                  </h2>
-                </div>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed font-semibold">
-                  Activa
+              {/* Cabecera de la Ficha */}
+              <div className="flex items-center justify-between pb-space-xs border-b border-surface-container">
+                <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+                  Ficha del Paciente
+                </h2>
+                <span className="inline-flex items-center gap-1.5 font-label-sm text-label-sm text-primary font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
+                  Sincronizada
                 </span>
               </div>
 
-              {/* Datos Demográficos y de Afiliación */}
-              <div className="flex flex-col gap-space-md bg-surface-container-low p-space-md rounded-xl">
-                <div className="flex flex-col">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">
-                    Paciente Titular
-                  </span>
-                  <span className="font-body-lg-medium text-body-lg-medium text-on-surface font-bold">
-                    {PATIENT_CLINICAL_PROFILE.fullName}
-                  </span>
-                  <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">
-                    DNI {PATIENT_CLINICAL_PROFILE.docNumber} • {PATIENT_CLINICAL_PROFILE.age} años
-                  </span>
-                </div>
-                <div className="w-full h-px bg-surface-container-high" />
-                <div className="flex flex-col">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">
-                    Cobertura Médica
-                  </span>
-                  <span className="font-body-md-medium text-body-md-medium text-on-surface font-bold">
-                    {PATIENT_CLINICAL_PROFILE.coverage}
-                  </span>
-                  <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">
-                    N° Afiliado {PATIENT_CLINICAL_PROFILE.memberNumber}
-                  </span>
-                </div>
+              {/* Identidad y Cobertura */}
+              <div className="flex flex-col gap-1">
+                <span className="font-headline-sm text-headline-sm text-on-surface font-bold">
+                  {PATIENT_CLINICAL_PROFILE.fullName}
+                </span>
+                <p className="font-body-md text-body-md text-on-surface-variant">
+                  DNI {PATIENT_CLINICAL_PROFILE.docNumber} · {PATIENT_CLINICAL_PROFILE.age} años
+                </p>
+                <p className="font-label-sm text-label-sm text-outline mt-0.5">
+                  {PATIENT_CLINICAL_PROFILE.coverage} · Afiliado N° {PATIENT_CLINICAL_PROFILE.memberNumber}
+                </p>
               </div>
 
-              {/* Parámetros Clínicos Críticos */}
+              <div className="w-full h-px bg-surface-container" />
+
+              {/* Parámetros Clínicos Esenciales */}
               <div className="flex flex-col gap-space-md">
-                {/* Grupo Sanguíneo */}
-                <div className="flex items-center justify-between p-space-sm bg-surface-container rounded-xl">
-                  <div className="flex items-center gap-space-xs">
-                    <Droplet className="h-5 w-5 text-primary" aria-hidden="true" />
-                    <span className="font-label-md text-label-md text-on-surface font-semibold">
+                <span className="font-label-sm text-[11px] text-outline uppercase tracking-wider font-bold">
+                  Información Clínica de Relevancia
+                </span>
+
+                {/* Grid Grupo Sanguíneo y Alergias */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-label-sm text-label-sm text-outline">
                       Grupo Sanguíneo
                     </span>
+                    <span className="font-body-lg text-body-lg text-on-surface font-bold">
+                      {PATIENT_CLINICAL_PROFILE.bloodType}
+                    </span>
                   </div>
-                  <span className="font-headline-sm text-headline-sm text-primary font-bold">
-                    {PATIENT_CLINICAL_PROFILE.bloodType}
-                  </span>
-                </div>
 
-                {/* Alergias Registradas */}
-                <div
-                  className="flex flex-col gap-space-2xs p-space-sm bg-error-container/40 rounded-xl border border-error/20"
-                  role="region"
-                  aria-label="Alergias médicas verificadas"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm text-error uppercase tracking-wider font-semibold flex items-center gap-1">
-                      <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-label-sm text-label-sm text-outline">
                       Alergias Registradas
                     </span>
-                    <span className="font-label-sm text-[10px] text-error font-semibold bg-surface-container-lowest px-2 py-0.5 rounded-full shadow-xs">
-                      Verificado
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-body-md text-body-md text-on-surface font-semibold">
+                        {PATIENT_CLINICAL_PROFILE.allergies[0].allergen}
+                      </span>
+                    </div>
                   </div>
-                  <p className="font-body-md-medium text-body-md-medium text-on-error-container font-semibold">
-                    {PATIENT_CLINICAL_PROFILE.allergies[0].allergen}
-                  </p>
-                  <span className="font-label-sm text-[11px] text-on-error-container/80">
-                    {PATIENT_CLINICAL_PROFILE.allergies[0].registeredBy}
-                  </span>
                 </div>
 
                 {/* Medicación Habitual */}
-                <div className="flex flex-col gap-space-2xs p-space-sm bg-surface-container rounded-xl">
-                  <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">
-                      Medicación Habitual Activa
-                    </span>
-                    <Pill className="h-4 w-4 text-outline" aria-hidden="true" />
-                  </div>
-                  <p className="font-body-md-medium text-body-md-medium text-on-surface font-semibold">
+                <div className="flex flex-col gap-0.5 pt-space-xs border-t border-surface-container">
+                  <span className="font-label-sm text-label-sm text-outline">
+                    Medicación Habitual
+                  </span>
+                  <span className="font-body-md text-body-md text-on-surface font-medium">
                     {PATIENT_CLINICAL_PROFILE.activeMedications}
-                  </p>
-                  <span className="font-label-sm text-[11px] text-on-surface-variant">
+                  </span>
+                  <span className="font-label-sm text-[11px] text-outline">
                     {PATIENT_CLINICAL_PROFILE.medicationNotes}
                   </span>
                 </div>
               </div>
 
-              {/* Sincronización y Validación del Sistema de Salud */}
-              <div className="flex flex-col gap-space-xs pt-space-xs border-t-0">
-                <div className="flex items-start gap-space-xs">
-                  <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
-                  <div className="flex flex-col">
-                    <span className="font-label-md text-label-md text-on-surface font-semibold">
-                      Red Hospitalaria Conectada
-                    </span>
-                    <p className="font-label-sm text-label-sm text-outline">
-                      {PATIENT_CLINICAL_PROFILE.networkStatus}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between bg-surface-container-low px-space-sm py-2 rounded-lg mt-space-2xs">
-                  <span className="font-label-sm text-[11px] text-outline">Última actualización:</span>
-                  <span className="font-label-sm text-[11px] text-on-surface font-medium">
-                    {PATIENT_CLINICAL_PROFILE.lastSyncTime}
-                  </span>
-                </div>
-              </div>
+              <div className="w-full h-px bg-surface-container" />
 
-              {/* Solicitud de Rectificación o Actualización */}
-              <button
-                type="button"
-                onClick={() =>
-                  onShowToast?.(
-                    "Solicitud de Actualización",
-                    "Se abrió el formulario de rectificación de datos para enviar a recepción central.",
-                    "edit_note",
-                    "info"
-                  )
-                }
-                className="w-full h-11 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-space-xs focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer font-medium"
-              >
-                <FileEdit className="h-4 w-4" aria-hidden="true" />
-                <span>Solicitar Corrección de Datos</span>
-              </button>
+              {/* Footer y Acción */}
+              <div className="flex flex-col gap-space-xs pt-space-2xs">
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast?.(
+                      "Solicitud de Actualización",
+                      "Se abrió el formulario de rectificación de datos para enviar a recepción central.",
+                      "edit_note",
+                      "info"
+                    )
+                  }
+                  className="w-full h-10 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-space-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer font-medium border border-outline-variant/30"
+                >
+                  <FileEdit className="h-4 w-4 text-primary" aria-hidden="true" />
+                  <span>Solicitar actualización de ficha</span>
+                </button>
+                <span className="font-label-sm text-[11px] text-outline text-center">
+                  Última sincronización: {PATIENT_CLINICAL_PROFILE.lastSyncTime}
+                </span>
+              </div>
             </div>
           </aside>
         </div>

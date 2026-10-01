@@ -25,72 +25,59 @@ export function AppointmentCard({
     <article
       id={`card-${appointment.id}`}
       className={cn(
-        "bg-surface-container-lowest p-space-lg rounded-xl border transition-all duration-200 shadow-xs relative",
+        "bg-surface-container-lowest p-space-lg rounded-2xl border transition-all duration-200 shadow-sm relative",
         isCancelled
-          ? "border-slate-300 opacity-75"
+          ? "border-outline-variant/50 opacity-75"
           : isBlocked24h
-          ? "border-surface-container-high"
-          : "border-surface-container-high hover:border-primary/40"
+          ? "border-outline-variant/40"
+          : "border-outline-variant/30 hover:border-primary/40"
       )}
     >
       {/* Header Info */}
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-space-md pb-space-md border-b border-surface-container">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-space-md pb-space-md border-b border-surface-container/60">
         <div className="flex flex-col">
-          <div className="flex items-center gap-space-xs mb-1">
+          <div className="flex items-center gap-space-xs mb-1.5">
             {isBlocked24h ? (
-              <>
-                <span className="font-label-sm text-label-sm text-amber-800 font-bold">
-                  Próximo a realizarse
-                </span>
-                <span aria-hidden="true" className="text-slate-400">
-                  •
-                </span>
-                <span className="font-label-sm text-label-sm text-slate-600 font-medium">
-                  Menos de 24 hs
-                </span>
-              </>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-tertiary/10 text-tertiary border border-tertiary/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true" />
+                <span>Próximo a realizarse (&lt; 24 hs)</span>
+              </span>
             ) : isCancelled ? (
-              <span className="font-label-sm text-label-sm text-error font-bold">
-                Cancelado en sesión
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-error-container/30 text-error border border-error/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true" />
+                <span>Cancelado en sesión</span>
               </span>
             ) : (
-              <>
-                <span className="font-label-sm text-label-sm text-primary font-bold">
-                  Confirmado
-                </span>
-                <span aria-hidden="true" className="text-slate-400">
-                  •
-                </span>
-                <span className="font-label-sm text-label-sm text-slate-600 font-medium">
-                  Reprogramable online
-                </span>
-              </>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-container text-on-secondary-container">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
+                <span>Confirmado • Reprogramable online</span>
+              </span>
             )}
           </div>
           <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
             {appointment.specialty}
           </h2>
-          <p className="font-body-md text-body-md text-slate-700 mt-0.5">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-0.5">
             {appointment.doctorName}{" "}
             {appointment.doctorLicense && (
-              <span className="font-label-sm text-slate-600 font-normal">
+              <span className="text-xs text-outline font-normal">
                 ({appointment.doctorLicense})
               </span>
             )}
           </p>
         </div>
 
-        <div className="flex md:flex-col items-start md:items-end justify-between">
+        <div className="flex md:flex-col items-start md:items-end justify-between bg-surface-container-low/60 md:bg-transparent p-3 md:p-0 rounded-xl border border-outline-variant/20 md:border-0">
           <span className="font-headline-sm text-headline-sm text-on-surface font-bold">
             {appointment.displayTime}
           </span>
-          <span className="font-body-md text-body-md text-slate-700 font-medium">
+          <span className="font-body-md text-body-md text-on-surface-variant font-medium">
             {appointment.displayDate}
           </span>
           <span
             className={cn(
-              "font-label-sm text-label-sm font-semibold mt-0.5",
-              isBlocked24h ? "text-tertiary font-bold" : "text-slate-600"
+              "text-xs font-semibold mt-0.5",
+              isBlocked24h ? "text-tertiary font-bold" : "text-on-surface-variant"
             )}
           >
             {appointment.relativeTime}
@@ -98,25 +85,25 @@ export function AppointmentCard({
         </div>
       </div>
 
-      {/* Details Grid (Venue & Coverage) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md py-space-md text-slate-700 font-body-md text-body-md">
-        <div>
-          <span className="font-label-sm text-[11px] text-slate-600 uppercase block font-bold mb-0.5">
-            Sede
+      {/* Details Grid (Venue & Coverage) in Minimalist Blocks */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm py-space-md">
+        <div className="bg-surface-container-low/60 border border-outline-variant/20 rounded-xl p-3.5 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-outline uppercase tracking-wider block mb-1">
+            Sede y Ubicación
           </span>
-          <p className="text-on-surface font-semibold">{appointment.venue}</p>
-          <p className="font-label-sm text-label-sm text-slate-600">
+          <p className="text-on-surface font-semibold text-sm">{appointment.venue}</p>
+          <p className="text-xs text-on-surface-variant mt-0.5">
             {appointment.venueAddress}
           </p>
         </div>
-        <div>
-          <span className="font-label-sm text-[11px] text-slate-600 uppercase block font-bold mb-0.5">
-            Cobertura
+        <div className="bg-surface-container-low/60 border border-outline-variant/20 rounded-xl p-3.5 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-outline uppercase tracking-wider block mb-1">
+            Cobertura Médica
           </span>
-          <p className="text-on-surface font-semibold">
+          <p className="text-on-surface font-semibold text-sm">
             {appointment.coverageProvider}
           </p>
-          <p className="font-label-sm text-label-sm text-slate-600">
+          <p className="text-xs text-on-surface-variant mt-0.5">
             {appointment.coverageStatus}
           </p>
         </div>
@@ -125,59 +112,47 @@ export function AppointmentCard({
       {/* Case <= 24h Warning Notice Callout */}
       {isBlocked24h && (
         <div
-          className="p-space-sm rounded-lg bg-surface-container text-slate-700 font-body-md text-body-md mb-space-md"
+          className="p-3.5 rounded-xl bg-surface-container-low text-on-surface mb-space-md border border-outline-variant/20"
           id={`aviso-bloqueo-${appointment.id}`}
         >
-          <p className="font-label-sm text-label-sm text-slate-700">
-            Por proximidad del horario (menos de 24 hs), comunícate
-            telefónicamente con recepción para gestionar cambios o
-            cancelaciones.
+          <p className="text-xs text-on-surface-variant leading-relaxed">
+            Por proximidad del horario (menos de 24 hs), la modificación online se encuentra cerrada para preservar la agenda de guardia y consultorios. Comunícate telefónicamente con recepción para gestionar cambios.
           </p>
         </div>
       )}
 
       {/* Actions Footer */}
       {!isCancelled && (
-        <div className="flex flex-wrap items-center justify-between gap-space-md pt-space-md border-t border-surface-container">
+        <div className="flex flex-wrap items-center justify-between gap-space-md pt-space-md border-t border-surface-container/60">
           {isBlocked24h ? (
-            <>
-              {/* Llamar a recepción - Deshabilitado */}
-              <button
-                type="button"
-                disabled
-                aria-disabled="true"
-                title="Línea telefónica directa disponible próximamente"
-                className="h-10 px-space-md rounded-lg bg-surface-container text-slate-500 font-label-md text-label-md font-semibold flex items-center gap-space-2xs opacity-60 cursor-not-allowed select-none"
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-space-sm">
+              <span className="text-xs text-outline font-medium">
+                Gestión online cerrada (&lt; 24 hs)
+              </span>
+              <a
+                href="tel:01147892200"
+                className="h-10 px-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors border border-outline-variant/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <Phone className="h-4 w-4 text-slate-400" />
+                <Phone className="h-4 w-4 text-primary" aria-hidden="true" />
                 <span>Llamar a Recepción (011 4789-2200)</span>
-              </button>
-              <button
-                aria-describedby={`aviso-bloqueo-${appointment.id}`}
-                aria-disabled="true"
-                disabled
-                className="h-10 px-space-md rounded-lg bg-surface-container text-slate-500 font-label-md text-label-md cursor-not-allowed opacity-60 transition-colors select-none"
-                type="button"
-              >
-                Gestión online deshabilitada
-              </button>
-            </>
+              </a>
+            </div>
           ) : (
             <>
-              <span className="font-label-sm text-label-sm text-slate-600 font-medium">
+              <span className="text-xs text-on-surface-variant font-medium">
                 {appointment.managementDeadline || "Gestión online habilitada"}
               </span>
               <div className="flex items-center gap-space-sm w-full sm:w-auto justify-end">
                 <button
                   type="button"
-                  className="h-10 px-space-md rounded-lg text-error hover:bg-error-container/30 font-label-md text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-2 cursor-pointer font-semibold"
+                  className="h-10 px-4 rounded-xl text-error hover:bg-error-container/20 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-2 cursor-pointer font-semibold border border-transparent hover:border-error/20"
                   onClick={() => onOpenCancel(appointment)}
                 >
                   Cancelar cita
                 </button>
                 <button
                   type="button"
-                  className="h-10 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
+                  className="h-10 px-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer border border-outline-variant/30"
                   onClick={() => onOpenReschedule(appointment)}
                 >
                   Reprogramar cita
@@ -195,16 +170,16 @@ export function AppointmentCard({
             <p className="font-body-md-medium text-body-md-medium text-on-surface font-semibold">
               Turno Cancelado
             </p>
-            <p className="font-label-sm text-label-sm text-slate-600">
+            <p className="font-label-sm text-label-sm text-on-surface-variant">
               El turno fue liberado para lista de espera.
             </p>
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-1 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold hover:bg-surface-variant transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold hover:bg-surface-container transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shadow-xs cursor-pointer border border-outline-variant/30"
             onClick={() => onRestore(appointment.id)}
           >
-            <RotateCcw className="h-3.5 w-3.5" />
+            <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             <span>Deshacer</span>
           </button>
         </div>

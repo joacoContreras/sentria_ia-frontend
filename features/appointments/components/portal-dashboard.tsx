@@ -124,14 +124,14 @@ export function PortalDashboard() {
                       className="flex flex-col gap-space-lg animate-in fade-in duration-150"
                     >
                       {upcomingAppointments.length === 0 ? (
-                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-slate-600">
+                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-outline-variant/30 text-on-surface-variant">
                           <p className="font-body-lg">
                             No tienes turnos pendientes en este momento.
                           </p>
                           <button
                             type="button"
                             onClick={() => openBookModal()}
-                            className="mt-3 inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-container transition-all cursor-pointer shadow-sm"
+                            className="mt-3 inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-container transition-all cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                           >
                             Agendar un Turno
                           </button>
@@ -159,7 +159,7 @@ export function PortalDashboard() {
                       className="flex flex-col gap-space-md animate-in fade-in duration-150"
                     >
                       {simplifiedHistory.length === 0 ? (
-                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-slate-600">
+                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-outline-variant/30 text-on-surface-variant">
                           <p className="font-body-lg">
                             No tienes historial de consultas pasadas.
                           </p>
@@ -173,7 +173,7 @@ export function PortalDashboard() {
                             <button
                               type="button"
                               onClick={navigateToHistory}
-                              className="font-label-sm text-label-sm text-primary font-bold hover:underline cursor-pointer inline-flex items-center gap-1"
+                              className="font-label-sm text-label-sm text-primary font-bold hover:underline cursor-pointer inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
                             >
                               Ver Historia Clínica Completa
                               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -206,7 +206,7 @@ export function PortalDashboard() {
                             <button
                               type="button"
                               onClick={navigateToHistory}
-                              className="px-space-lg h-11 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold inline-flex items-center justify-center gap-space-2xs transition-all shadow-sm shrink-0 cursor-pointer"
+                              className="px-space-lg h-11 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold inline-flex items-center justify-center gap-space-2xs transition-all shadow-sm shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             >
                               <span>Ver Historial Clínico</span>
                               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -226,7 +226,7 @@ export function PortalDashboard() {
                       className="flex flex-col gap-space-md animate-in fade-in duration-150"
                     >
                       {canceledAppointments.length === 0 ? (
-                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-slate-600">
+                        <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-outline-variant/30 text-on-surface-variant">
                           <p className="font-body-lg">
                             No hay citas canceladas registradas en el período.
                           </p>

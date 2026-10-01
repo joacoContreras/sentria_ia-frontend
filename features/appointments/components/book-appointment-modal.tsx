@@ -220,9 +220,9 @@ function BookAppointmentContent({
         <div className="flex flex-col gap-space-xs">
           <label
             htmlFor="select-especialidad"
-            className="font-label-lg text-label-lg text-on-surface flex items-center gap-space-2xs font-semibold"
+            className="text-sm text-on-surface flex items-center gap-2 font-semibold"
           >
-            <span className="w-5 h-5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] flex items-center justify-center font-bold">
+            <span className="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant text-[11px] font-bold flex items-center justify-center border border-outline-variant/30">
               1
             </span>
             Especialidad Médica
@@ -232,7 +232,7 @@ function BookAppointmentContent({
               id="select-especialidad"
               value={specialty}
               onChange={handleSpecialtyChange}
-              className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary"
+              className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary"
             >
               {SPECIALTIES.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -250,9 +250,9 @@ function BookAppointmentContent({
         <div className="flex flex-col gap-space-xs">
           <label
             htmlFor="select-profesional"
-            className="font-label-lg text-label-lg text-on-surface flex items-center gap-space-2xs font-semibold"
+            className="text-sm text-on-surface flex items-center gap-2 font-semibold"
           >
-            <span className="w-5 h-5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] flex items-center justify-center font-bold">
+            <span className="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant text-[11px] font-bold flex items-center justify-center border border-outline-variant/30">
               2
             </span>
             Profesional / Especialista
@@ -262,7 +262,7 @@ function BookAppointmentContent({
               id="select-profesional"
               value={selectedDoctor}
               onChange={(e) => setSelectedDoctor(e.target.value)}
-              className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary"
+              className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary"
             >
               {(DOCTORS_BY_SPECIALTY[specialty] || DOCTORS_BY_SPECIALTY["Cardiología Clínica"]).map((doc) => (
                 <option key={doc.name} value={doc.name}>
@@ -275,8 +275,8 @@ function BookAppointmentContent({
             </div>
           </div>
           <div className="flex items-center gap-space-2xs mt-0.5">
-            <CheckCircle2 className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
-            <span className="font-label-sm text-label-sm text-outline">
+            <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" aria-hidden="true" />
+            <span className="text-xs text-outline font-medium">
               {currentDoctorObj.subtitle}
             </span>
           </div>
@@ -284,8 +284,8 @@ function BookAppointmentContent({
 
         {/* STEP 3: Sede o Modalidad */}
         <div className="flex flex-col gap-space-xs">
-          <span className="font-label-lg text-label-lg text-on-surface flex items-center gap-space-2xs font-semibold">
-            <span className="w-5 h-5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] flex items-center justify-center font-bold">
+          <span className="text-sm text-on-surface flex items-center gap-2 font-semibold">
+            <span className="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant text-[11px] font-bold flex items-center justify-center border border-outline-variant/30">
               3
             </span>
             Sede o Modalidad
@@ -317,28 +317,23 @@ function BookAppointmentContent({
                   />
                   <div
                     className={cn(
-                      "h-full p-space-md rounded-xl transition-all flex flex-col justify-between gap-space-2xs border",
+                      "h-full p-3.5 rounded-xl transition-all flex flex-col justify-between gap-space-2xs border",
                       isSelected
-                        ? "bg-primary-container text-on-primary-container border-primary shadow-sm"
-                        : "bg-surface-container-low hover:bg-surface-container text-on-surface border-transparent"
+                        ? "bg-surface-container-lowest text-on-surface border-primary ring-2 ring-primary/20 shadow-xs"
+                        : "bg-surface-container-low/70 hover:bg-surface-container text-on-surface border-outline-variant/20"
                     )}
                   >
                     <div className="flex items-center justify-between">
-                      <IconComponent className="h-5 w-5" aria-hidden="true" />
+                      <IconComponent className={cn("h-4 w-4", isSelected ? "text-primary" : "text-on-surface-variant")} aria-hidden="true" />
                       {isSelected && (
-                        <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                        <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden="true" />
                       )}
                     </div>
                     <div>
-                      <div className="font-label-lg text-label-lg leading-snug font-semibold">
+                      <div className="text-sm leading-snug font-semibold">
                         {opt.title}
                       </div>
-                      <div
-                        className={cn(
-                          "font-label-sm text-label-sm mt-0.5",
-                          isSelected ? "opacity-90" : "text-on-surface-variant"
-                        )}
-                      >
+                      <div className="text-xs mt-0.5 text-on-surface-variant">
                         {opt.subtitle}
                       </div>
                     </div>
@@ -350,18 +345,18 @@ function BookAppointmentContent({
         </div>
 
         {/* STEP 4: Selección de Fecha y Turno Disponible */}
-        <div className="flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded-2xl">
+        <div className="flex flex-col gap-space-sm bg-surface-container-low/70 p-4 rounded-2xl border border-outline-variant/20">
           <div className="flex items-center justify-between">
-            <span className="font-label-lg text-label-lg text-on-surface flex items-center gap-space-2xs font-semibold">
+            <span className="text-sm text-on-surface flex items-center gap-2 font-semibold">
               <span
                 aria-hidden="true"
-                className="w-5 h-5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] flex items-center justify-center font-bold"
+                className="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant text-[11px] font-bold flex items-center justify-center border border-outline-variant/30"
               >
                 4
               </span>
-              Selección de Fecha y Turno Disponible
+              Selección de Fecha y Horario
             </span>
-            <span className="font-label-sm text-label-sm text-outline">
+            <span className="text-xs text-outline font-medium">
               Octubre - Noviembre 2024
             </span>
           </div>
@@ -384,14 +379,14 @@ function BookAppointmentContent({
                   className={cn(
                     "py-2.5 px-space-xs rounded-xl flex flex-col items-center justify-center text-center transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary",
                     isSelected
-                      ? "bg-surface-container-lowest shadow-sm border-2 border-primary"
-                      : "bg-surface-container text-on-surface-variant opacity-75 hover:opacity-100 border border-transparent"
+                      ? "bg-surface-container-lowest shadow-xs border-2 border-primary"
+                      : "bg-surface-container-lowest/60 text-on-surface-variant hover:bg-surface-container-lowest border border-outline-variant/20"
                   )}
                 >
                   <span
                     className={cn(
-                      "font-label-sm text-label-sm",
-                      isSelected ? "text-primary font-bold" : "text-outline"
+                      "text-xs font-semibold",
+                      isSelected ? "text-primary" : "text-outline"
                     )}
                   >
                     {dateObj.dayName}
@@ -401,8 +396,8 @@ function BookAppointmentContent({
                   </span>
                   <span
                     className={cn(
-                      "font-label-sm text-[10px]",
-                      isSelected ? "text-primary font-semibold" : "text-outline"
+                      "text-[10px] font-medium mt-0.5",
+                      isSelected ? "text-primary" : "text-outline"
                     )}
                   >
                     {dateObj.count}
@@ -416,9 +411,9 @@ function BookAppointmentContent({
           <div className="flex flex-col gap-space-2xs mt-1">
             <span
               id="label-horarios"
-              className="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold"
+              className="text-[11px] text-outline uppercase tracking-wider font-semibold"
             >
-              Horarios Matutinos y Vespertinos
+              Horarios Disponibles
             </span>
             <div
               aria-labelledby="label-horarios"
@@ -435,14 +430,14 @@ function BookAppointmentContent({
                     aria-checked={isSelected}
                     onClick={() => setSelectedTime(timeStr)}
                     className={cn(
-                      "h-10 rounded-lg font-label-md text-label-md flex items-center justify-center transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary",
+                      "h-10 rounded-xl text-xs flex items-center justify-center transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary",
                       isSelected
-                        ? "bg-primary text-on-primary font-semibold gap-1 shadow-sm"
-                        : "bg-surface-container-lowest text-on-surface hover:bg-surface-container"
+                        ? "bg-primary text-on-primary font-semibold gap-1 shadow-xs"
+                        : "bg-surface-container-lowest text-on-surface hover:bg-surface-container border border-outline-variant/20"
                     )}
                   >
                     {isSelected && (
-                      <Check className="h-4 w-4" aria-hidden="true" />
+                      <Check className="h-3.5 w-3.5" aria-hidden="true" />
                     )}
                     <span>{timeStr}</span>
                   </button>
@@ -454,26 +449,26 @@ function BookAppointmentContent({
 
         {/* STEP 5: Cobertura Médica Asociada */}
         <div className="flex flex-col gap-space-sm">
-          <span className="font-label-lg text-label-lg text-on-surface flex items-center gap-space-2xs font-semibold">
-            <span className="w-5 h-5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] flex items-center justify-center font-bold">
+          <span className="text-sm text-on-surface flex items-center gap-2 font-semibold">
+            <span className="w-5 h-5 rounded-full bg-surface-container-high text-on-surface-variant text-[11px] font-bold flex items-center justify-center border border-outline-variant/30">
               5
             </span>
             Cobertura Médica Asociada
           </span>
-          <div className="p-space-md rounded-xl bg-surface-container-low flex items-start gap-space-sm border border-outline-variant/30">
-            <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Shield className="h-4 w-4 text-on-primary-container" aria-hidden="true" />
+          <div className="p-3.5 rounded-xl bg-surface-container-low/60 flex items-start gap-3 border border-outline-variant/20">
+            <div className="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center flex-shrink-0 mt-0.5 border border-outline-variant/20">
+              <Shield className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <div className="flex flex-col flex-1">
-              <div className="flex flex-wrap items-center justify-between gap-space-2xs">
-                <span className="font-label-lg text-label-lg text-on-surface font-semibold">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-sm text-on-surface font-semibold">
                   Cobertura automática: OSDE 310
                 </span>
-                <span className="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-primary text-on-primary font-semibold">
+                <span className="px-2 py-0.5 rounded-full text-xs bg-secondary-container text-on-secondary-container font-medium">
                   Copago $0
                 </span>
               </div>
-              <p className="font-label-sm text-label-sm text-outline mt-0.5">
+              <p className="text-xs text-outline mt-0.5">
                 Autorización en línea al instante validada por sistema con DNI 38.452.901.
               </p>
             </div>
@@ -482,7 +477,7 @@ function BookAppointmentContent({
           <div className="flex flex-col gap-space-2xs">
             <label
               htmlFor="step-motivo"
-              className="font-label-md text-label-md text-on-surface-variant font-medium"
+              className="text-xs text-on-surface-variant font-medium"
             >
               Motivo de consulta (opcional)
             </label>
@@ -492,7 +487,7 @@ function BookAppointmentContent({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Ej: Control de rutina, dolor torácico leve, renovación de receta"
-              className="w-full h-12 px-space-md rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all border-0 ring-1 ring-outline-variant/40 focus:ring-2 focus:ring-primary"
+              className="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all border-0 ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -555,7 +550,7 @@ export function BookAppointmentModal({
       aria-describedby="modal-agendar-desc"
       aria-modal="true"
       role="dialog"
-      className="fixed inset-0 z-50 flex items-center justify-center p-space-sm sm:p-space-lg bg-slate-900/40 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-space-sm sm:p-space-lg bg-inverse-surface/45 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
     >
       <BookAppointmentContent
         initialSpecialty={initialSpecialty}

@@ -24,45 +24,45 @@ export function PortalFooter({ onSelectSection }: PortalFooterProps) {
           <button
             type="button"
             onClick={() => handleNav("sede")}
-            className="font-label-md text-label-md text-slate-700 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded cursor-pointer"
+            className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg cursor-pointer"
           >
-            Sede Médica y Telemétrica Central
+            Sede Médica Central
           </button>
-          <span aria-hidden="true" className="text-slate-400 select-none">
+          <span aria-hidden="true" className="text-outline select-none">
             •
           </span>
           <button
             type="button"
             onClick={() => handleNav("terminos")}
-            className="font-label-md text-label-md text-slate-700 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded cursor-pointer"
+            className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg cursor-pointer"
           >
             Términos Clínicos
           </button>
-          <span aria-hidden="true" className="text-slate-400 select-none">
+          <span aria-hidden="true" className="text-outline select-none">
             •
           </span>
           <button
             type="button"
             onClick={() => handleNav("privacidad")}
-            className="font-label-md text-label-md text-slate-700 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded cursor-pointer"
+            className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg cursor-pointer"
           >
             Privacidad Médica
           </button>
-          <span aria-hidden="true" className="text-slate-400 select-none">
+          <span aria-hidden="true" className="text-outline select-none">
             •
           </span>
           <button
             type="button"
             onClick={() => handleNav("protocolo")}
-            className="font-label-md text-label-md text-slate-700 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded cursor-pointer"
+            className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg cursor-pointer"
           >
             Protocolo Criptográfico
           </button>
         </div>
         <div className="pt-space-md text-center border-t border-surface-container">
-          <p className="font-label-sm text-label-sm text-slate-600">
+          <p className="font-label-sm text-label-sm text-outline">
             © {new Date().getFullYear()} Sentria AI Health Systems. Cumplimiento
-            Estricto HIPAA y Regulaciones HITECH.
+            Estricto de Normativas de Salud y Privacidad Médica.
           </p>
         </div>
       </div>

@@ -91,7 +91,7 @@ export function PortalHeader({
             )}
             aria-current={isTriageActive ? "page" : undefined}
           >
-            Triage &amp; Síntomas
+            Triage y Síntomas
           </button>
 
           {/* Historial Clínico */}
@@ -145,8 +145,8 @@ export function PortalHeader({
           </div>
 
           <div
-            aria-label={`Perfil de ${displayName}`}
-            className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs"
+            aria-label={`Avatar de ${displayName}`}
+            className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-xs shrink-0"
             role="img"
           >
             <User className="h-4 w-4" aria-hidden="true" />
@@ -157,7 +157,7 @@ export function PortalHeader({
             variant="ghost"
             size="sm"
             onClick={logout}
-            className="text-slate-600 hover:text-error hover:bg-error-container/20"
+            className="text-on-surface-variant hover:text-error hover:bg-error-container/20 font-label-md"
             title="Cerrar sesión"
             leftIcon={<LogOut className="h-4 w-4" />}
           >
