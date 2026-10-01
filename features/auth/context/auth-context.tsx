@@ -9,6 +9,19 @@ import type {
   AuthResponse,
 } from "@/types/auth"
 
+const DEV_USER: AuthUser = {
+    id: "dev-001",
+    fullName: "Developer Sentria",
+    email: "dev@sentria.ai",
+    docNumber: "99.999.999",
+    docType: "DNI",
+    coverageProvider: "Modo Desarrollador (OSDE 410)",
+    phone: "+54 11 9999-9999",
+    memberId: "DEV-9999"
+}
+
+
+
 interface AuthContextValue {
   user: AuthUser | null
   token: string | null
@@ -32,6 +45,7 @@ interface SessionData {
 const emptySession: SessionData = { user: null, token: null }
 let cachedSession: SessionData | null = null
 const listeners = new Set<() => void>()
+
 
 function parseSafeSession(raw: string | null): SessionData {
   if (!raw) return emptySession
@@ -115,6 +129,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   )
   const [isPending, setIsPending] = React.useState(false)
 
+  // En entorno de desarrollo o con variable activada, proveer perfil developer si no hay sesión
+  const isDevBypass =
+    process.env.NEXT_PUBLIC_DEV_AUTO_LOGIN === "true" ||
+    process.env.NODE_ENV === "development"
+
+  const effectiveUser = session.user || (isDevBypass ? DEV_USER : null)
+  const effectiveToken = session.token || (isDevBypass ? "dev-mock-token" : null)
+
   const login = async (credentials: PatientLoginInput): Promise<AuthResponse> => {
     setIsPending(true)
     try {
@@ -154,9 +176,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const value: AuthContextValue = {
-    user: session.user,
-    token: session.token,
-    isAuthenticated: !!session.user,
+    user: effectiveUser,
+    token: effectiveToken,
+    isAuthenticated: !!effectiveUser,
     isLoading: isPending,
     isHydrated,
     login,

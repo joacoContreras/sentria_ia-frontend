@@ -93,15 +93,20 @@ Cada subcarpeta en `features/` representa una funcionalidad de negocio independi
   - `services/`: Métodos para interactuar con los endpoints de autenticación y validación de cobertura sanitaria.
 - **`features/landing/`:**
   - Componentes del panel informativo, métricas de satisfacción y telemetría de triage.
-- **Nuevas features a incorporar según hoja de ruta:**
-  - `features/triage/`: Algoritmo de clasificación sintomática ESI v4.
-  - `features/appointments/`: Autogestión de turnos médicos y telemedicina.
+- **`features/appointments/`:**
+  - `components/`: Componentes del portal de turnos (`portal-header`, `patient-hero-banner`, `appointment-tabs`, `appointment-card`, `appointment-history-card`, `appointment-canceled-card`, `clinical-sidebar`, `cancel-appointment-modal`, `reschedule-appointment-modal`, `portal-toast`, `portal-footer`, `portal-dashboard`).
+  - `services/`: Métodos para interactuar con los endpoints de gestión de turnos (`appointment.service.ts`), desacoplados y listos para conectar con el backend REST.
+  - `hooks/`: Hook `useAppointments` para gestión reactiva de estado, filtros, conteos, mutaciones (cancelación, reprogramación, restauración) y toasts.
+- **`features/help/`:**
+  - Componentes de mesa de ayuda, FAQ asistencial y modales interactivos de soporte.
+- **`features/about/` y `features/legal/`:**
+  - Vistas institucionales, éticas, privacidad médica y protocolos criptográficos.
 
 ### `lib/` (Utilidades Compartidas)
 - **`lib/utils.ts`:** Provee la función `cn(...inputs)` que combina `clsx` y `tailwind-merge` para resolver colisiones de clases CSS de Tailwind de forma determinista.
 
 ### `types/` (Tipos e Interfaces Globales)
-- Centraliza las definiciones de tipos TypeScript compartidos entre múltiples features, componentes y servicios.
+- Centraliza las definiciones de tipos TypeScript compartidos (`types/auth.ts`, `types/appointments.ts`, `types/help.ts`).
 
 ---
 
