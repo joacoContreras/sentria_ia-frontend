@@ -39,26 +39,36 @@ sentria_ia-frontend/
 │
 ├── features/                        # Módulos organizados por dominio funcional (Vertical Slices)
 │   ├── auth/                        # Dominio de Autenticación y Registro de Pacientes
-│   │   ├── components/
-│   │   │   ├── login-form.tsx       # Formulario de inicio de sesión
-│   │   │   ├── register-form.tsx    # Formulario multisección de alta de paciente
-│   │   │   ├── registration-card.tsx # Orquestador de tabs y feedback visual
-│   │   │   └── registration-success.tsx # Vista de confirmación de éxito
-│   │   └── services/
-│   │       └── auth.service.ts      # Comunicación con API y simulación de red
-│   │
+│   │   ├── components/              # Login, Registro, Recuperación de clave y Éxito
+│   │   └── services/auth.service.ts # Servicio dual-mode conectado a /api/auth/*
+│   ├── appointments/                # Dominio de Turnos y Citas Médicas
+│   │   ├── components/              # Dashboard, Tarjetas, Modales de reserva y cancelación
+│   │   ├── hooks/use-appointments.ts# Hook orquestador de estado de turnos
+│   │   └── services/appointment.service.ts # Servicio dual-mode conectado a /api/patient/appointments
+│   ├── medical-history/             # Dominio de Historia Clínica Digital
+│   │   ├── components/              # Vista de consultas, filtros y ficha de paciente
+│   │   └── services/medical-history.service.ts # Servicio dual-mode conectado a /api/patient/records
+│   ├── triage/                      # Dominio de Triage Clínico con IA
+│   │   ├── components/              # Ingesta de síntomas y panel de recomendaciones ESI
+│   │   └── services/triage.service.ts # Servicio dual-mode conectado a /api/triage/evaluate
+│   ├── help/                        # Dominio de Mesa de Ayuda y Asistente Virtual
+│   │   ├── components/              # Chat interactivo, modal de correo y FAQ asistencial
+│   │   └── services/help.service.ts # Servicio dual-mode conectado a /api/support/*
 │   └── landing/                     # Dominio de Presentación Institucional y Valor
-│       └── components/
-│           ├── telemetry-chart.tsx  # Gráfico animado de telemetría y métricas ESI
-│           └── value-panel.tsx      # Panel descriptivo de beneficios y satisfacción
 │
 ├── lib/                             # Utilidades y configuración transversal
+│   ├── api-client.ts                # Cliente HTTP unificado con JWT, timeout y tipado genérico
 │   └── utils.ts                     # Helper cn() para merge inteligente de Tailwind
 │
 ├── types/                           # Modelos, contratos de API e interfaces TypeScript
-│   └── auth.ts                      # Tipos para registro, login y respuestas de auth
+│   ├── auth.ts                      # Tipos de usuarios, registro y login
+│   ├── appointments.ts              # Tipos de citas, turnos y cupos disponibles
+│   ├── medical-history.ts           # Tipos de consultas clínicas y perfil de paciente
+│   ├── triage.ts                    # Tipos de ingesta de síntomas y resultados ESI
+│   └── help.ts                      # Tipos de mesa de ayuda y FAQ
 │
-├── public/                          # Recursos estáticos (imágenes, iconos, SVGs)
+├── API_CONTRACT_JAVA.md             # Guía exhaustiva de contratos DTO y CORS para backend Java
+├── DATABASE_SCHEMA.md               # Esquema relacional PostgreSQL y DDL
 ├── DESIGN.md                        # Guía de tokens de diseño, colores y tipografía
 ├── package.json                     # Dependencias y scripts de construcción
 └── tsconfig.json                    # Configuración de TypeScript con alias @/*

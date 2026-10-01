@@ -19,6 +19,8 @@ import {
   RotateCw,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { triageService } from "../services/triage.service"
+import { TriageResult } from "@/types/triage"
 
 interface TriageViewProps {
   onOpenBookAppointment?: (specialty?: string, doctor?: string) => void
@@ -47,6 +49,7 @@ export function TriageView({
   const [riskFactors, setRiskFactors] = useState<string[]>(["allergies"])
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
   const [analysisHighlight, setAnalysisHighlight] = useState<boolean>(false)
+  const [triageResult, setTriageResult] = useState<TriageResult | null>(null)
 
   // Toggle quick symptom chip
   const toggleChip = (symptom: string) => {
@@ -84,12 +87,25 @@ export function TriageView({
     return "Muy Severo"
   }
 
-  // AI analysis simulation
-  const handleAnalyze = () => {
+  // AI analysis evaluation
+  const handleAnalyze = async () => {
     if (isAnalyzing) return
     setIsAnalyzing(true)
-    setTimeout(() => {
-      setIsAnalyzing(false)
+
+    const response = await triageService.evaluateTriage({
+      symptoms: {
+        selectedSymptoms: selectedChips,
+        description: symptomText,
+        painLevel,
+        duration,
+        riskFactors,
+      },
+    })
+
+    setIsAnalyzing(false)
+
+    if (response.success && response.result) {
+      setTriageResult(response.result)
       setAnalysisHighlight(true)
       onShowToast?.(
         "Triage Actualizado",
@@ -100,7 +116,14 @@ export function TriageView({
       setTimeout(() => {
         setAnalysisHighlight(false)
       }, 1500)
-    }, 1200)
+    } else {
+      onShowToast?.(
+        "Error en Triage",
+        response.error || "No se pudo completar la evaluación clínica.",
+        "error",
+        "error"
+      )
+    }
   }
 
   const handleDownloadReport = () => {
@@ -499,10 +522,17 @@ export function TriageView({
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs text-primary uppercase tracking-wider font-bold">
-                  Orientación Clínica Preliminar
+                  {triageResult ? `Caso ${triageResult.caseId} · ESI Nivel ${triageResult.esiLevel ?? 3}` : "Orientación Clínica Preliminar"}
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-semibold">
-                  Prioridad Media
+                <span className={cn(
+                  "inline-flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full font-semibold",
+                  (triageResult?.esiLevel ?? 3) <= 2
+                    ? "bg-error-container text-error"
+                    : (triageResult?.esiLevel ?? 3) === 3
+                      ? "bg-secondary-container text-on-secondary-container"
+                      : "bg-surface-container-high text-on-surface"
+                )}>
+                  {(triageResult?.esiLevel ?? 3) <= 2 ? "Prioridad Alta" : (triageResult?.esiLevel ?? 3) === 3 ? "Prioridad Media" : "Prioridad Baja"}
                 </span>
               </div>
 
@@ -512,12 +542,24 @@ export function TriageView({
                   Conducta recomendada:
                 </span>
                 <p className="text-sm text-on-surface bg-surface-container-low/60 p-4 rounded-xl leading-relaxed border border-outline-variant/20">
-                  Se recomienda consulta ambulatoria con{" "}
-                  <strong className="text-primary font-bold">
-                    Especialista en Neurología o Clínica Médica
-                  </strong>{" "}
-                  dentro de las próximas{" "}
-                  <strong className="text-on-surface font-bold">48 a 72 horas</strong>.
+                  {triageResult ? (
+                    <>
+                      {triageResult.suggestedAction} con{" "}
+                      <strong className="text-primary font-bold">
+                        {triageResult.recommendedSpecialty}
+                      </strong>{" "}
+                      ({triageResult.timeframe}).
+                    </>
+                  ) : (
+                    <>
+                      Se recomienda consulta ambulatoria con{" "}
+                      <strong className="text-primary font-bold">
+                        Especialista en Neurología o Clínica Médica
+                      </strong>{" "}
+                      dentro de las próximas{" "}
+                      <strong className="text-on-surface font-bold">48 a 72 horas</strong>.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -527,44 +569,63 @@ export function TriageView({
                   Pautas de cuidado general:
                 </span>
                 <div className="space-y-1.5">
-                  <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
-                    <CheckCircle2
-                      className="h-4 w-4 text-primary mt-0.5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <p className="text-xs text-on-surface-variant leading-relaxed">
-                      <strong className="text-on-surface font-medium">
-                        Patrón compatible sin signos de foco agudo:
-                      </strong>{" "}
-                      No se evidencian signos focales ni rigidez nucal en el relato.
-                    </p>
-                  </div>
+                  {triageResult?.findings && triageResult.findings.length > 0 ? (
+                    triageResult.findings.map((f, idx) => (
+                      <div key={idx} className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
+                        <CheckCircle2
+                          className="h-4 w-4 text-primary mt-0.5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          <strong className="text-on-surface font-medium">
+                            {f.title}:
+                          </strong>{" "}
+                          {f.detail}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
+                        <CheckCircle2
+                          className="h-4 w-4 text-primary mt-0.5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          <strong className="text-on-surface font-medium">
+                            Patrón compatible sin signos de foco agudo:
+                          </strong>{" "}
+                          No se evidencian signos focales ni rigidez nucal en el relato.
+                        </p>
+                      </div>
 
-                  <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
-                    <CheckCircle2
-                      className="h-4 w-4 text-primary mt-0.5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <p className="text-xs text-on-surface-variant leading-relaxed">
-                      <strong className="text-on-surface font-medium">
-                        Evitar automedicación:
-                      </strong>{" "}
-                      No consumir AINEs por antecedente de alergia registrado en ficha. Mantener reposo en ambiente tranquilo.
-                    </p>
-                  </div>
+                      <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
+                        <CheckCircle2
+                          className="h-4 w-4 text-primary mt-0.5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          <strong className="text-on-surface font-medium">
+                            Evitar automedicación:
+                          </strong>{" "}
+                          No consumir AINEs por antecedente de alergia registrado en ficha. Mantener reposo en ambiente tranquilo.
+                        </p>
+                      </div>
 
-                  <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
-                    <CheckCircle2
-                      className="h-4 w-4 text-primary mt-0.5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <p className="text-xs text-on-surface-variant leading-relaxed">
-                      <strong className="text-on-surface font-medium">
-                        Control evolutivo:
-                      </strong>{" "}
-                      Si se adiciona fiebre &gt; 38.5°C o síntomas visuales nuevos, recurrir a guardia médica.
-                    </p>
-                  </div>
+                      <div className="flex items-start gap-2.5 p-2 rounded-xl bg-surface-container-low/40 border border-outline-variant/10">
+                        <CheckCircle2
+                          className="h-4 w-4 text-primary mt-0.5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          <strong className="text-on-surface font-medium">
+                            Control evolutivo:
+                          </strong>{" "}
+                          Si se adiciona fiebre &gt; 38.5°C o síntomas visuales nuevos, recurrir a guardia médica.
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

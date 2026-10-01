@@ -24,10 +24,10 @@ import {
 } from "lucide-react"
 import {
   INITIAL_CONSULTATIONS,
-  ADDITIONAL_2023_CONSULTATIONS,
   PATIENT_CLINICAL_PROFILE,
 } from "../data/medical-history-data"
-import { MedicalConsultation } from "@/types/medical-history"
+import { medicalHistoryService } from "../services/medical-history.service"
+import { MedicalConsultation, PatientClinicalProfile } from "@/types/medical-history"
 
 interface MedicalHistoryViewProps {
   onBookAppointmentWithDoctor?: (doctorName: string, specialty: string) => void
@@ -41,7 +41,9 @@ export function MedicalHistoryView({
   const [consultations, setConsultations] = useState<MedicalConsultation[]>([
     ...INITIAL_CONSULTATIONS,
   ])
+  const [clinicalProfile, setClinicalProfile] = useState<PatientClinicalProfile>(PATIENT_CLINICAL_PROFILE)
   const [hasLoaded2023, setHasLoaded2023] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState("")
@@ -50,17 +52,44 @@ export function MedicalHistoryView({
   const [locationFilter, setLocationFilter] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
 
+  React.useEffect(() => {
+    let isMounted = true
+    async function loadData() {
+      setIsLoading(true)
+      const [resConsults, resProfile] = await Promise.all([
+        medicalHistoryService.getConsultations(),
+        medicalHistoryService.getClinicalProfile(),
+      ])
+      if (isMounted) {
+        if (resConsults.success && resConsults.consultations.length > 0) {
+          setConsultations(resConsults.consultations)
+        }
+        if (resProfile.success && resProfile.profile) {
+          setClinicalProfile(resProfile.profile)
+        }
+        setIsLoading(false)
+      }
+    }
+    loadData()
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   // Load more / 2023 records
-  const handleLoadMore2023 = () => {
+  const handleLoadMore2023 = async () => {
     if (!hasLoaded2023) {
-      setConsultations((prev) => [...prev, ...ADDITIONAL_2023_CONSULTATIONS])
-      setHasLoaded2023(true)
-      onShowToast?.(
-        "Expediente Actualizado",
-        "Se cargaron las consultas archivadas del período 2023.",
-        "history",
-        "info"
-      )
+      const res = await medicalHistoryService.getConsultations("2023")
+      if (res.success) {
+        setConsultations((prev) => [...prev, ...res.consultations])
+        setHasLoaded2023(true)
+        onShowToast?.(
+          "Expediente Actualizado",
+          "Se cargaron las consultas archivadas del período 2023.",
+          "history",
+          "info"
+        )
+      }
     }
   }
 
@@ -379,7 +408,12 @@ export function MedicalHistoryView({
             </div>
 
             {/* Listado de Tarjetas de Consultas */}
-            {filteredConsultations.length === 0 ? (
+            {isLoading ? (
+              <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-on-surface-variant flex flex-col items-center gap-2">
+                <RotateCcw className="h-6 w-6 animate-spin text-primary" aria-hidden="true" />
+                <p className="font-body-md font-medium">Cargando consultas e historial clínico...</p>
+              </div>
+            ) : filteredConsultations.length === 0 ? (
               <div className="p-space-xl text-center bg-surface-container-lowest rounded-2xl border border-surface-container-high text-on-surface-variant">
                 <p className="font-body-lg">
                   No se encontraron consultas con los filtros seleccionados.
@@ -611,13 +645,13 @@ export function MedicalHistoryView({
               {/* Identidad y Cobertura */}
               <div className="flex flex-col gap-1">
                 <span className="font-headline-sm text-headline-sm text-on-surface font-bold">
-                  {PATIENT_CLINICAL_PROFILE.fullName}
+                  {clinicalProfile.fullName}
                 </span>
                 <p className="font-body-md text-body-md text-on-surface-variant">
-                  DNI {PATIENT_CLINICAL_PROFILE.docNumber} · {PATIENT_CLINICAL_PROFILE.age} años
+                  DNI {clinicalProfile.docNumber} · {clinicalProfile.age} años
                 </p>
                 <p className="font-label-sm text-label-sm text-outline mt-0.5">
-                  {PATIENT_CLINICAL_PROFILE.coverage} · Afiliado N° {PATIENT_CLINICAL_PROFILE.memberNumber}
+                  {clinicalProfile.coverage} · Afiliado N° {clinicalProfile.memberNumber}
                 </p>
               </div>
 
@@ -636,7 +670,7 @@ export function MedicalHistoryView({
                       Grupo Sanguíneo
                     </span>
                     <span className="font-body-lg text-body-lg text-on-surface font-bold">
-                      {PATIENT_CLINICAL_PROFILE.bloodType}
+                      {clinicalProfile.bloodType}
                     </span>
                   </div>
 
@@ -646,7 +680,7 @@ export function MedicalHistoryView({
                     </span>
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-body-md text-body-md text-on-surface font-semibold">
-                        {PATIENT_CLINICAL_PROFILE.allergies[0].allergen}
+                        {clinicalProfile.allergies?.[0]?.allergen || "Sin alergias"}
                       </span>
                     </div>
                   </div>
@@ -658,10 +692,10 @@ export function MedicalHistoryView({
                     Medicación Habitual
                   </span>
                   <span className="font-body-md text-body-md text-on-surface font-medium">
-                    {PATIENT_CLINICAL_PROFILE.activeMedications}
+                    {clinicalProfile.activeMedications}
                   </span>
                   <span className="font-label-sm text-[11px] text-outline">
-                    {PATIENT_CLINICAL_PROFILE.medicationNotes}
+                    {clinicalProfile.medicationNotes}
                   </span>
                 </div>
               </div>
@@ -686,7 +720,7 @@ export function MedicalHistoryView({
                   <span>Solicitar actualización de ficha</span>
                 </button>
                 <span className="font-label-sm text-[11px] text-outline text-center">
-                  Última sincronización: {PATIENT_CLINICAL_PROFILE.lastSyncTime}
+                  Última sincronización: {clinicalProfile.lastSyncTime}
                 </span>
               </div>
             </div>

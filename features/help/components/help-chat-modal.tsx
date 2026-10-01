@@ -16,6 +16,7 @@ import {
   CheckCircle2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { helpService } from "../services/help.service"
 
 interface Message {
   id: string
@@ -183,6 +184,7 @@ function HelpChatContent({
   onOpenEmailSupport?: () => void
 }) {
   const msgCounterRef = React.useRef(0)
+  const sessionIdRef = React.useRef<string>("")
 
   const [messages, setMessages] = React.useState<Message[]>([
     {
@@ -202,6 +204,9 @@ function HelpChatContent({
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
+    if (!sessionIdRef.current) {
+      sessionIdRef.current = `chat-session-${Date.now()}`
+    }
     inputRef.current?.focus()
   }, [])
 
@@ -209,7 +214,7 @@ function HelpChatContent({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const text = (textToSend || inputVal).trim()
     if (!text || isTyping) return
 
@@ -233,6 +238,31 @@ function HelpChatContent({
     }
 
     setIsTyping(true)
+
+    // Intentar envío a backend Java REST o responder con bot local
+    let remoteResponse: { success: boolean; message?: Message } | null = null
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const res = await helpService.sendChatMessage(sessionIdRef.current, text)
+      if (res.success && res.message) {
+        remoteResponse = {
+          success: true,
+          message: {
+            id: res.message.id,
+            sender: res.message.sender,
+            text: res.message.text,
+            timestamp: res.message.timestamp || nowTime,
+            isEmergency: res.message.isEmergency,
+            actions: res.message.actions,
+          },
+        }
+      }
+    }
+
+    if (remoteResponse?.success && remoteResponse.message) {
+      setMessages((prev) => [...prev, remoteResponse.message!])
+      setIsTyping(false)
+      return
+    }
 
     setTimeout(() => {
       const response = getBotResponse(text)
@@ -286,7 +316,7 @@ function HelpChatContent({
 
       setMessages((prev) => [...prev, botMsg])
       setIsTyping(false)
-    }, 600)
+    }, 500)
   }
 
   const handleActionClick = (action: string) => {

@@ -4,7 +4,7 @@ export interface SymptomIntakeForm {
   selectedSymptoms: string[]
   description: string
   painLevel: number
-  duration: EpisodeDuration
+  duration: EpisodeDuration | string
   riskFactors: string[]
 }
 
@@ -27,6 +27,7 @@ export interface TriageFinding {
 
 export interface TriageResult {
   caseId: string
+  esiLevel?: number
   recommendedSpecialty: string
   suggestedAction: string
   timeframe: string

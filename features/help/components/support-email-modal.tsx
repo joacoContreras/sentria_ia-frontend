@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { validateEmail } from "@/features/auth/schemas/auth.schema"
 
+import { helpService } from "../services/help.service"
+
 interface SupportEmailModalProps {
   isOpen: boolean
   onClose: () => void
@@ -130,18 +132,20 @@ function SupportEmailContent({ onClose }: { onClose: () => void }) {
     setErrors({})
     setIsSubmitting(true)
 
-    // Simulate sending network request
-    await new Promise((resolve) => setTimeout(resolve, 1200))
-
-    const generatedTicket = `TKT-${Math.floor(100000 + Math.random() * 900000)}`
-    const now = new Date().toLocaleTimeString("es-AR", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const result = await helpService.createTicket({
+      ...formData,
+      attachment: attachedFile,
     })
 
+    if (!result.success) {
+      setErrors({ form: result.error || "No se pudo enviar el ticket. Intente nuevamente." })
+      setIsSubmitting(false)
+      return
+    }
+
     setTicketResult({
-      ticketId: generatedTicket,
-      timestamp: now,
+      ticketId: result.ticketCode,
+      timestamp: result.timestamp,
     })
     setIsSubmitting(false)
   }

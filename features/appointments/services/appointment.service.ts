@@ -1,3 +1,4 @@
+import { apiClient } from "@/lib/api-client"
 import {
   Appointment,
   AvailableDateOption,
@@ -6,7 +7,7 @@ import {
   RescheduleAppointmentInput,
 } from "@/types/appointments"
 
-// Initial mock dataset matching clinical business rules and acceptance criteria
+// Mock dataset inicial para modo sin conexión o desarrollo local
 const INITIAL_APPOINTMENTS: Appointment[] = [
   {
     id: "apt-rossi-01",
@@ -188,9 +189,20 @@ class AppointmentService {
 
   /**
    * Obtiene todos los turnos del paciente
-   * En producción conectará con GET /api/patient/appointments
+   * Conecta con GET /api/patient/appointments o fallback en memoria
    */
   async getAppointments(): Promise<Appointment[]> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<Appointment[]>("/api/patient/appointments", {
+        method: "GET",
+      })
+
+      if (response.success && Array.isArray(response.data)) {
+        this.appointments = response.data
+        return response.data
+      }
+    }
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...this.appointments])
@@ -201,7 +213,23 @@ class AppointmentService {
   /**
    * Obtiene las opciones de fechas y turnos disponibles para reprogramar o agendar
    */
-  async getAvailableSlots(): Promise<AvailableDateOption[]> {
+  async getAvailableSlots(specialty?: string, doctor?: string): Promise<AvailableDateOption[]> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const params = new URLSearchParams()
+      if (specialty) params.append("specialty", specialty)
+      if (doctor) params.append("doctor", doctor)
+      const queryStr = params.toString() ? `?${params.toString()}` : ""
+
+      const response = await apiClient<AvailableDateOption[]>(
+        `/api/appointments/available-slots${queryStr}`,
+        { method: "GET", requiresAuth: false }
+      )
+
+      if (response.success && Array.isArray(response.data)) {
+        return response.data
+      }
+    }
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...MOCK_AVAILABLE_DATES])
@@ -213,6 +241,20 @@ class AppointmentService {
    * Cancela un turno (>24 hs)
    */
   async cancelAppointment(input: CancelAppointmentInput): Promise<{ success: boolean; appointment: Appointment }> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<Appointment>(
+        `/api/patient/appointments/${input.appointmentId}/cancel`,
+        {
+          method: "PATCH",
+          body: { reason: input.reason || "Cancelado por el paciente" },
+        }
+      )
+
+      if (response.success && response.data) {
+        return { success: true, appointment: response.data }
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const index = this.appointments.findIndex((a) => a.id === input.appointmentId)
       if (index === -1) {
@@ -236,6 +278,19 @@ class AppointmentService {
    * Restaura un turno previamente cancelado en la sesión
    */
   async restoreAppointment(appointmentId: string): Promise<{ success: boolean; appointment: Appointment }> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<Appointment>(
+        `/api/patient/appointments/${appointmentId}/restore`,
+        {
+          method: "PATCH",
+        }
+      )
+
+      if (response.success && response.data) {
+        return { success: true, appointment: response.data }
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const index = this.appointments.findIndex((a) => a.id === appointmentId)
       if (index === -1) {
@@ -261,6 +316,20 @@ class AppointmentService {
   async rescheduleAppointment(
     input: RescheduleAppointmentInput
   ): Promise<{ success: boolean; appointment: Appointment }> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<Appointment>(
+        `/api/patient/appointments/${input.appointmentId}/reschedule`,
+        {
+          method: "PATCH",
+          body: input,
+        }
+      )
+
+      if (response.success && response.data) {
+        return { success: true, appointment: response.data }
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const index = this.appointments.findIndex((a) => a.id === input.appointmentId)
       if (index === -1) {
@@ -288,6 +357,18 @@ class AppointmentService {
   async bookAppointment(
     input: BookAppointmentInput
   ): Promise<{ success: boolean; appointment: Appointment }> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<Appointment>("/api/patient/appointments", {
+        method: "POST",
+        body: input,
+      })
+
+      if (response.success && response.data) {
+        this.appointments = [response.data, ...this.appointments]
+        return { success: true, appointment: response.data }
+      }
+    }
+
     return new Promise((resolve) => {
       const newAppointment: Appointment = {
         id: `apt-new-${Date.now()}`,
