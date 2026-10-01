@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/features/auth/hooks/use-auth";
+import { HelpChatProvider } from "@/features/help/hooks/use-help-chat";
+import { GlobalHelpChat } from "@/features/help/components/global-help-chat";
 
 export default function RootLayout({ children }: { children: import("react").ReactNode }) {
   return (
@@ -31,7 +33,12 @@ export default function RootLayout({ children }: { children: import("react").Rea
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-on-background">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <HelpChatProvider>
+            {children}
+            <GlobalHelpChat />
+          </HelpChatProvider>
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

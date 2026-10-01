@@ -16,6 +16,7 @@ import {
   CheckCircle2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { helpService } from "../services/help.service"
 
 interface Message {
   id: string
@@ -183,6 +184,7 @@ function HelpChatContent({
   onOpenEmailSupport?: () => void
 }) {
   const msgCounterRef = React.useRef(0)
+  const sessionIdRef = React.useRef<string>("")
 
   const [messages, setMessages] = React.useState<Message[]>([
     {
@@ -202,6 +204,9 @@ function HelpChatContent({
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
+    if (!sessionIdRef.current) {
+      sessionIdRef.current = `chat-session-${Date.now()}`
+    }
     inputRef.current?.focus()
   }, [])
 
@@ -209,7 +214,7 @@ function HelpChatContent({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const text = (textToSend || inputVal).trim()
     if (!text || isTyping) return
 
@@ -233,6 +238,31 @@ function HelpChatContent({
     }
 
     setIsTyping(true)
+
+    // Intentar envío a backend Java REST o responder con bot local
+    let remoteResponse: { success: boolean; message?: Message } | null = null
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const res = await helpService.sendChatMessage(sessionIdRef.current, text)
+      if (res.success && res.message) {
+        remoteResponse = {
+          success: true,
+          message: {
+            id: res.message.id,
+            sender: res.message.sender,
+            text: res.message.text,
+            timestamp: res.message.timestamp || nowTime,
+            isEmergency: res.message.isEmergency,
+            actions: res.message.actions,
+          },
+        }
+      }
+    }
+
+    if (remoteResponse?.success && remoteResponse.message) {
+      setMessages((prev) => [...prev, remoteResponse.message!])
+      setIsTyping(false)
+      return
+    }
 
     setTimeout(() => {
       const response = getBotResponse(text)
@@ -286,7 +316,7 @@ function HelpChatContent({
 
       setMessages((prev) => [...prev, botMsg])
       setIsTyping(false)
-    }, 600)
+    }, 500)
   }
 
   const handleActionClick = (action: string) => {
@@ -349,37 +379,36 @@ function HelpChatContent({
 
   return (
     <div
-      className={`relative flex flex-col bg-white border border-slate-200/80 shadow-2xl overflow-hidden transition-all duration-300 rounded-2xl ${
+      className={`fixed bottom-20 right-4 sm:bottom-22 sm:right-6 z-50 flex flex-col bg-white border border-slate-200/90 shadow-[0_12px_44px_rgba(0,0,0,0.18)] overflow-hidden transition-all duration-200 rounded-2xl animate-in fade-in slide-in-from-bottom-3 zoom-in-95 origin-bottom-right ${
         isMaximized
-          ? "w-full h-[95vh] max-w-5xl"
-          : "w-full max-w-2xl h-[85vh] max-h-[680px]"
+          ? "w-[calc(100vw-2rem)] sm:w-[580px] md:w-[620px] h-[600px] max-h-[calc(100dvh-6.5rem)]"
+          : "w-[calc(100vw-2rem)] sm:w-[390px] md:w-[415px] h-[530px] max-h-[calc(100dvh-6.5rem)]"
       }`}
       onClick={(e) => e.stopPropagation()}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="help-chat-title"
+      role="region"
+      aria-label="Ventana de chat de asistencia"
     >
       {/* Chat Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-4 sm:px-6 py-3.5 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-primary">
+      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-4 sm:px-5 py-3 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-50 text-primary border border-teal-100/60 shadow-2xs">
             <MessageSquare className="h-4 w-4" />
           </div>
           <div>
             <h2
               id="help-chat-title"
-              className="text-sm sm:text-base font-bold text-slate-900 leading-tight"
+              className="text-xs sm:text-sm font-bold text-slate-900 leading-tight"
             >
               Centro de Asistencia Sentria
             </h2>
-            <p className="text-xs text-slate-500 flex items-center gap-1.5">
+            <p className="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5">
               {isHumanAssigned ? (
                 <span className="text-emerald-700 font-medium flex items-center gap-1">
                   <CheckCircle2 className="h-3 w-3" /> Operador en línea
                 </span>
               ) : (
                 <>
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   En línea • Orientación 24/7
                 </>
               )}
@@ -394,7 +423,7 @@ function HelpChatContent({
             title="Reiniciar chat"
             className="rounded-lg p-1.5 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
           >
-            <RotateCcw className="h-4 w-4" />
+            <RotateCcw className="h-3.5 w-3.5" />
           </button>
           <button
             type="button"
@@ -403,15 +432,16 @@ function HelpChatContent({
             className="hidden sm:block rounded-lg p-1.5 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
           >
             {isMaximized ? (
-              <Minimize2 className="h-4 w-4" />
+              <Minimize2 className="h-3.5 w-3.5" />
             ) : (
-              <Maximize2 className="h-4 w-4" />
+              <Maximize2 className="h-3.5 w-3.5" />
             )}
           </button>
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar chat"
+            title="Minimizar chat"
             className="rounded-lg p-1.5 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
           >
             <X className="h-4 w-4" />
@@ -420,23 +450,23 @@ function HelpChatContent({
       </div>
 
       {/* Emergency Notice Pill */}
-      <div className="bg-rose-50/80 px-4 py-2 border-b border-rose-100 flex items-center justify-between text-xs text-rose-900 shrink-0">
-        <div className="flex items-center gap-2 truncate">
-          <AlertTriangle className="h-3.5 w-3.5 text-rose-600 shrink-0" />
+      <div className="bg-rose-50/90 px-3.5 py-1.5 border-b border-rose-100 flex items-center justify-between text-[11px] text-rose-900 shrink-0">
+        <div className="flex items-center gap-1.5 truncate">
+          <AlertTriangle className="h-3 w-3 text-rose-600 shrink-0" />
           <span className="truncate">
-            En emergencias con riesgo de vida llame al <strong>911</strong> o acuda a la guardia.
+            En emergencias con riesgo de vida llame al <strong>911</strong>.
           </span>
         </div>
         <a
           href="tel:911"
-          className="shrink-0 ml-2 font-semibold text-rose-700 hover:underline flex items-center gap-1"
+          className="shrink-0 ml-2 font-semibold text-rose-700 hover:underline flex items-center gap-0.5"
         >
-          <PhoneCall className="h-3 w-3" /> 911
+          <PhoneCall className="h-2.5 w-2.5" /> 911
         </a>
       </div>
 
       {/* Message Flow Area */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-50/40">
+      <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 bg-slate-50/40 text-xs sm:text-sm">
         {messages.map((msg) => {
           const isUser = msg.sender === "user"
           const isHuman = msg.sender === "human_agent"
@@ -449,35 +479,35 @@ function HelpChatContent({
               }`}
             >
               <div
-                className={`flex gap-2.5 max-w-[90%] sm:max-w-[82%] ${
+                className={`flex gap-2 max-w-[92%] ${
                   isUser ? "flex-row-reverse" : "flex-row"
                 }`}
               >
                 {!isUser && (
                   <div
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs mt-0.5 ${
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs mt-0.5 ${
                       isHuman
                         ? "bg-slate-700 text-white"
                         : "bg-teal-50 text-primary border border-teal-100"
                     }`}
                   >
                     {isHuman ? (
-                      <Headphones className="h-3.5 w-3.5" />
+                      <Headphones className="h-3 w-3" />
                     ) : (
-                      <MessageSquare className="h-3.5 w-3.5" />
+                      <MessageSquare className="h-3 w-3" />
                     )}
                   </div>
                 )}
 
                 {isUser && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-xs mt-0.5">
-                    <User className="h-3.5 w-3.5" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-xs mt-0.5">
+                    <User className="h-3 w-3" />
                   </div>
                 )}
 
                 <div className="flex flex-col gap-1">
                   <div
-                    className={`rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
+                    className={`rounded-2xl p-3 text-xs leading-relaxed whitespace-pre-line ${
                       isUser
                         ? "bg-primary text-white rounded-tr-xs shadow-2xs"
                         : msg.isEmergency
@@ -505,13 +535,13 @@ function HelpChatContent({
 
                   {/* Quick action triggers inside message */}
                   {msg.actions && msg.actions.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
+                    <div className="flex flex-wrap gap-1 mt-0.5">
                       {msg.actions.map((act) => (
                         <button
                           key={act.action}
                           type="button"
                           onClick={() => handleActionClick(act.action)}
-                          className="inline-flex items-center gap-1 text-xs bg-white text-slate-700 hover:text-primary hover:border-primary px-3 py-1.5 rounded-full border border-slate-200/80 transition-all font-medium cursor-pointer shadow-2xs"
+                          className="inline-flex items-center gap-1 text-[11px] bg-white text-slate-700 hover:text-primary hover:border-primary px-2.5 py-1 rounded-full border border-slate-200/80 transition-all font-medium cursor-pointer shadow-2xs"
                         >
                           <span>{act.label}</span>
                         </button>
@@ -520,7 +550,7 @@ function HelpChatContent({
                   )}
 
                   <span
-                    className={`text-[11px] text-slate-400 px-1 ${
+                    className={`text-[10px] text-slate-400 px-1 ${
                       isUser ? "text-right" : "text-left"
                     }`}
                   >
@@ -533,17 +563,17 @@ function HelpChatContent({
         })}
 
         {isTyping && (
-          <div className="flex items-start gap-2.5">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-primary border border-teal-100 text-xs mt-0.5">
-              <MessageSquare className="h-3.5 w-3.5" />
+          <div className="flex items-start gap-2">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-primary border border-teal-100 text-xs mt-0.5">
+              <MessageSquare className="h-3 w-3" />
             </div>
-            <div className="rounded-2xl rounded-tl-xs bg-white border border-slate-200/80 px-4 py-3 text-xs text-slate-500 flex items-center gap-2 shadow-2xs">
+            <div className="rounded-2xl rounded-tl-xs bg-white border border-slate-200/80 px-3 py-2 text-xs text-slate-500 flex items-center gap-1.5 shadow-2xs">
               <div className="flex space-x-1">
-                <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce" />
-                <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:0.2s]" />
-                <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:0.4s]" />
+                <div className="h-1 w-1 bg-primary/60 rounded-full animate-bounce" />
+                <div className="h-1 w-1 bg-primary/60 rounded-full animate-bounce [animation-delay:0.2s]" />
+                <div className="h-1 w-1 bg-primary/60 rounded-full animate-bounce [animation-delay:0.4s]" />
               </div>
-              <span>Escribiendo...</span>
+              <span className="text-[11px]">Escribiendo...</span>
             </div>
           </div>
         )}
@@ -552,9 +582,9 @@ function HelpChatContent({
       </div>
 
       {/* Suggested Quick Questions Pills */}
-      <div className="border-t border-slate-100 bg-slate-50/60 px-4 py-2 overflow-x-auto shrink-0">
+      <div className="border-t border-slate-100 bg-slate-50/60 px-3 py-2 overflow-x-auto shrink-0">
         <div className="flex items-center gap-1.5 text-xs no-scrollbar">
-          <span className="text-[11px] text-slate-400 font-semibold shrink-0 uppercase tracking-wider">
+          <span className="text-[10px] text-slate-400 font-semibold shrink-0 uppercase tracking-wider">
             Sugerencias:
           </span>
           {INITIAL_SUGGESTIONS.map((sug) => (
@@ -562,7 +592,7 @@ function HelpChatContent({
               key={sug}
               type="button"
               onClick={() => handleSend(sug)}
-              className="shrink-0 rounded-full bg-white px-3 py-1 text-xs text-slate-600 hover:text-primary hover:border-primary border border-slate-200/80 transition-colors cursor-pointer font-medium shadow-2xs"
+              className="shrink-0 rounded-full bg-white px-2.5 py-1 text-[11px] text-slate-600 hover:text-primary hover:border-primary border border-slate-200/80 transition-colors cursor-pointer font-medium shadow-2xs"
             >
               {sug}
             </button>
@@ -571,7 +601,7 @@ function HelpChatContent({
       </div>
 
       {/* Input Bar */}
-      <div className="p-3.5 sm:p-4 bg-white border-t border-slate-100 shrink-0">
+      <div className="p-3 bg-white border-t border-slate-100 shrink-0">
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -585,22 +615,22 @@ function HelpChatContent({
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             placeholder="Escriba su consulta..."
-            className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/10"
+            className="flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
           />
 
           <Button
             type="submit"
             disabled={!inputVal.trim() || isTyping}
             variant="primary"
-            className="h-10 w-10 p-0 rounded-xl flex items-center justify-center text-white shrink-0"
+            className="h-9 w-9 p-0 rounded-xl flex items-center justify-center text-white shrink-0"
             title="Enviar mensaje"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-3.5 w-3.5" />
           </Button>
         </form>
 
-        <p className="mt-2 text-center text-[11px] text-slate-400">
-          Información orientativa regida por la Ley de Derechos del Paciente (Ley 26.529).
+        <p className="mt-1.5 text-center text-[10px] text-slate-400 leading-tight">
+          Orientación asistencial regulada por Ley de Derechos del Paciente.
         </p>
       </div>
     </div>
@@ -614,8 +644,6 @@ export function HelpChatModal({ isOpen, onClose, onOpenEmailSupport }: HelpChatM
 
   React.useEffect(() => {
     if (!isOpen) return
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -624,7 +652,6 @@ export function HelpChatModal({ isOpen, onClose, onOpenEmailSupport }: HelpChatM
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => {
-      document.body.style.overflow = originalOverflow
       window.removeEventListener("keydown", handleKeyDown)
     }
   }, [isOpen, onClose])
@@ -632,15 +659,10 @@ export function HelpChatModal({ isOpen, onClose, onOpenEmailSupport }: HelpChatM
   if (!isOpen || !isClient) return null
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
-    >
-      <HelpChatContent
-        onClose={onClose}
-        onOpenEmailSupport={onOpenEmailSupport}
-      />
-    </div>,
+    <HelpChatContent
+      onClose={onClose}
+      onOpenEmailSupport={onOpenEmailSupport}
+    />,
     document.body
   )
 }
