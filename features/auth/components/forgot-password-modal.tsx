@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { validateEmail } from "../schemas/auth.schema"
 
+import { authService } from "../services/auth.service"
+
 interface ForgotPasswordModalProps {
   isOpen: boolean
   onClose: () => void
@@ -36,9 +38,14 @@ function ForgotPasswordContent({
     setError(null)
     setIsLoading(true)
 
-    // Simulación de envío de correo de recuperación
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const response = await authService.forgotPassword(email)
     setIsLoading(false)
+
+    if (!response.success) {
+      setError(response.error || response.message || "No se pudo procesar la solicitud.")
+      return
+    }
+
     setIsSent(true)
   }
 

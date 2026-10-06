@@ -27,6 +27,7 @@ export interface AuthUser {
   phone?: string
   coverageProvider?: string
   memberId?: string
+  avatarUrl?: string
   createdAt?: string
 }
 

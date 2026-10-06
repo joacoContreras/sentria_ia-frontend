@@ -1,14 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Activity, User, ArrowRight } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Activity, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/features/auth/hooks/use-auth"
+import { UserMenuDropdown } from "./user-menu-dropdown"
 
 export function SiteHeader() {
   const pathname = usePathname()
-  const { isAuthenticated, user, isHydrated } = useAuth()
+  const router = useRouter()
+  const { isAuthenticated, user, isHydrated, logout } = useAuth()
 
   const navLinks = [
     { href: "/", label: "Inicio", isActive: pathname === "/" },
@@ -58,13 +60,11 @@ export function SiteHeader() {
 
             {/* Auth CTA button */}
             {isHydrated && isAuthenticated && user ? (
-              <Link
-                href="/portal"
-                className="hidden sm:inline-flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant/30 text-label-sm font-semibold px-3 py-1.5 rounded-lg transition-all"
-              >
-                <User className="h-3.5 w-3.5" />
-                <span className="max-w-[120px] truncate">{user.fullName.split(" ")[0]}</span>
-              </Link>
+              <UserMenuDropdown
+                user={user}
+                onNavigateToSettings={() => router.push("/configuracion")}
+                onLogout={logout}
+              />
             ) : (
               <Link
                 href="/acceso"

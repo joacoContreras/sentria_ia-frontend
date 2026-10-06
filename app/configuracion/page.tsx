@@ -7,26 +7,26 @@ import { useAuth } from "@/features/auth/hooks/use-auth"
 import { PortalDashboard } from "@/features/appointments/components/portal-dashboard"
 import { Button } from "@/components/ui/button"
 
-function PortalLoadingFallback() {
+function SettingsLoadingFallback() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-space-sm text-secondary">
         <Activity className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-body-md font-medium">Cargando portal...</p>
+        <p className="text-body-md font-medium">Cargando configuración...</p>
       </div>
     </div>
   )
 }
 
-export default function PatientPortalPage() {
+export default function ConfiguracionPage() {
   const { user, isAuthenticated, isLoading, isHydrated } = useAuth()
   const router = useRouter()
 
   if (!isHydrated || isLoading) {
-    return <PortalLoadingFallback />
+    return <SettingsLoadingFallback />
   }
 
-  // If unauthenticated and not in development fallback
+  // If unauthenticated
   if (!isAuthenticated && !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-gutter-mobile">
@@ -38,8 +38,7 @@ export default function PatientPortalPage() {
             Acceso no autenticado
           </h1>
           <p className="text-body-md text-secondary mb-space-lg">
-            Para acceder al Portal del Paciente debe iniciar sesión o registrar
-            su ficha clínica.
+            Para acceder a la configuración de la cuenta debe iniciar sesión en el portal.
           </p>
           <Button
             variant="primary"
@@ -54,8 +53,8 @@ export default function PatientPortalPage() {
   }
 
   return (
-    <React.Suspense fallback={<PortalLoadingFallback />}>
-      <PortalDashboard />
+    <React.Suspense fallback={<SettingsLoadingFallback />}>
+      <PortalDashboard initialSection="configuracion" />
     </React.Suspense>
   )
 }
