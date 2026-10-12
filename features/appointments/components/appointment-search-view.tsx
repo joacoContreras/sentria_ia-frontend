@@ -67,8 +67,17 @@ export function AppointmentSearchView({
     }
 
     loadCatalogs()
+
+    const handleCatalogUpdate = () => {
+      loadCatalogs()
+    }
+    window.addEventListener("sentria_catalog_updated", handleCatalogUpdate)
+    window.addEventListener("storage", handleCatalogUpdate)
+
     return () => {
       isMounted = false
+      window.removeEventListener("sentria_catalog_updated", handleCatalogUpdate)
+      window.removeEventListener("storage", handleCatalogUpdate)
     }
   }, [])
 

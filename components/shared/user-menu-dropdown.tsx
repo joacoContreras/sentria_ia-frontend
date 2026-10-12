@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
-import { User, Settings, LogOut, CheckCircle2 } from "lucide-react"
+import Link from "next/link"
+import { User, Settings, LogOut, CheckCircle2, ShieldCheck } from "lucide-react"
 import { AuthUser } from "@/types/auth"
 import { cn } from "@/lib/utils"
 
@@ -150,6 +151,26 @@ export function UserMenuDropdown({
 
           {/* Navigation & Action Items */}
           <div className="p-1.5 flex flex-col gap-1">
+            {/* Panel de Control (Admin) */}
+            <Link
+              href="/admin"
+              onClick={() => setIsOpen(false)}
+              role="menuitem"
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm text-slate-700 hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-body-md-medium font-medium leading-none">
+                  Panel de Control (Admin)
+                </span>
+                <span className="font-label-sm text-slate-500 text-[11px] mt-0.5">
+                  Médicos, especialidades y coberturas
+                </span>
+              </div>
+            </Link>
+
             {/* Configuración */}
             <button
               type="button"

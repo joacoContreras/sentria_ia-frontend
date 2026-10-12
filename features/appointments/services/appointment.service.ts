@@ -17,6 +17,7 @@ import {
   MOCK_SPECIALTIES,
   MOCK_VENUES,
 } from "../data/turnos-search-data"
+import { catalogService } from "@/features/admin/services/catalog.service"
 
 // Mock dataset inicial para modo sin conexión o desarrollo local
 const INITIAL_APPOINTMENTS: Appointment[] = [
@@ -302,9 +303,21 @@ class AppointmentService {
       }
     }
 
-    // Modo dual-mode simulado de alta fidelidad: filtrado reactivo en memoria
+      // Modo dual-mode simulado de alta fidelidad: filtrado reactivo en memoria
     return new Promise((resolve) => {
       let filtered = [...INITIAL_MOCK_TURNOS]
+
+      // Filtrar profesionales que hayan sido dados de baja lógica (RNF-02)
+      const inactiveDoctors = catalogService.getDoctors().filter((d) => !d.isActive)
+      if (inactiveDoctors.length > 0) {
+        filtered = filtered.filter(
+          (s) =>
+            !inactiveDoctors.some(
+              (inact) =>
+                inact.fullName === s.doctorName || inact.license === s.doctorLicense
+            )
+        )
+      }
 
       if (filters.specialty && filters.specialty !== "all") {
         filtered = filtered.filter((s) => s.specialty === filters.specialty)
@@ -360,6 +373,16 @@ class AppointmentService {
         return response.data
       }
     }
+
+    const dynamicSpecialties = catalogService.getActiveSpecialties()
+    if (dynamicSpecialties.length > 0) {
+      return dynamicSpecialties.map((s) => ({
+        value: s.name,
+        label: s.name,
+        count: catalogService.getActiveDoctors(s.id).length,
+      }))
+    }
+
     return Promise.resolve([...MOCK_SPECIALTIES])
   }
 
@@ -375,6 +398,16 @@ class AppointmentService {
       if (response.success && Array.isArray(response.data)) {
         return response.data
       }
+    }
+
+    const dynamicDoctors = catalogService.getActiveDoctors(specialty)
+    if (dynamicDoctors.length > 0) {
+      return dynamicDoctors.map((d) => ({
+        name: d.fullName,
+        license: d.license,
+        specialty: d.specialtyName,
+        subtitle: d.subtitle || `Especialista en ${d.specialtyName}`,
+      }))
     }
 
     if (!specialty || specialty === "all") {
