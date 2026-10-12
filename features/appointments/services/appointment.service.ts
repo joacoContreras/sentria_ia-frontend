@@ -2,10 +2,21 @@ import { apiClient } from "@/lib/api-client"
 import {
   Appointment,
   AvailableDateOption,
+  AvailableTurnoSlot,
   BookAppointmentInput,
   CancelAppointmentInput,
+  DoctorOption,
   RescheduleAppointmentInput,
+  SpecialtyOption,
+  TurnoSearchFilters,
+  VenueOption,
 } from "@/types/appointments"
+import {
+  INITIAL_MOCK_TURNOS,
+  MOCK_DOCTORS,
+  MOCK_SPECIALTIES,
+  MOCK_VENUES,
+} from "../data/turnos-search-data"
 
 // Mock dataset inicial para modo sin conexión o desarrollo local
 const INITIAL_APPOINTMENTS: Appointment[] = [
@@ -235,6 +246,157 @@ class AppointmentService {
         resolve([...MOCK_AVAILABLE_DATES])
       }, 50)
     })
+  }
+
+  /**
+   * Obtiene los turnos disponibles con soporte de filtros dinámicos
+   * Conecta con GET /turnos/disponibles (API REST de Benjamín)
+   * o provee fallback reactivo en memoria para desarrollo local
+   */
+  async getAvailableTurnos(filters: TurnoSearchFilters = {}): Promise<AvailableTurnoSlot[]> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const params = new URLSearchParams()
+      if (filters.specialty) {
+        params.append("especialidad", filters.specialty)
+        params.append("specialty", filters.specialty)
+      }
+      if (filters.doctor && filters.doctor !== "all") {
+        params.append("profesional", filters.doctor)
+        params.append("doctor", filters.doctor)
+      }
+      if (filters.venue && filters.venue !== "all") {
+        params.append("sede", filters.venue)
+        params.append("venue", filters.venue)
+      }
+      if (filters.dateFrom) {
+        params.append("fechaDesde", filters.dateFrom)
+        params.append("startDate", filters.dateFrom)
+      }
+      if (filters.dateTo) {
+        params.append("fechaHasta", filters.dateTo)
+        params.append("endDate", filters.dateTo)
+      }
+      if (filters.searchQuery) {
+        params.append("q", filters.searchQuery)
+      }
+
+      const queryStr = params.toString() ? `?${params.toString()}` : ""
+
+      // Intento primario: /turnos/disponibles estipulado en la Definición de Terminado
+      const response = await apiClient<AvailableTurnoSlot[]>(
+        `/turnos/disponibles${queryStr}`,
+        { method: "GET", requiresAuth: false }
+      )
+
+      if (response.success && Array.isArray(response.data)) {
+        return response.data
+      }
+
+      // Intento secundario: /api/turnos/disponibles si el backend usa prefijo /api
+      const altResponse = await apiClient<AvailableTurnoSlot[]>(
+        `/api/turnos/disponibles${queryStr}`,
+        { method: "GET", requiresAuth: false }
+      )
+      if (altResponse.success && Array.isArray(altResponse.data)) {
+        return altResponse.data
+      }
+    }
+
+    // Modo dual-mode simulado de alta fidelidad: filtrado reactivo en memoria
+    return new Promise((resolve) => {
+      let filtered = [...INITIAL_MOCK_TURNOS]
+
+      if (filters.specialty && filters.specialty !== "all") {
+        filtered = filtered.filter((s) => s.specialty === filters.specialty)
+      }
+
+      if (filters.doctor && filters.doctor !== "all" && !filters.doctor.includes("Cualquier")) {
+        filtered = filtered.filter((s) => s.doctorName.toLowerCase().includes(filters.doctor!.toLowerCase()))
+      }
+
+      if (filters.venue && filters.venue !== "all") {
+        filtered = filtered.filter(
+          (s) =>
+            s.venue.toLowerCase().includes(filters.venue!.toLowerCase()) ||
+            (filters.venue === "teleconsulta" && s.isTeleconsulta)
+        )
+      }
+
+      if (filters.dateFrom) {
+        filtered = filtered.filter((s) => s.date >= filters.dateFrom!)
+      }
+
+      if (filters.dateTo) {
+        filtered = filtered.filter((s) => s.date <= filters.dateTo!)
+      }
+
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase()
+        filtered = filtered.filter(
+          (s) =>
+            s.doctorName.toLowerCase().includes(q) ||
+            s.specialty.toLowerCase().includes(q) ||
+            s.venue.toLowerCase().includes(q) ||
+            s.consultorio.toLowerCase().includes(q)
+        )
+      }
+
+      setTimeout(() => {
+        resolve(filtered)
+      }, 40)
+    })
+  }
+
+  /**
+   * Obtiene la lista de especialidades activas registradas en la institución
+   */
+  async getActiveSpecialties(): Promise<SpecialtyOption[]> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<SpecialtyOption[]>("/api/specialties", {
+        method: "GET",
+        requiresAuth: false,
+      })
+      if (response.success && Array.isArray(response.data)) {
+        return response.data
+      }
+    }
+    return Promise.resolve([...MOCK_SPECIALTIES])
+  }
+
+  /**
+   * Obtiene los profesionales habilitados para una especialidad
+   */
+  async getDoctorsBySpecialty(specialty?: string): Promise<DoctorOption[]> {
+    if (process.env.NEXT_PUBLIC_API_URL && specialty) {
+      const response = await apiClient<DoctorOption[]>(
+        `/api/doctors?specialty=${encodeURIComponent(specialty)}`,
+        { method: "GET", requiresAuth: false }
+      )
+      if (response.success && Array.isArray(response.data)) {
+        return response.data
+      }
+    }
+
+    if (!specialty || specialty === "all") {
+      return Promise.resolve([...MOCK_DOCTORS])
+    }
+    return Promise.resolve(MOCK_DOCTORS.filter((d) => d.specialty === specialty))
+  }
+
+  /**
+   * Obtiene las sedes institucionales y consultorios disponibles
+   */
+  async getVenues(): Promise<VenueOption[]> {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response = await apiClient<VenueOption[]>("/api/venues", {
+        method: "GET",
+        requiresAuth: false,
+      })
+      if (response.success && Array.isArray(response.data)) {
+        return response.data
+      }
+    }
+    return Promise.resolve([...MOCK_VENUES])
   }
 
   /**
