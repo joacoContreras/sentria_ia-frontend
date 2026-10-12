@@ -1,8 +1,7 @@
 "use client"
 
 import React from "react"
-import Link from "next/link"
-import { Activity, ShieldCheck } from "lucide-react"
+import { Activity } from "lucide-react"
 import { useAuth } from "@/features/auth/hooks/use-auth"
 import { UserMenuDropdown } from "@/components/shared/user-menu-dropdown"
 import { AppointmentTab, PortalSection } from "@/types/appointments"
@@ -137,16 +136,6 @@ export function PortalHeader({
           >
             Centro de Ayuda
           </button>
-
-          {/* Panel Admin */}
-          <Link
-            href="/admin"
-            className="px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-primary font-medium flex items-center gap-1.5"
-            title="Ir al panel de control de administradores y médicos"
-          >
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            <span>Admin</span>
-          </Link>
         </nav>
 
         {/* Patient Profile Widget & User Menu Dropdown */}

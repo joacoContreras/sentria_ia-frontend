@@ -12,10 +12,16 @@ export function SiteHeader() {
   const router = useRouter()
   const { isAuthenticated, user, isHydrated, logout } = useAuth()
 
+  const isAdmin = user?.role === "admin"
+
   const navLinks = [
     { href: "/", label: "Inicio", isActive: pathname === "/" },
-    { href: "/turnos", label: "Turnos", isActive: pathname === "/turnos" },
-    { href: "/admin", label: "Panel Admin", isActive: pathname === "/admin" },
+    ...(!isAdmin
+      ? [{ href: "/turnos", label: "Turnos", isActive: pathname === "/turnos" }]
+      : []),
+    ...(isAdmin
+      ? [{ href: "/admin", label: "Administración", isActive: pathname === "/admin" }]
+      : []),
     { href: "/sobre-nosotros", label: "Sobre Nosotros", isActive: pathname === "/sobre-nosotros" },
     { href: "/ayuda", label: "Ayuda", isActive: pathname === "/ayuda" },
   ]

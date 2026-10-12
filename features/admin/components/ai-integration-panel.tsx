@@ -4,13 +4,13 @@ import React, { useState } from "react"
 import {
   Bot,
   Sparkles,
-  Code2,
   CheckCircle2,
   Send,
   Terminal,
   Search,
   Stethoscope,
   CreditCard,
+  Code2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -95,96 +95,96 @@ export function AiIntegrationPanel({
 
   return (
     <div className="space-y-6">
-      {/* Resumen de Flujos Conectados en Tiempo Real (CA4) */}
+      {/* Estado de Sincronización en Tiempo Real */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* RF-01: Registro de Pacientes */}
+        {/* Registro y Afiliación */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
             <span className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
               <CreditCard className="w-5 h-5" />
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               Sincronizado
             </span>
           </div>
           <div>
-            <h4 className="font-bold text-slate-900 text-sm">Registro de Pacientes (RF-01)</h4>
+            <h4 className="font-bold text-slate-900 text-sm">Registro de Pacientes</h4>
             <p className="text-xs text-slate-500 mt-0.5">
-              Alimenta el selector de obras sociales y prepagas aceptadas.
+              Alimenta el catálogo de coberturas y prepagas aceptadas.
             </p>
           </div>
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-600 font-medium">Entidades activas:</span>
-            <span className="font-bold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
+            <span className="text-slate-500">Entidades vigentes:</span>
+            <span className="font-semibold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
               {activeCoverages.length} coberturas
             </span>
           </div>
         </div>
 
-        {/* RF-02: Buscador de Turnos */}
+        {/* Buscador de Turnos */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
             <span className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               <Stethoscope className="w-5 h-5" />
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               Sincronizado
             </span>
           </div>
           <div>
-            <h4 className="font-bold text-slate-900 text-sm">Buscador de Turnos (RF-02)</h4>
+            <h4 className="font-bold text-slate-900 text-sm">Agenda y Turnos</h4>
             <p className="text-xs text-slate-500 mt-0.5">
-              Alimenta desplegables dinámicos de especialidad y profesionales.
+              Alimenta los desplegables de especialidad y profesionales.
             </p>
           </div>
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-600 font-medium">Médicos en agenda:</span>
-            <span className="font-bold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
-              {activeDoctors.length} activos ({activeSpecialties.length} ramas)
+            <span className="text-slate-500">Médicos en agenda:</span>
+            <span className="font-semibold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
+              {activeDoctors.length} activos
             </span>
           </div>
         </div>
 
-        {/* Bot Conversacional OpenAI */}
+        {/* Asistente Clínico Inteligente */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
-            <span className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <span className="w-9 h-9 rounded-xl bg-teal-50 text-primary flex items-center justify-center">
               <Bot className="w-5 h-5" />
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-100 text-purple-800">
-              <Sparkles className="w-3 h-3 text-purple-600" />
-              OpenAI Active
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-primary">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              Activo
             </span>
           </div>
           <div>
-            <h4 className="font-bold text-slate-900 text-sm">Bot Asistente & Function Calling</h4>
+            <h4 className="font-bold text-slate-900 text-sm">Asistente Conversacional</h4>
             <p className="text-xs text-slate-500 mt-0.5">
-              Responde consultas clínicas y valida coberturas en lenguaje natural.
+              Responde consultas sobre profesionales y coberturas en tiempo real.
             </p>
           </div>
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-600 font-medium">Tools homologadas:</span>
-            <span className="font-bold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
-              {OPENAI_CATALOG_TOOLS.length} funciones
+            <span className="text-slate-500">Consultas disponibles:</span>
+            <span className="font-semibold text-slate-900 font-mono bg-slate-100 px-2 py-0.5 rounded">
+              {OPENAI_CATALOG_TOOLS.length} herramientas
             </span>
           </div>
         </div>
       </div>
 
-      {/* Probador en Vivo de Consultas del Bot Conversacional */}
+      {/* Simulador de Consultas del Asistente */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-6 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
             <Bot className="w-5 h-5" />
           </div>
           <div>
             <h3 className="font-bold text-base text-slate-900">
-              Simulador del Bot Conversacional con OpenAI
+              Simulador del Asistente Clínico
             </h3>
             <p className="text-xs text-slate-500">
-              Pruebe cómo el asistente valida en tiempo real si el centro atiende una especialidad o prepaga
+              Verifique en tiempo real las respuestas del asistente según los catálogos activos
             </p>
           </div>
         </div>
@@ -194,11 +194,11 @@ export function AiIntegrationPanel({
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Escriba una pregunta (ej: '¿Atienden Oftalmología?', '¿Aceptan Swiss Medical?', '¿Tienen cardiólogo?')"
+              placeholder="ej. '¿Atienden Cardiología?', '¿Aceptan OSDE 310?', '¿Qué especialidades tienen?'"
               value={testQuery}
               onChange={(e) => setTestQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleTestConversationalQuery()}
-              className="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              className="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             />
           </div>
           <Button
@@ -207,20 +207,20 @@ export function AiIntegrationPanel({
             size="md"
             onClick={handleTestConversationalQuery}
             leftIcon={<Send className="w-4 h-4" />}
+            className="text-white"
           >
-            Consultar al Bot
+            Consultar
           </Button>
         </div>
 
         {/* Sugerencias Rápidas de Prueba */}
-        <div className="flex flex-wrap gap-2 text-xs">
-          <span className="text-slate-400 font-medium py-1">Consultas rápidas:</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="text-slate-400 font-medium py-1">Consultas de prueba:</span>
           {[
             "¿Atienden Dermatología?",
             "¿Tienen cardiólogo activo?",
             "¿Aceptan Swiss Medical?",
             "¿Reciben OSDE?",
-            "¿Qué obras sociales atienden?",
             "¿Qué especialidades tienen?",
           ].map((q) => (
             <button
@@ -238,26 +238,26 @@ export function AiIntegrationPanel({
           ))}
         </div>
 
-        {/* Respuesta generada por el Bot */}
+        {/* Respuesta generada por el Asistente */}
         {conversationalResult && (
-          <div className="p-4 rounded-xl bg-purple-50/70 border border-purple-200 animate-in fade-in duration-150 space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-purple-900">
+          <div className="p-4 rounded-xl bg-teal-50/60 border border-teal-200/80 animate-in fade-in duration-150 space-y-2">
+            <div className="flex items-center justify-between text-xs font-semibold text-primary">
               <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                Respuesta Dinámica del Asistente Virtual:
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                Respuesta del Asistente Virtual:
               </span>
-              <span className="text-[11px] text-purple-700 font-mono">
-                Catálogo Operativo Sentria AI
+              <span className="text-[11px] text-primary/80 font-mono">
+                Catálogo Institucional
               </span>
             </div>
-            <div className="text-sm text-slate-800 whitespace-pre-line leading-relaxed bg-white p-3.5 rounded-lg border border-purple-100">
+            <div className="text-sm text-slate-800 whitespace-pre-line leading-relaxed bg-white p-3.5 rounded-lg border border-teal-100">
               {conversationalResult.reply}
             </div>
           </div>
         )}
       </div>
 
-      {/* Probador Técnico de Function Calling (OpenAI Tool Execution) */}
+      {/* Consola Técnica de Herramientas del Modelo */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -266,14 +266,14 @@ export function AiIntegrationPanel({
             </div>
             <div>
               <h3 className="font-bold text-base text-slate-900">
-                Consola de OpenAI Function Calling (API Tools)
+                Herramientas de Integración API / AI
               </h3>
               <p className="text-xs text-slate-500">
-                Ejecuta directamente las funciones estructuradas que invoca el modelo GPT-4o
+                Ejecución de funciones estructuradas invocadas por el asistente inteligente
               </p>
             </div>
           </div>
-          <span className="font-mono text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+          <span className="font-mono text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">
             POST /api/ai/tools
           </span>
         </div>
@@ -285,7 +285,7 @@ export function AiIntegrationPanel({
               key={t.function.name}
               type="button"
               onClick={() => handlePreloadTool(t.function.name)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 selectedTool === t.function.name
                   ? "bg-slate-900 text-white shadow-xs"
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -296,10 +296,10 @@ export function AiIntegrationPanel({
           ))}
         </div>
 
-        {/* Input de Parámetros y Botón de Ejecutar */}
+        {/* Parámetros y Ejecución */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
-            Argumentos JSON (Parameters)
+            Parámetros JSON
           </label>
           <div className="flex flex-col sm:flex-row gap-2">
             <textarea
@@ -310,21 +310,21 @@ export function AiIntegrationPanel({
             />
             <Button
               type="button"
-              variant="primary"
+              variant="secondary"
               size="md"
               onClick={handleExecuteTool}
               className="sm:w-36 shrink-0 self-end sm:self-auto"
             >
-              Ejecutar Tool
+              Ejecutar
             </Button>
           </div>
         </div>
 
-        {/* Resultado JSON de la función */}
+        {/* Resultado JSON */}
         {executionResult && (
           <div className="p-4 rounded-xl bg-slate-900 text-slate-100 space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
-              <span>Resultado Estructurado (OpenAI Tool Output):</span>
+              <span>Resultado Estructurado:</span>
               <span className="text-emerald-400">200 OK</span>
             </div>
             <pre className="text-xs font-mono text-emerald-300 overflow-x-auto max-h-56 p-2 bg-slate-950/60 rounded-lg">
@@ -334,22 +334,11 @@ export function AiIntegrationPanel({
         )}
       </div>
 
-      {/* Especificación de Esquema OpenAI Tools para Desarrolladores */}
-      <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-            <Code2 className="w-4 h-4 text-primary" />
-            <span>Esquema JSON compatible con OpenAI Assistants & Function Calling</span>
-          </div>
-          <span className="text-[11px] text-slate-500">RFC 8259 / OpenAPI 3.0</span>
-        </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
-          Los catálogos están expuestos a través de los endpoints RESTful de Sentria AI (
-          <code className="text-primary font-mono font-semibold">/api/specialties</code>,{" "}
-          <code className="text-primary font-mono font-semibold">/api/doctors</code>,{" "}
-          <code className="text-primary font-mono font-semibold">/api/coverages</code> y{" "}
-          <code className="text-primary font-mono font-semibold">/api/ai/tools</code>
-          ). Cualquier modificación realizada por el administrador en las tablas superiores se propaga de forma instantánea.
+      {/* Nota técnica institucional */}
+      <div className="bg-slate-50/80 rounded-2xl border border-slate-200/80 p-4 text-xs text-slate-600 flex items-start gap-3">
+        <Code2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+        <p className="leading-relaxed">
+          Los catálogos están expuestos a través de endpoints seguros en Sentria AI. Cualquier alta, modificación o baja aplicada en esta consola se sincroniza de forma inmediata con los canales asistenciales.
         </p>
       </div>
     </div>

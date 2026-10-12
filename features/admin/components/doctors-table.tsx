@@ -9,10 +9,8 @@ import {
   Edit2,
   UserX,
   UserCheck,
-  ShieldCheck,
   Stethoscope,
   CreditCard,
-  History,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Coverage, CreateDoctorInput, Doctor, Specialty, UpdateDoctorInput } from "@/types/admin"
@@ -287,11 +285,10 @@ export function DoctorsTable({
                           </span>
                         ) : (
                           <span
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-200 text-slate-700"
-                            title="Baja lógica aplicada: turnos anteriores preservados (RNF-02)"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600"
+                            title="Profesional inactivo en agenda"
                           >
-                            <History className="w-3.5 h-3.5 text-slate-500" />
-                            Inactivo (Baja Lógica)
+                            Inactivo
                           </span>
                         )}
                       </td>
@@ -309,13 +306,13 @@ export function DoctorsTable({
                             <Edit2 className="w-4 h-4" />
                           </button>
 
-                          {/* Baja Lógica o Reactivar */}
+                          {/* Desactivar o Reactivar */}
                           {doc.isActive ? (
                             <button
                               type="button"
                               onClick={() => handleDeactivateClick(doc)}
                               className="p-1.5 rounded-lg text-slate-400 hover:text-amber-800 hover:bg-amber-50 transition-colors cursor-pointer"
-                              title="Dar de baja lógica (Inactivo - RNF-02)"
+                              title="Desactivar profesional"
                             >
                               <UserX className="w-4 h-4" />
                             </button>
@@ -340,13 +337,10 @@ export function DoctorsTable({
         </div>
 
         {/* Footer informativo */}
-        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>
-              <strong>Borrado Lógico RNF-02:</strong> La baja de profesionales no elimina citas pasadas ni rompe relaciones en la base de datos.
-            </span>
-          </div>
+        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200/80 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>
+            {doctors.filter((d) => d.isActive).length} profesionales activos disponibles para reserva de turnos.
+          </span>
           <span>Mostrando {filteredDoctors.length} de {doctors.length} profesionales</span>
         </div>
       </div>

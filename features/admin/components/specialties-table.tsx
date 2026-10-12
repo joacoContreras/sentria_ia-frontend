@@ -10,7 +10,6 @@ import {
   Edit2,
   Trash2,
   Users,
-  ShieldCheck,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CreateSpecialtyInput, Doctor, Specialty, UpdateSpecialtyInput } from "@/types/admin"
@@ -34,7 +33,7 @@ export function SpecialtiesTable({
   const [modalOpen, setModalOpen] = useState(false)
   const [editingSpecialty, setEditingSpecialty] = useState<Specialty | null>(null)
 
-  // Estado para el modal de integridad referencial RNF-02
+  // Estado para el modal de integridad referencial
   const [integrityModalOpen, setIntegrityModalOpen] = useState(false)
   const [blockedSpecialty, setBlockedSpecialty] = useState<Specialty | null>(null)
   const [linkedDoctors, setLinkedDoctors] = useState<Doctor[]>([])
@@ -100,7 +99,7 @@ export function SpecialtiesTable({
   }
 
   /**
-   * Intento de eliminación con verificación estricta de regla RNF-02
+   * Intento de eliminación con verificación de profesionales vinculados
    */
   const handleDeleteAttempt = (spec: Specialty) => {
     const check = catalogService.canDeleteSpecialty(spec.id)
@@ -259,7 +258,7 @@ export function SpecialtiesTable({
                         {spec.description || "—"}
                       </td>
 
-                      {/* Médicos activos vinculados (RNF-02) */}
+                      {/* Médicos activos vinculados */}
                       <td className="py-3.5 px-4 text-center">
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -314,7 +313,7 @@ export function SpecialtiesTable({
                             className="p-1.5 rounded-lg text-slate-400 hover:text-error hover:bg-error/10 transition-colors cursor-pointer"
                             title={
                               activeDoctorsCount > 0
-                                ? "Protegido por RNF-02: existen médicos activos"
+                                ? "Tiene profesionales asociados"
                                 : "Eliminar especialidad"
                             }
                           >
@@ -331,13 +330,10 @@ export function SpecialtiesTable({
         </div>
 
         {/* Footer informativo */}
-        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>
-              <strong>Regla RNF-02 activa:</strong> Las especialidades con médicos activos no pueden ser eliminadas directamente.
-            </span>
-          </div>
+        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200/80 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>
+            {specialties.filter((s) => s.isActive).length} especialidades activas para agendamiento.
+          </span>
           <span>Mostrando {filteredSpecialties.length} de {specialties.length} especialidades</span>
         </div>
       </div>
@@ -350,7 +346,7 @@ export function SpecialtiesTable({
         specialty={editingSpecialty}
       />
 
-      {/* Modal de Advertencia RNF-02 */}
+      {/* Modal de Integridad Referencial */}
       <ReferentialIntegrityModal
         isOpen={integrityModalOpen}
         onClose={() => setIntegrityModalOpen(false)}
@@ -362,7 +358,7 @@ export function SpecialtiesTable({
         }}
       />
 
-      {/* Modal de Confirmación de Borrado Simple */}
+      {/* Modal de Confirmación de Borrado */}
       {confirmDeleteSpecialty && (
         <div
           role="dialog"
@@ -379,8 +375,8 @@ export function SpecialtiesTable({
                 <p className="text-xs text-slate-500">Esta acción removerá la categoría del catálogo</p>
               </div>
             </div>
-            <p className="text-sm text-slate-600 mb-6">
-              ¿Está seguro de que desea eliminar <strong>{confirmDeleteSpecialty.name}</strong>? Esta especialidad no tiene profesionales activos vinculados (cumple RNF-02).
+            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+              ¿Está seguro de que desea eliminar <strong>{confirmDeleteSpecialty.name}</strong>? Se eliminará de forma permanente del catálogo.
             </p>
             <div className="flex justify-end gap-2.5">
               <Button

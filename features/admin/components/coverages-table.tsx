@@ -355,9 +355,9 @@ export function CoveragesTable({
         </div>
 
         {/* Footer */}
-        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+        <div className="bg-slate-50/60 px-4 py-3 border-t border-slate-200/80 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>
-            Las coberturas habilitadas alimentan de inmediato el registro de pacientes y la búsqueda de turnos.
+            {coverages.filter((c) => c.isActive).length} coberturas habilitadas para pacientes.
           </span>
           <span>Mostrando {filteredCoverages.length} de {coverages.length} coberturas</span>
         </div>

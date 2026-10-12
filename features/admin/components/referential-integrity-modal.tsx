@@ -44,33 +44,28 @@ export function ReferentialIntegrityModal({
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl border border-error/30 overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
+        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
       >
-        {/* Header con alerta RNF-02 */}
-        <div className="bg-error/10 border-b border-error/20 px-6 py-4 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-error/20 text-error flex items-center justify-center shrink-0">
-            <ShieldAlert className="w-6 h-6" />
+        {/* Header */}
+        <div className="bg-amber-50/70 border-b border-amber-200/60 px-6 py-4.5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+            <ShieldAlert className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-error text-white">
-                RNF-02
-              </span>
-              <span className="text-xs font-semibold text-error">
-                Integridad Referencial Protegida
-              </span>
-            </div>
             <h3
               id="integrity-modal-title"
-              className="text-lg font-bold text-slate-900 mt-1"
+              className="text-base font-bold text-slate-900"
             >
-              No se puede eliminar la especialidad
+              No es posible eliminar la especialidad
             </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Existen profesionales médicos activos asignados
+            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors"
+            className="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -79,22 +74,21 @@ export function ReferentialIntegrityModal({
 
         {/* Contenido explicativo */}
         <div className="p-6 space-y-4">
-          <p className="text-sm text-slate-700 leading-relaxed">
-            La especialidad <strong className="text-slate-900 font-semibold">{specialty.name}</strong> tiene{" "}
-            <strong className="text-error font-bold">{activeDoctors.length} profesional(es) médico(s) activo(s)</strong>{" "}
-            vinculado(s) actualmente a ella en el catálogo institucional.
+          <p className="text-sm text-slate-600 leading-relaxed">
+            La especialidad <strong className="text-slate-900 font-semibold">{specialty.name}</strong> cuenta con{" "}
+            <strong className="text-slate-900 font-semibold">{activeDoctors.length} profesional(es) activo(s)</strong> vinculados en el catálogo institucional.
           </p>
 
-          <div className="bg-surface-container-low rounded-xl p-3.5 border border-surface-container">
+          <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
             <div className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <UserCheck className="w-3.5 h-3.5 text-primary" />
-              Profesionales activos vinculados:
+              <span>Profesionales vinculados:</span>
             </div>
             <ul className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
               {activeDoctors.map((doc) => (
                 <li
                   key={doc.id}
-                  className="text-xs text-slate-800 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200/60 flex items-center justify-between"
+                  className="text-xs text-slate-800 bg-white px-3 py-2 rounded-lg border border-slate-200/60 flex items-center justify-between"
                 >
                   <span className="font-semibold text-slate-900">{doc.fullName}</span>
                   <span className="text-slate-500 font-mono text-[11px]">{doc.license}</span>
@@ -103,13 +97,13 @@ export function ReferentialIntegrityModal({
             </ul>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
-            <strong>Requisito RNF-02:</strong> Para preservar la coherencia del sistema y evitar profesionales huérfanos o inconsistencias en turnos, debe reasignar a los médicos a otra especialidad o darles la baja lógica antes de eliminar la categoría. Alternativamente, puede <strong>desactivar</strong> la especialidad para ocultarla de nuevos agendamientos.
-          </div>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Para eliminar esta especialidad, reasigne previamente a los profesionales a otra área o desactívelos. También puede optar por <strong>desactivar la especialidad</strong> para ocultarla de nuevos agendamientos sin alterar las agendas existentes.
+          </p>
         </div>
 
-        {/* Footer con acciones alternativas */}
-        <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-end gap-2.5">
+        {/* Footer con acciones */}
+        <div className="bg-slate-50/80 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-end gap-2.5">
           <Button
             type="button"
             variant="secondary"
@@ -117,7 +111,7 @@ export function ReferentialIntegrityModal({
             onClick={onClose}
             className="w-full sm:w-auto"
           >
-            Entendido, cancelar borrado
+            Cerrar
           </Button>
 
           {onDeactivateInstead && specialty.isActive && (
@@ -129,8 +123,8 @@ export function ReferentialIntegrityModal({
                 onDeactivateInstead(specialty.id)
                 onClose()
               }}
-              className="w-full sm:w-auto"
-              leftIcon={<ArrowRight className="w-4 h-4" />}
+              className="w-full sm:w-auto text-white"
+              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
               Desactivar en su lugar
             </Button>

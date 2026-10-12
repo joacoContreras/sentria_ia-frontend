@@ -22,7 +22,13 @@ export default function TurnosPage() {
   const { user, isAuthenticated, isLoading, isHydrated } = useAuth()
   const router = useRouter()
 
-  if (!isHydrated || isLoading) {
+  React.useEffect(() => {
+    if (isHydrated && !isLoading && user?.role === "admin") {
+      router.replace("/admin")
+    }
+  }, [isHydrated, isLoading, user, router])
+
+  if (!isHydrated || isLoading || user?.role === "admin") {
     return <TurnosLoadingFallback />
   }
 
