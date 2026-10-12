@@ -1,13 +1,15 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import { MessageSquare, X } from "lucide-react"
 import { useHelpChat } from "../hooks/use-help-chat"
 import { HelpChatModal } from "./help-chat-modal"
 import { SupportEmailModal } from "./support-email-modal"
 
 export function GlobalHelpChat() {
-    const {
+  const pathname = usePathname()
+  const {
     isChatOpen,
     isEmailModalOpen,
     toggleChat,
@@ -15,6 +17,11 @@ export function GlobalHelpChat() {
     openEmailSupport,
     closeEmailSupport,
   } = useHelpChat()
+
+  // Ocultar el chatbot de asistencia médica flotante en las rutas del panel de administración
+  if (pathname?.startsWith("/admin")) {
+    return null
+  }
 
   return (
     <>
