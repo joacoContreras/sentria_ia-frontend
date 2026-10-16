@@ -79,7 +79,7 @@ export function LoginForm({ isLoading, onSubmit }: LoginFormProps) {
           name="email"
           type="email"
           required
-          placeholder="paciente@email.com"
+          placeholder="ej. admin@sentria.ai o paciente@email.com"
           leftIcon={<Mail className="h-4 w-4" />}
           value={formData.email}
           onChange={handleChange}

@@ -13,6 +13,7 @@ const DEV_USER: AuthUser = {
   id: "dev-001",
   fullName: "Developer Sentria",
   email: "dev@sentria.ai",
+  role: "patient",
   docNumber: "99.999.999",
   docType: "DNI",
   coverageProvider: "Modo Desarrollador (OSDE 410)",
@@ -130,10 +131,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   )
   const [isPending, setIsPending] = React.useState(false)
 
-  // En entorno de desarrollo o con variable activada, proveer perfil developer si no hay sesión
-  const isDevBypass =
-    process.env.NEXT_PUBLIC_DEV_AUTO_LOGIN === "true" ||
-    process.env.NODE_ENV === "development"
+  // Proveer perfil developer simulado únicamente si NEXT_PUBLIC_DEV_AUTO_LOGIN está explícitamente en "true"
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_AUTO_LOGIN === "true"
 
   const effectiveUser = session.user || (isDevBypass ? DEV_USER : null)
   const effectiveToken = session.token || (isDevBypass ? "dev-mock-token" : null)

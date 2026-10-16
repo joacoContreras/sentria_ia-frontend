@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { BookAppointmentInput } from "@/types/appointments"
 import { cn } from "@/lib/utils"
+import { catalogService, CATALOG_UPDATE_EVENT } from "@/features/admin/services/catalog.service"
 
 interface BookAppointmentModalProps {
   isOpen: boolean
@@ -26,7 +27,7 @@ interface BookAppointmentModalProps {
   onConfirm: (input: BookAppointmentInput) => Promise<void> | void
 }
 
-const SPECIALTIES = [
+const DEFAULT_FALLBACK_SPECIALTIES = [
   { value: "Cardiología Clínica", label: "Cardiología Clínica" },
   { value: "Dermatología", label: "Dermatología" },
   { value: "Traumatología", label: "Traumatología" },
@@ -34,28 +35,37 @@ const SPECIALTIES = [
   { value: "Neurología", label: "Neurología" },
 ]
 
-const DOCTORS_BY_SPECIALTY: Record<string, { name: string; license: string; subtitle: string }[]> = {
-  "Cardiología Clínica": [
-    { name: "Dr. Alejandro Rossi", license: "M.N. 104.892", subtitle: "Especialista en Evaluación Miocárdica y Arritmias • Valoración 4.9/5" },
-    { name: "Dra. Silvina Katz", license: "M.N. 98.412", subtitle: "Cardiología Preventiva y Ergometría • Valoración 4.8/5" },
-    { name: "Cualquier profesional disponible (Primer turno libre)", license: "Red Sentria", subtitle: "Asignación inteligente según disponibilidad inmediata" },
-  ],
-  "Dermatología": [
-    { name: "Dra. Lucía Soria", license: "M.N. 87.210", subtitle: "Dermatología General y Control de Lunares • Valoración 4.9/5" },
-    { name: "Cualquier profesional disponible (Primer turno libre)", license: "Red Sentria", subtitle: "Asignación inteligente según disponibilidad inmediata" },
-  ],
-  "Traumatología": [
-    { name: "Dra. Valeria Méndez", license: "M.N. 104.551", subtitle: "Traumatología Deportiva y Artroscopía • Valoración 5.0/5" },
-    { name: "Cualquier profesional disponible (Primer turno libre)", license: "Red Sentria", subtitle: "Asignación inteligente según disponibilidad inmediata" },
-  ],
-  "Clínica Médica": [
-    { name: "Dr. Esteban Benítez", license: "M.N. 87.319", subtitle: "Medicina Familiar y Chequeos Preventivos • Valoración 4.9/5" },
-    { name: "Cualquier profesional disponible (Primer turno libre)", license: "Red Sentria", subtitle: "Asignación inteligente según disponibilidad inmediata" },
-  ],
-  "Neurología": [
-    { name: "Dra. Mariana Rossi", license: "M.N. 112.940", subtitle: "Cefaleas, Migrañas y Trastornos Cognitivos • Valoración 4.9/5" },
-    { name: "Cualquier profesional disponible (Primer turno libre)", license: "Red Sentria", subtitle: "Asignación inteligente según disponibilidad inmediata" },
-  ],
+function getActiveSpecialtiesList() {
+  const active = catalogService.getActiveSpecialties()
+  if (active.length > 0) {
+    return active.map((s) => ({ value: s.name, label: s.name }))
+  }
+  return DEFAULT_FALLBACK_SPECIALTIES
+}
+
+function getActiveDoctorsForSpec(specName: string) {
+  const activeDocs = catalogService.getActiveDoctors(specName)
+  if (activeDocs.length > 0) {
+    return [
+      ...activeDocs.map((d) => ({
+        name: d.fullName,
+        license: d.license,
+        subtitle: d.subtitle || `Especialista en ${d.specialtyName}`,
+      })),
+      {
+        name: "Cualquier profesional disponible (Primer turno libre)",
+        license: "Red Sentria",
+        subtitle: "Asignación inteligente según disponibilidad inmediata",
+      },
+    ]
+  }
+  return [
+    {
+      name: "Cualquier profesional disponible (Primer turno libre)",
+      license: "Red Sentria",
+      subtitle: "Asignación inteligente según disponibilidad inmediata",
+    },
+  ]
 }
 
 const MODALITY_OPTIONS = [
@@ -83,14 +93,19 @@ function BookAppointmentContent({
   onClose: () => void
   onConfirm: (input: BookAppointmentInput) => Promise<void> | void
 }) {
-  const defaultSpecialty = initialSpecialty || "Cardiología Clínica"
-  const doctorsForSpec = DOCTORS_BY_SPECIALTY[defaultSpecialty] || DOCTORS_BY_SPECIALTY["Cardiología Clínica"]
-  const defaultDoctor =
-    initialDoctor && doctorsForSpec.some((d) => d.name.includes(initialDoctor))
-      ? initialDoctor
-      : doctorsForSpec[0].name
-
+  const [specialtiesList, setSpecialtiesList] = useState(getActiveSpecialtiesList)
+  const defaultSpecialty = initialSpecialty || specialtiesList[0]?.value || "Cardiología Clínica"
   const [specialty, setSpecialty] = useState<string>(defaultSpecialty)
+
+  const [availableDoctors, setAvailableDoctors] = useState(() =>
+    getActiveDoctorsForSpec(defaultSpecialty)
+  )
+
+  const defaultDoctor =
+    initialDoctor && availableDoctors.some((d) => d.name.includes(initialDoctor))
+      ? initialDoctor
+      : availableDoctors[0]?.name || "Cualquier profesional disponible (Primer turno libre)"
+
   const [selectedDoctor, setSelectedDoctor] = useState<string>(defaultDoctor)
   const [modality, setModality] = useState<string>("belgrano")
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(0)
@@ -99,6 +114,22 @@ function BookAppointmentContent({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const updatedSpecs = getActiveSpecialtiesList()
+      setSpecialtiesList(updatedSpecs)
+      const updatedDocs = getActiveDoctorsForSpec(specialty)
+      setAvailableDoctors(updatedDocs)
+    }
+
+    window.addEventListener(CATALOG_UPDATE_EVENT, handleUpdate)
+    window.addEventListener("storage", handleUpdate)
+    return () => {
+      window.removeEventListener(CATALOG_UPDATE_EVENT, handleUpdate)
+      window.removeEventListener("storage", handleUpdate)
+    }
+  }, [specialty])
 
   useEffect(() => {
     const closeBtn = modalRef.current?.querySelector<HTMLElement>(
@@ -111,8 +142,9 @@ function BookAppointmentContent({
   const handleSpecialtyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value
     setSpecialty(val)
-    const doctors = DOCTORS_BY_SPECIALTY[val] || DOCTORS_BY_SPECIALTY["Cardiología Clínica"]
-    setSelectedDoctor(doctors[0].name)
+    const docs = getActiveDoctorsForSpec(val)
+    setAvailableDoctors(docs)
+    setSelectedDoctor(docs[0]?.name || "Cualquier profesional disponible (Primer turno libre)")
   }
 
   // Keyboard accessibility
@@ -147,8 +179,8 @@ function BookAppointmentContent({
   }, [onClose, isSubmitting])
 
   const currentDoctorObj =
-    DOCTORS_BY_SPECIALTY[specialty]?.find((d) => d.name === selectedDoctor) ||
-    DOCTORS_BY_SPECIALTY[specialty]?.[0] || {
+    availableDoctors.find((d) => d.name === selectedDoctor) ||
+    availableDoctors[0] || {
       name: selectedDoctor,
       license: "M.N. 104.892",
       subtitle: "Especialista en Evaluación Clínica • Valoración 4.9/5",
@@ -234,7 +266,7 @@ function BookAppointmentContent({
               onChange={handleSpecialtyChange}
               className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary"
             >
-              {SPECIALTIES.map((s) => (
+              {specialtiesList.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}
                 </option>
@@ -264,7 +296,7 @@ function BookAppointmentContent({
               onChange={(e) => setSelectedDoctor(e.target.value)}
               className="w-full h-12 px-space-md pr-10 rounded-xl bg-surface-container-low font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all cursor-pointer border-0 ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary"
             >
-              {(DOCTORS_BY_SPECIALTY[specialty] || DOCTORS_BY_SPECIALTY["Cardiología Clínica"]).map((doc) => (
+              {availableDoctors.map((doc) => (
                 <option key={doc.name} value={doc.name}>
                   {doc.name} {doc.license !== "Red Sentria" ? `(${doc.license})` : ""}
                 </option>

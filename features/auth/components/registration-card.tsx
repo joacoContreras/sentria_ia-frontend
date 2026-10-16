@@ -1,6 +1,7 @@
 "use client"
-
-import { useState } from "react"
+ 
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { AlertCircle, X, ShieldCheck } from "lucide-react"
 import { LoginForm } from "./login-form"
 import { RegisterForm } from "./register-form"
@@ -9,6 +10,7 @@ import { useAuth } from "../hooks/use-auth"
 import type { PatientRegistrationInput, PatientLoginInput } from "@/types/auth"
 
 export function RegistrationCard() {
+  const router = useRouter()
   const [tab, setTab] = useState<"login" | "register">("register")
   const [isSuccess, setIsSuccess] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
@@ -18,7 +20,17 @@ export function RegistrationCard() {
     email?: string
   }>({})
 
-  const { login, register, isLoading } = useAuth()
+  const { login, register, isLoading, user, isAuthenticated, isHydrated } = useAuth()
+
+  useEffect(() => {
+    if (isHydrated && !isLoading && isAuthenticated && user) {
+      if (user.role === "admin") {
+        router.replace("/admin")
+      } else {
+        router.replace("/portal")
+      }
+    }
+  }, [isHydrated, isLoading, isAuthenticated, user, router])
 
   const handleRegister = async (data: PatientRegistrationInput) => {
     setApiError(null)
@@ -51,7 +63,11 @@ export function RegistrationCard() {
     setApiError(null)
     try {
       const response = await login(credentials)
-      if (response.success) {
+      if (response.success && response.user) {
+        if (response.user.role === "admin") {
+          router.push("/admin")
+          return
+        }
         setSuccessInfo({
           email: credentials.email,
         })
@@ -149,17 +165,17 @@ export function RegistrationCard() {
             {/* Header del formulario */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[11px] uppercase font-semibold tracking-wider text-primary">
-                {tab === "register" ? "Ficha de Paciente" : "Portal de Pacientes"}
+                {tab === "register" ? "Ficha de Paciente" : "Acceso al Sistema"}
               </span>
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 {tab === "register"
                   ? "Crear ficha de paciente"
-                  : "Acceso a su cuenta"}
+                  : "Iniciar sesión"}
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 {tab === "register"
                   ? "Complete sus datos personales y cobertura para gestionar sus consultas e historial clínico."
-                  : "Ingrese sus datos de acceso para consultar turnos, resultados e indicaciones médicas."}
+                  : "Ingrese con sus credenciales de usuario o administración para ingresar al sistema."}
               </p>
             </div>
 

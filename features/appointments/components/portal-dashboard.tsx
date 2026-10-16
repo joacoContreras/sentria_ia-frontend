@@ -13,6 +13,7 @@ import { ClinicalSidebar } from "./clinical-sidebar"
 import { CancelAppointmentModal } from "./cancel-appointment-modal"
 import { RescheduleAppointmentModal } from "./reschedule-appointment-modal"
 import { BookAppointmentModal } from "./book-appointment-modal"
+import { AppointmentSearchView } from "./appointment-search-view"
 import { PortalToast } from "./portal-toast"
 import { PortalFooter } from "./portal-footer"
 import { MedicalHistoryView } from "@/features/medical-history/components/medical-history-view"
@@ -35,6 +36,7 @@ interface PortalDashboardProps {
 
 export function PortalDashboard({ initialSection = "turnos" }: PortalDashboardProps) {
   const {
+    appointments,
     availableDates,
     activeSection,
     activeTab,
@@ -104,7 +106,7 @@ export function PortalDashboard({ initialSection = "turnos" }: PortalDashboardPr
             <PatientHeroBanner
               activeCount={activeAppointmentsCount}
               nextAppointment={nextAppointment}
-              onNewAppointment={() => openBookModal()}
+              onNewAppointment={() => switchSection("buscar")}
             />
 
             {/* Main Body: Filtered Queue & Clinical Details */}
@@ -136,7 +138,7 @@ export function PortalDashboard({ initialSection = "turnos" }: PortalDashboardPr
                           </p>
                           <button
                             type="button"
-                            onClick={() => openBookModal()}
+                            onClick={() => switchSection("buscar")}
                             className="mt-3 inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-container transition-all cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                           >
                             Agendar un Turno
@@ -252,6 +254,22 @@ export function PortalDashboard({ initialSection = "turnos" }: PortalDashboardPr
                 {/* Right Column: Clinical Instructions & Guidelines (4 cols) */}
                 <ClinicalSidebar />
               </div>
+            </section>
+          </div>
+        )}
+
+        {/* SECTION: BUSCADOR DE TURNOS INTERACTIVO (RF-02) */}
+        {activeSection === "buscar" && (
+          <div className="flex flex-col w-full flex-1 animate-in fade-in duration-200">
+            <section className="max-w-container-max mx-auto px-gutter-mobile lg:px-gutter-desktop py-space-xl w-full">
+              <AppointmentSearchView
+                existingAppointments={appointments}
+                onBookAppointment={confirmBookAppointment}
+                onNavigateToMyAppointments={() => {
+                  switchSection("turnos")
+                  switchTab("upcoming")
+                }}
+              />
             </section>
           </div>
         )}

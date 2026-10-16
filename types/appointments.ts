@@ -12,6 +12,7 @@ export type AppointmentTab = "upcoming" | "history" | "canceled"
 
 export type PortalSection =
   | "turnos"
+  | "buscar"
   | "triage"
   | "historial"
   | "ayuda"
@@ -92,3 +93,69 @@ export interface ToastNotification {
   icon?: string
   type?: "success" | "info" | "warning" | "error"
 }
+
+export interface TurnoSearchFilters {
+  specialty?: string
+  doctor?: string
+  venue?: string
+  dateFrom?: string
+  dateTo?: string
+  searchQuery?: string
+}
+
+export interface AvailableTurnoSlot {
+  id: string
+  time: string
+  period: "morning" | "afternoon"
+  date: string // YYYY-MM-DD
+  dateDisplay: string // e.g. "Viernes 25 de Octubre"
+  doctorName: string
+  doctorLicense: string
+  doctorSubtitle?: string
+  doctorAvatarUrl?: string
+  specialty: string
+  venue: string
+  venueAddress: string
+  consultorio: string
+  isTeleconsulta?: boolean
+}
+
+export interface DoctorSlotGroup {
+  doctorName: string
+  doctorLicense: string
+  doctorSubtitle?: string
+  doctorAvatarUrl?: string
+  rating?: number
+  specialty: string
+  venue: string
+  venueAddress: string
+  consultorio: string
+  isTeleconsulta?: boolean
+  dates: {
+    date: string
+    dateDisplay: string
+    slots: AvailableTurnoSlot[]
+  }[]
+}
+
+export interface SpecialtyOption {
+  value: string
+  label: string
+  iconName?: string
+  count?: number
+}
+
+export interface DoctorOption {
+  name: string
+  license: string
+  specialty: string
+  subtitle?: string
+}
+
+export interface VenueOption {
+  id: string
+  name: string
+  address: string
+  isVirtual?: boolean
+}
+
