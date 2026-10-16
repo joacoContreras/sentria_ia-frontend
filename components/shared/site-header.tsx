@@ -12,11 +12,12 @@ export function SiteHeader() {
   const router = useRouter()
   const { isAuthenticated, user, isHydrated, logout } = useAuth()
 
-  const isAdmin = user?.role === "admin"
+  const isPatient = isHydrated && isAuthenticated && user?.role !== "admin"
+  const isAdmin = isHydrated && isAuthenticated && user?.role === "admin"
 
   const navLinks = [
     { href: "/", label: "Inicio", isActive: pathname === "/" },
-    ...(!isAdmin
+    ...(isPatient
       ? [{ href: "/turnos", label: "Turnos", isActive: pathname === "/turnos" }]
       : []),
     ...(isAdmin
