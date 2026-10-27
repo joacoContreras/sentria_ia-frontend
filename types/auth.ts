@@ -18,11 +18,14 @@ export interface PatientLoginInput {
   password: string
 }
 
+export type UserRole = "patient" | "admin"
+
 export interface AuthUser {
   id: string
   fullName: string
   email: string
-  docNumber: string
+  role?: UserRole | string
+  docNumber?: string
   docType?: DocumentType | string
   phone?: string
   coverageProvider?: string

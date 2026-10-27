@@ -24,8 +24,12 @@ import {
   sanitizeDocNumber,
   sanitizePhone,
 } from "../schemas/auth.schema"
+import {
+  catalogService,
+  CATALOG_UPDATE_EVENT,
+} from "@/features/admin/services/catalog.service"
 
-const coverageOptions = [
+const DEFAULT_COVERAGE_OPTIONS = [
   { value: "", label: "Seleccione entidad...", disabled: true },
   { value: "OSDE", label: "OSDE" },
   { value: "Swiss Medical", label: "Swiss Medical" },
@@ -62,6 +66,30 @@ export function RegisterForm({
   const [formData, setFormData] = React.useState<PatientRegistrationInput>(
     initialRegistrationData
   )
+  const [coverageOptions, setCoverageOptions] = React.useState(DEFAULT_COVERAGE_OPTIONS)
+
+  React.useEffect(() => {
+    const updateOptions = () => {
+      const active = catalogService.getActiveCoverages()
+      if (active.length > 0) {
+        setCoverageOptions([
+          { value: "", label: "Seleccione entidad...", disabled: true },
+          ...active.map((c) => ({
+            value: c.name,
+            label: c.type === "particular" ? `${c.name} / Sin Cobertura` : c.name,
+          })),
+        ])
+      }
+    }
+
+    updateOptions()
+    window.addEventListener(CATALOG_UPDATE_EVENT, updateOptions)
+    window.addEventListener("storage", updateOptions)
+    return () => {
+      window.removeEventListener(CATALOG_UPDATE_EVENT, updateOptions)
+      window.removeEventListener("storage", updateOptions)
+    }
+  }, [])
   const [errors, setErrors] = React.useState<
     Partial<Record<keyof PatientRegistrationInput, string>>
   >({})

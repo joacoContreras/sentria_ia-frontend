@@ -15,8 +15,10 @@ import {
   PhoneCall,
   CheckCircle2,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { helpService } from "../services/help.service"
+import { evaluateConversationalCatalogQuery } from "@/features/admin/services/ai-catalog-tools"
 
 interface Message {
   id: string
@@ -114,6 +116,15 @@ function getBotResponse(userText: string): {
     query.includes("sangrado grave")
   ) {
     return BOT_KNOWLEDGE_BASE.emergencia
+  }
+
+  // CA4: Consulta dinámica al catálogo institucional para el Bot conversacional
+  const catalogMatch = evaluateConversationalCatalogQuery(userText)
+  if (catalogMatch && catalogMatch.matched) {
+    return {
+      reply: catalogMatch.reply,
+      actions: catalogMatch.actions,
+    }
   }
 
   if (
@@ -319,7 +330,21 @@ function HelpChatContent({
     }, 500)
   }
 
+  const router = useRouter()
+
   const handleActionClick = (action: string) => {
+    if (action === "buscar_turnos") {
+      onClose()
+      router.push("/turnos")
+      return
+    }
+
+    if (action === "ir_portal") {
+      onClose()
+      router.push("/portal")
+      return
+    }
+
     if (action === "abrir_correo") {
       onClose()
       onOpenEmailSupport?.()

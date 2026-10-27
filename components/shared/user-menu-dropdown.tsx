@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
-import { User, Settings, LogOut, CheckCircle2 } from "lucide-react"
+import Link from "next/link"
+import { User, Settings, LogOut, CheckCircle2, ShieldCheck } from "lucide-react"
 import { AuthUser } from "@/types/auth"
 import { cn } from "@/lib/utils"
 
@@ -21,8 +22,13 @@ export function UserMenuDropdown({
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const displayName = user?.fullName || "María Florencia Gómez"
-  const displayDocNumber = user?.docNumber ? `DNI ${user.docNumber}` : "DNI 38.452.901"
+  const isAdmin = user?.role === "admin"
+  const displayName = user?.fullName || (isAdmin ? "Administrador Central" : "María Florencia Gómez")
+  const displaySubtitle = isAdmin
+    ? "Administración Central"
+    : user?.docNumber
+      ? `DNI ${user.docNumber}`
+      : "DNI 38.452.901"
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -79,7 +85,7 @@ export function UserMenuDropdown({
             {displayName}
           </span>
           <span className="font-label-sm text-label-sm text-slate-500">
-            {displayDocNumber}
+            {displaySubtitle}
           </span>
         </div>
 
@@ -96,6 +102,8 @@ export function UserMenuDropdown({
                 alt={`Avatar de ${displayName}`}
                 className="w-full h-full object-cover"
               />
+            ) : isAdmin ? (
+              <ShieldCheck className="h-4 w-4" aria-hidden="true" />
             ) : (
               <User className="h-4 w-4" aria-hidden="true" />
             )}
@@ -127,6 +135,8 @@ export function UserMenuDropdown({
                     alt={`Avatar de ${displayName}`}
                     className="w-full h-full object-cover"
                   />
+                ) : isAdmin ? (
+                  <ShieldCheck className="h-5 w-5" aria-hidden="true" />
                 ) : (
                   <User className="h-5 w-5" aria-hidden="true" />
                 )}
@@ -136,13 +146,20 @@ export function UserMenuDropdown({
                   <span className="font-body-md-medium text-body-md-medium text-on-surface font-semibold truncate">
                     {displayName}
                   </span>
-                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed-variant font-semibold shrink-0">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Paciente
-                  </span>
+                  {isAdmin ? (
+                    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-primary/10 text-primary font-semibold shrink-0 border border-primary/20">
+                      <ShieldCheck className="h-3 w-3" />
+                      Admin
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed-variant font-semibold shrink-0">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Paciente
+                    </span>
+                  )}
                 </div>
                 <p className="font-label-sm text-label-sm text-slate-500 truncate">
-                  {user?.email || "florencia.gomez@email.com"}
+                  {user?.email || (isAdmin ? "admin@sentria.ai" : "florencia.gomez@email.com")}
                 </p>
               </div>
             </div>
@@ -150,27 +167,49 @@ export function UserMenuDropdown({
 
           {/* Navigation & Action Items */}
           <div className="p-1.5 flex flex-col gap-1">
-            {/* Configuración */}
-            <button
-              type="button"
-              role="menuitem"
-              onClick={handleSettingsClick}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm text-slate-700 hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-surface-container text-slate-700 group-hover:bg-primary/10 group-hover:text-primary flex items-center justify-center shrink-0 transition-colors">
-                <Settings className="h-4 w-4" aria-hidden="true" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-body-md-medium font-medium leading-none">
-                  Configuración
-                </span>
-                <span className="font-label-sm text-slate-500 text-[11px] mt-0.5">
-                  Datos personales, cobertura y 2FA
-                </span>
-              </div>
-            </button>
+            {isAdmin ? (
+              /* Panel de Administración exclusivo para admin */
+              <Link
+                href="/admin"
+                onClick={() => setIsOpen(false)}
+                role="menuitem"
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm text-slate-700 hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+                  <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-body-md-medium font-medium leading-none">
+                    Panel de Administración
+                  </span>
+                  <span className="font-label-sm text-slate-500 text-[11px] mt-0.5">
+                    Catálogos, especialidades y médicos
+                  </span>
+                </div>
+              </Link>
+            ) : (
+              /* Configuración de paciente */
+              <button
+                type="button"
+                role="menuitem"
+                onClick={handleSettingsClick}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm text-slate-700 hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-surface-container text-slate-700 group-hover:bg-primary/10 group-hover:text-primary flex items-center justify-center shrink-0 transition-colors">
+                  <Settings className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-body-md-medium font-medium leading-none">
+                    Configuración
+                  </span>
+                  <span className="font-label-sm text-slate-500 text-[11px] mt-0.5">
+                    Datos personales y cobertura
+                  </span>
+                </div>
+              </button>
+            )}
 
-            {/* Cerrar sesión (No emphasis, standard menu item) */}
+            {/* Cerrar sesión */}
             <button
               type="button"
               role="menuitem"

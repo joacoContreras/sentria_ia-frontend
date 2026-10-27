@@ -23,6 +23,7 @@ export function PortalHeader({
   const { user, logout } = useAuth()
 
   const isMisTurnosActive = activeSection === "turnos"
+  const isBuscarActive = activeSection === "buscar"
   const isTriageActive = activeSection === "triage"
   const isHistorialActive = activeSection === "historial"
   const isAyudaActive = activeSection === "ayuda"
@@ -74,6 +75,21 @@ export function PortalHeader({
             aria-current={isMisTurnosActive ? "page" : undefined}
           >
             Mis Turnos
+          </button>
+
+          {/* Buscar Turnos */}
+          <button
+            type="button"
+            onClick={() => onSelectSection("buscar")}
+            className={cn(
+              "px-space-md py-space-xs transition-all rounded-lg font-label-lg text-label-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer font-semibold",
+              isBuscarActive
+                ? "bg-primary-container text-on-primary-container shadow-xs"
+                : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-medium"
+            )}
+            aria-current={isBuscarActive ? "page" : undefined}
+          >
+            Buscar Turnos
           </button>
 
           {/* Triage & Síntomas */}
