@@ -23,8 +23,9 @@ import { DoctorsTable } from "./doctors-table"
 import { CoveragesTable } from "./coverages-table"
 import { AiIntegrationPanel } from "./ai-integration-panel"
 import { AnalyticsDashboard } from "./analytics-dashboard"
+import { AppointmentsCalendar } from "./appointments-calendar"
 
-export type AdminTab = "analytics" | "specialties" | "doctors" | "coverages" | "ai"
+export type AdminTab = "analytics" | "appointments" | "specialties" | "doctors" | "coverages" | "ai"
 
 export function AdminDashboard() {
   const router = useRouter()
@@ -322,8 +323,17 @@ export function AdminDashboard() {
           </button>
         </div>
 
-        {/* Barra de Pestañas de Navegación */}
+          {/* Barra de Pestañas de Navegación */}
         <div className="flex items-center gap-2 border-b border-slate-200/80 overflow-x-auto pb-px">
+          <button
+            type="button"
+            onClick={() => setActiveTab("appointments")}
+            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${activeTab === "appointments" ? "border-primary text-primary bg-white/60 rounded-t-xl" : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"}`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Agenda de turnos</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setActiveTab("analytics")}
@@ -399,8 +409,10 @@ export function AdminDashboard() {
           </button>
         </div>
 
-        {/* Contenido de la pestaña activa */}
+          {/* Contenido de la pestaña activa */}
         <div className="pt-2">
+          {activeTab === "appointments" && <AppointmentsCalendar doctors={doctors} />}
+
           {activeTab === "analytics" && (
             <AnalyticsDashboard doctors={doctors} specialties={specialties} />
           )}
