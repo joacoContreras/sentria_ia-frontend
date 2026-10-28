@@ -22,14 +22,15 @@ import { SpecialtiesTable } from "./specialties-table"
 import { DoctorsTable } from "./doctors-table"
 import { CoveragesTable } from "./coverages-table"
 import { AiIntegrationPanel } from "./ai-integration-panel"
+import { AnalyticsDashboard } from "./analytics-dashboard"
 
-export type AdminTab = "specialties" | "doctors" | "coverages" | "ai"
+export type AdminTab = "analytics" | "specialties" | "doctors" | "coverages" | "ai"
 
 export function AdminDashboard() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, isHydrated, logout } = useAuth()
 
-  const [activeTab, setActiveTab] = useState<AdminTab>("specialties")
+  const [activeTab, setActiveTab] = useState<AdminTab>("analytics")
   const [specialties, setSpecialties] = useState<Specialty[]>(() =>
     catalogService.getSpecialties()
   )
@@ -159,7 +160,7 @@ export function AdminDashboard() {
                 </span>
               </div>
               <span className="text-[11px] text-slate-500 hidden sm:inline leading-none mt-0.5">
-                Consola Central de Catálogos Clínicos
+                Centro de Inteligencia Operativa
               </span>
             </div>
           </div>
@@ -214,10 +215,10 @@ export function AdminDashboard() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Gestión de Catálogos Clínicos
+              Panel de analíticas
             </h1>
             <p className="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
-              Administre las especialidades, la nómina de profesionales médicos y los convenios de cobertura asistencial en tiempo real.
+              Mida el rendimiento de sus turnos, la conversión de reservas y el impacto del Agente de IA con datos consolidados.
             </p>
           </div>
         </div>
@@ -325,6 +326,19 @@ export function AdminDashboard() {
         <div className="flex items-center gap-2 border-b border-slate-200/80 overflow-x-auto pb-px">
           <button
             type="button"
+            onClick={() => setActiveTab("analytics")}
+            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === "analytics"
+                ? "border-primary text-primary bg-white/60 rounded-t-xl"
+                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Analíticas</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab("specialties")}
             className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === "specialties"
@@ -387,6 +401,10 @@ export function AdminDashboard() {
 
         {/* Contenido de la pestaña activa */}
         <div className="pt-2">
+          {activeTab === "analytics" && (
+            <AnalyticsDashboard doctors={doctors} specialties={specialties} />
+          )}
+
           {activeTab === "specialties" && (
             <SpecialtiesTable
               specialties={specialties}
