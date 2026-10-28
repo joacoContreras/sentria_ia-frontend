@@ -79,7 +79,7 @@ export function AdminDashboard({ section }: AdminDashboardProps) {
         {section === "operaciones" ? <OperationsSection doctors={doctors} specialties={specialties} /> : <ManagementSection activeTab={managementTab} setActiveTab={setManagementTab} specialties={specialties} doctors={doctors} coverages={coverages} refreshData={refreshData} />}
       </main>
 
-      {showResetConfirm && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4"><div className="w-full max-w-md rounded-2xl bg-surface-container-lowest p-6 shadow-2xl"><h2 className="font-headline-md text-on-surface">¿Restablecer datos demo?</h2><p className="mt-2 text-sm text-on-surface-variant">Se reemplazarán los cambios locales de especialidades, profesionales y coberturas.</p><div className="mt-6 flex justify-end gap-3"><Button variant="outline" onClick={() => setShowResetConfirm(false)}>Cancelar</Button><Button onClick={handleReset}>Restablecer</Button></div></div></div>}
+      {showResetConfirm && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4"><div className="w-full max-w-md rounded-2xl bg-surface-container-lowest p-6 shadow-2xl"><h2 className="font-headline-md text-on-surface">¿Restablecer datos demo?</h2><p className="mt-2 text-sm text-on-surface-variant">Se reemplazarán los cambios locales de especialidades, profesionales y coberturas.</p><div className="mt-6 flex justify-end gap-3"><Button variant="danger" onClick={() => setShowResetConfirm(false)}>Cancelar</Button><Button onClick={handleReset}>Restablecer</Button></div></div></div>}
     </div>
   )
 }
