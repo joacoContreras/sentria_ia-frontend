@@ -250,10 +250,11 @@ function HelpChatContent({
 
     setIsTyping(true)
 
-    // Intentar envío a backend Java REST o responder con bot local
+    // Intentar envío al asistente IA del backend Java (POST /api/v1/ia/chat)
+    // o responder con bot local si el backend no está configurado / disponible
     let remoteResponse: { success: boolean; message?: Message } | null = null
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const res = await helpService.sendChatMessage(sessionIdRef.current, text)
+    if (process.env.NEXT_PUBLIC_API_URL && !isHumanAssigned) {
+      const res = await helpService.sendChatMessage([...messages, userMsg])
       if (res.success && res.message) {
         remoteResponse = {
           success: true,

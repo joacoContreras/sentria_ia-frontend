@@ -23,6 +23,28 @@ export interface ChatMessageResponse {
   timestamp: string
   isEmergency?: boolean
   actions?: { label: string; action: string }[]
+  suggestedSpecialty?: string
+}
+
+/** Mensaje del historial local que se reenvía al backend */
+export interface ChatHistoryEntry {
+  sender: "bot" | "user" | "human_agent" | "system"
+  text: string
+}
+
+/** Respuesta de POST /api/v1/ia/chat (record RespuestaChat del backend) */
+export interface AssistantChatResponse {
+  tipo:
+    | "administrativo"
+    | "triage"
+    | "emergencia"
+    | "rechazo_clinico"
+    | "fuera_de_dominio"
+    | "intento_manipulacion"
+  respuesta: string
+  alertaEmergencia: boolean
+  reservaHabilitada: boolean
+  especialidadSugerida: string | null
 }
 
 export const helpService = {
@@ -100,38 +122,69 @@ export const helpService = {
   },
 
   /**
-   * Envía un mensaje al asistente virtual / agente y obtiene respuesta
-   * Conecta con POST /api/support/chat/message o devuelve fallback del bot
+   * Envía la conversación al asistente IA del backend Java (RF-06 / RF-07)
+   * Conecta con POST /api/v1/ia/chat. El backend recibe el historial completo
+   * (roles "usuario" / "asistente") y agrega el system prompt por su cuenta.
    */
   async sendChatMessage(
-    sessionId: string,
-    messageText: string
+    history: ChatHistoryEntry[]
   ): Promise<{
     success: boolean
     message?: ChatMessageResponse
     error?: string
   }> {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const response = await apiClient<ChatMessageResponse>("/api/support/chat/message", {
-        method: "POST",
-        requiresAuth: false,
-        body: {
-          sessionId,
-          text: messageText,
-        },
-      })
-
-      if (response.success && response.data) {
-        return {
-          success: true,
-          message: response.data,
-        }
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      return {
+        success: false,
+        error: "Modo mock: responder con base de conocimiento local",
       }
     }
 
+    const mensajes = history
+      .filter((m) => (m.sender === "user" || m.sender === "bot") && m.text.trim())
+      .map((m) => ({
+        rol: m.sender === "user" ? "usuario" : "asistente",
+        contenido: m.text,
+      }))
+
+    const response = await apiClient<AssistantChatResponse>("/api/v1/ia/chat", {
+      method: "POST",
+      requiresAuth: false,
+      body: { mensajes },
+    })
+
+    if (!response.success || !response.data || typeof response.data.respuesta !== "string") {
+      return {
+        success: false,
+        error: response.error || "El asistente IA no está disponible",
+      }
+    }
+
+    const data = response.data
+    const actions: { label: string; action: string }[] = []
+    if (data.alertaEmergencia) {
+      actions.push(
+        { label: "Llamar a Emergencias (911)", action: "llamar_911" },
+        { label: "Ver dirección de Guardia Central", action: "guardia" }
+      )
+    } else if (data.reservaHabilitada && data.especialidadSugerida) {
+      actions.push({
+        label: `Buscar turnos de ${data.especialidadSugerida}`,
+        action: "buscar_turnos",
+      })
+    }
+
     return {
-      success: false,
-      error: "Modo mock: responder con base de conocimiento local",
+      success: true,
+      message: {
+        id: `ia-${Date.now()}`,
+        sender: "bot",
+        text: data.respuesta,
+        timestamp: new Intl.DateTimeFormat("es-AR", { hour: "2-digit", minute: "2-digit" }).format(new Date()),
+        isEmergency: data.alertaEmergencia,
+        actions: actions.length ? actions : undefined,
+        suggestedSpecialty: data.especialidadSugerida || undefined,
+      },
     }
   },
 }
