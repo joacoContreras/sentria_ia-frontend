@@ -1,7 +1,7 @@
 # Contrato de Integración de API REST para Backend Java / PL/pgSQL
-**Proyecto:** Sentria AI - Plataforma Asistencial  
-**Consumidor:** Frontend Next.js (App Router, TypeScript)  
-**Proveedor:** Backend Java (Spring Boot / Jakarta EE) + PostgreSQL / PL/pgSQL  
+**Proyecto:** Sentria AI - Plataforma Asistencial
+**Consumidor:** Frontend Next.js (App Router, TypeScript)
+**Proveedor:** Backend Java (Spring Boot / Jakarta EE) + PostgreSQL / PL/pgSQL
 
 ---
 

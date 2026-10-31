@@ -1,47 +1,44 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import {
-  Activity,
-  Bot,
-  CreditCard,
-  LogOut,
-  RotateCcw,
-  ShieldCheck,
-  ShieldAlert,
-  Sparkles,
-  Stethoscope,
-  Users,
-} from "lucide-react"
+import { Activity, BarChart3, Bot, Building2, CreditCard, LogOut, RotateCcw, ShieldAlert, ShieldCheck, Stethoscope, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/hooks/use-auth"
-import { Coverage, Doctor, Specialty } from "@/types/admin"
+import type { Coverage, Doctor, Specialty } from "@/types/admin"
 import { CATALOG_UPDATE_EVENT, catalogService } from "../services/catalog.service"
-import { SpecialtiesTable } from "./specialties-table"
-import { DoctorsTable } from "./doctors-table"
-import { CoveragesTable } from "./coverages-table"
 import { AiIntegrationPanel } from "./ai-integration-panel"
+import { AnalyticsDashboard } from "./analytics-dashboard"
+import { AppointmentsCalendar } from "./appointments-calendar"
+import { CoveragesTable } from "./coverages-table"
+import { DoctorsTable } from "./doctors-table"
+import { SpecialtiesTable } from "./specialties-table"
 
-export type AdminTab = "specialties" | "doctors" | "coverages" | "ai"
+export type AdminSection = "operaciones" | "gestion"
 
-export function AdminDashboard() {
+type AdminDashboardProps = { section: AdminSection }
+
+const operationItems = [
+  { href: "/admin/operaciones", label: "Agenda de turnos", icon: Activity },
+  { href: "/admin/operaciones/analiticas", label: "Analíticas", icon: BarChart3 },
+]
+
+const managementItems = [
+  { id: "specialties", label: "Especialidades médicas", icon: Stethoscope },
+  { id: "doctors", label: "Profesionales médicos", icon: Users },
+  { id: "coverages", label: "Obras sociales", icon: CreditCard },
+  { id: "ai", label: "Asistente e integración IA", icon: Bot },
+]
+
+export function AdminDashboard({ section }: AdminDashboardProps) {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, isHydrated, logout } = useAuth()
-
-  const [activeTab, setActiveTab] = useState<AdminTab>("specialties")
-  const [specialties, setSpecialties] = useState<Specialty[]>(() =>
-    catalogService.getSpecialties()
-  )
-  const [doctors, setDoctors] = useState<Doctor[]>(() =>
-    catalogService.getDoctors()
-  )
-  const [coverages, setCoverages] = useState<Coverage[]>(() =>
-    catalogService.getCoverages()
-  )
+  const [managementTab, setManagementTab] = useState("specialties")
+  const [specialties, setSpecialties] = useState<Specialty[]>(() => catalogService.getSpecialties())
+  const [doctors, setDoctors] = useState<Doctor[]>(() => catalogService.getDoctors())
+  const [coverages, setCoverages] = useState<Coverage[]>(() => catalogService.getCoverages())
   const [showResetConfirm, setShowResetConfirm] = useState(false)
 
-  // Carga reactiva de los catálogos
   const refreshData = useCallback(() => {
     setSpecialties(catalogService.getSpecialties())
     setDoctors(catalogService.getDoctors())
@@ -52,418 +49,50 @@ export function AdminDashboard() {
     const handleUpdate = () => refreshData()
     window.addEventListener(CATALOG_UPDATE_EVENT, handleUpdate)
     window.addEventListener("storage", handleUpdate)
-
     return () => {
       window.removeEventListener(CATALOG_UPDATE_EVENT, handleUpdate)
       window.removeEventListener("storage", handleUpdate)
     }
   }, [refreshData])
 
-  const handleResetDefaults = () => {
-    catalogService.resetToDefaults()
-    refreshData()
-    setShowResetConfirm(false)
-  }
+  if (!isHydrated || isLoading) return <div className="flex min-h-screen items-center justify-center bg-background"><Activity className="size-8 animate-spin text-primary" /></div>
 
-  const handleLogout = () => {
-    logout()
-    router.push("/acceso")
-  }
+  if (!isAuthenticated || !user) return <AccessCard title="Acceso a la administración" description="Iniciá sesión con una cuenta institucional para acceder al panel de administrador." action="Iniciar sesión" onClick={() => router.push("/acceso")} />
+  if (user.role !== "admin") return <AccessCard title="Acceso restringido" description="Esta sección es exclusiva para la administración del centro médico." action="Ir a mi portal" onClick={() => router.push("/portal")} restricted />
 
-  // Loading fallback
-  if (!isHydrated || isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3 text-secondary">
-          <Activity className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm font-medium text-slate-600">Cargando panel de administración...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Protección: No autenticado
-  if (!isAuthenticated || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md bg-white rounded-2xl p-6 sm:p-8 text-center border border-slate-200/80 shadow-md space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center">
-            <ShieldCheck className="w-7 h-7" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">Acceso a la Consola de Administración</h2>
-            <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-              Debe iniciar sesión con una cuenta de administración institucional para acceder a este panel.
-            </p>
-          </div>
-          <Button
-            variant="primary"
-            onClick={() => router.push("/acceso")}
-            className="w-full text-white"
-          >
-            Iniciar Sesión
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  // Protección: Usuario no es administrador (es un paciente)
-  if (user.role !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md bg-white rounded-2xl p-6 sm:p-8 text-center border border-slate-200/80 shadow-md space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-700 mx-auto flex items-center justify-center border border-amber-200">
-            <ShieldAlert className="w-7 h-7" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">Acceso Restringido</h2>
-            <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-              Esta sección es exclusiva para la administración del centro médico. Su cuenta actual está registrada como paciente.
-            </p>
-          </div>
-          <Button
-            variant="primary"
-            onClick={() => router.push("/portal")}
-            className="w-full text-white"
-          >
-            Ir a mi Portal de Paciente
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  // Métricas de estado de catálogos
-  const activeSpecialtiesCount = specialties.filter((s) => s.isActive).length
-  const activeDoctorsCount = doctors.filter((d) => d.isActive).length
-  const activeCoveragesCount = coverages.filter((c) => c.isActive).length
+  const handleLogout = () => { logout(); router.push("/acceso") }
+  const handleReset = () => { catalogService.resetToDefaults(); refreshData(); setShowResetConfirm(false) }
 
   return (
     <div className="min-h-screen bg-background pb-16">
-      {/* Top Header Institucional */}
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          {/* Logo & Título del Panel */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-2xs font-bold">
-              <Activity className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-base text-slate-900 tracking-tight leading-tight">
-                  Sentria <span className="text-primary font-bold">AI</span>
-                </span>
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
-                  Administración
-                </span>
-              </div>
-              <span className="text-[11px] text-slate-500 hidden sm:inline leading-none mt-0.5">
-                Consola Central de Catálogos Clínicos
-              </span>
-            </div>
-          </div>
-
-          {/* Acciones y Perfil del Administrador */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setShowResetConfirm(true)}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
-              title="Restablecer catálogos de prueba iniciales"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
-              <span className="hidden md:inline">Restablecer datos demo</span>
-            </button>
-
-            <div className="h-5 w-px bg-slate-200 hidden sm:block" />
-
-            {/* Administrador logueado & Cerrar sesión */}
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div className="hidden lg:flex flex-col text-left">
-                  <span className="text-xs font-semibold text-slate-900 leading-tight">
-                    {user.fullName || "Administrador Central"}
-                  </span>
-                  <span className="text-[11px] text-slate-500 leading-tight truncate max-w-[160px]">
-                    {user.email}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-error hover:bg-error/10 px-2.5 py-1.5 rounded-xl transition-colors cursor-pointer"
-                title="Cerrar sesión de administrador"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Salir</span>
-              </button>
-            </div>
-          </div>
+      <header className="sticky top-0 z-30 border-b border-outline-variant/50 bg-surface-container-lowest/95 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3"><div className="flex size-9 items-center justify-center rounded-xl bg-primary text-on-primary"><Activity className="size-5" /></div><div><div className="flex items-center gap-2"><span className="font-bold tracking-tight text-on-surface">Sentria <span className="text-primary">AI</span></span><span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">Administrador</span></div><span className="hidden text-[11px] text-on-surface-variant sm:block">Centro de Inteligencia Operativa</span></div></div>
+          <div className="flex items-center gap-3"><button type="button" onClick={() => setShowResetConfirm(true)} className="hidden items-center gap-1.5 rounded-xl border border-outline-variant/60 px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-surface-container-low md:inline-flex"><RotateCcw className="size-3.5" />Restablecer datos demo</button><div className="hidden h-5 w-px bg-outline-variant sm:block" /><div className="flex items-center gap-2"><div className="flex size-8 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary"><ShieldCheck className="size-4" /></div><div className="hidden lg:block"><p className="text-xs font-semibold text-on-surface">{user.fullName || "Administrador"}</p><p className="max-w-[160px] truncate text-[11px] text-on-surface-variant">{user.email}</p></div><button type="button" onClick={handleLogout} className="rounded-xl px-2.5 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-error/10 hover:text-error"><LogOut className="inline size-4 sm:mr-1" /><span className="hidden sm:inline">Salir</span></button></div></div>
         </div>
       </header>
 
-      {/* Contenido Principal */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
-        {/* Encabezado Principal */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Gestión de Catálogos Clínicos
-            </h1>
-            <p className="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
-              Administre las especialidades, la nómina de profesionales médicos y los convenios de cobertura asistencial en tiempo real.
-            </p>
-          </div>
-        </div>
+      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-8 sm:px-6 lg:px-8">
+        <div><p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">Control institucional</p><h1 className="font-headline-lg text-on-surface">Panel de administrador</h1><p className="mt-1 max-w-2xl text-sm leading-6 text-on-surface-variant">Gestioná la operación diaria y los catálogos que sostienen la atención del centro médico.</p></div>
+        <nav aria-label="Secciones de administración" className="grid gap-3 rounded-2xl border border-outline-variant/50 bg-surface-container-low p-2 sm:grid-cols-2"><NavCard active={section === "operaciones"} href="/admin/operaciones" icon={Activity} title="Operaciones" description="Agenda y rendimiento de turnos" /><NavCard active={section === "gestion"} href="/admin/gestion" icon={Building2} title="Gestión institucional" description="Catálogos, coberturas e IA" /></nav>
 
-        {/* Tarjetas KPI de Estado */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* KPI 1: Especialidades */}
-          <button
-            type="button"
-            onClick={() => setActiveTab("specialties")}
-            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-              activeTab === "specialties"
-                ? "bg-white border-primary shadow-xs ring-2 ring-primary/20"
-                : "bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs"
-            }`}
-          >
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Especialidades</span>
-              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                <Stethoscope className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{specialties.length}</span>
-              <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                {activeSpecialtiesCount} activas
-              </span>
-            </div>
-          </button>
-
-          {/* KPI 2: Médicos */}
-          <button
-            type="button"
-            onClick={() => setActiveTab("doctors")}
-            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-              activeTab === "doctors"
-                ? "bg-white border-primary shadow-xs ring-2 ring-primary/20"
-                : "bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs"
-            }`}
-          >
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Profesionales</span>
-              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                <Users className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{doctors.length}</span>
-              <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                {activeDoctorsCount} en agenda
-              </span>
-            </div>
-          </button>
-
-          {/* KPI 3: Coberturas */}
-          <button
-            type="button"
-            onClick={() => setActiveTab("coverages")}
-            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-              activeTab === "coverages"
-                ? "bg-white border-primary shadow-xs ring-2 ring-primary/20"
-                : "bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs"
-            }`}
-          >
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Coberturas</span>
-              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                <CreditCard className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{coverages.length}</span>
-              <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                {activeCoveragesCount} habilitadas
-              </span>
-            </div>
-          </button>
-
-          {/* KPI 4: Asistente IA */}
-          <button
-            type="button"
-            onClick={() => setActiveTab("ai")}
-            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-              activeTab === "ai"
-                ? "bg-white border-primary shadow-xs ring-2 ring-primary/20"
-                : "bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs"
-            }`}
-          >
-            <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Asistente IA</span>
-              <div className="w-8 h-8 rounded-lg bg-teal-50 text-primary flex items-center justify-center">
-                <Sparkles className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">Activo</span>
-              <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                Sincronizado
-              </span>
-            </div>
-          </button>
-        </div>
-
-        {/* Barra de Pestañas de Navegación */}
-        <div className="flex items-center gap-2 border-b border-slate-200/80 overflow-x-auto pb-px">
-          <button
-            type="button"
-            onClick={() => setActiveTab("specialties")}
-            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === "specialties"
-                ? "border-primary text-primary bg-white/60 rounded-t-xl"
-                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
-            }`}
-          >
-            <Stethoscope className="w-4 h-4" />
-            <span>Especialidades Médicas</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-700">
-              {specialties.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("doctors")}
-            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === "doctors"
-                ? "border-primary text-primary bg-white/60 rounded-t-xl"
-                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Profesionales Médicos</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-700">
-              {doctors.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("coverages")}
-            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === "coverages"
-                ? "border-primary text-primary bg-white/60 rounded-t-xl"
-                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
-            }`}
-          >
-            <CreditCard className="w-4 h-4" />
-            <span>Obras Sociales y Prepagas</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-700">
-              {coverages.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("ai")}
-            className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === "ai"
-                ? "border-primary text-primary bg-white/60 rounded-t-xl"
-                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
-            }`}
-          >
-            <Bot className="w-4 h-4" />
-            <span>Asistente e Integración IA</span>
-          </button>
-        </div>
-
-        {/* Contenido de la pestaña activa */}
-        <div className="pt-2">
-          {activeTab === "specialties" && (
-            <SpecialtiesTable
-              specialties={specialties}
-              doctors={doctors}
-              onRefresh={refreshData}
-            />
-          )}
-
-          {activeTab === "doctors" && (
-            <DoctorsTable
-              doctors={doctors}
-              specialties={specialties}
-              coverages={coverages}
-              onRefresh={refreshData}
-            />
-          )}
-
-          {activeTab === "coverages" && (
-            <CoveragesTable
-              coverages={coverages}
-              specialties={specialties}
-              doctors={doctors}
-              onRefresh={refreshData}
-            />
-          )}
-
-          {activeTab === "ai" && (
-            <AiIntegrationPanel
-              specialties={specialties}
-              doctors={doctors}
-              coverages={coverages}
-            />
-          )}
-        </div>
+        {section === "operaciones" ? <OperationsSection doctors={doctors} specialties={specialties} /> : <ManagementSection activeTab={managementTab} setActiveTab={setManagementTab} specialties={specialties} doctors={doctors} coverages={coverages} refreshData={refreshData} />}
       </main>
 
-      {/* Modal de confirmación de restablecimiento */}
-      {showResetConfirm && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
-        >
-          <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-200">
-            <div className="flex items-center gap-3 text-slate-900 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
-                <RotateCcw className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-bold text-base">¿Restablecer datos demo?</h4>
-                <p className="text-xs text-slate-500">Se reiniciarán las especialidades, médicos y prepagas iniciales</p>
-              </div>
-            </div>
-            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-              Esta acción restaurará los 3 catálogos con la nómina clínica de prueba original de Sentria AI.
-            </p>
-            <div className="flex justify-end gap-2.5">
-              <Button
-                type="button"
-                variant="secondary"
-                size="md"
-                onClick={() => setShowResetConfirm(false)}
-              >
-                Cancelar
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                size="md"
-                onClick={handleResetDefaults}
-              >
-                Sí, restablecer
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {showResetConfirm && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4"><div className="w-full max-w-md rounded-2xl bg-surface-container-lowest p-6 shadow-2xl"><h2 className="font-headline-md text-on-surface">¿Restablecer datos demo?</h2><p className="mt-2 text-sm text-on-surface-variant">Se reemplazarán los cambios locales de especialidades, profesionales y coberturas.</p><div className="mt-6 flex justify-end gap-3"><Button variant="danger" onClick={() => setShowResetConfirm(false)}>Cancelar</Button><Button onClick={handleReset}>Restablecer</Button></div></div></div>}
     </div>
   )
 }
+
+function OperationsSection({ doctors, specialties }: { doctors: Doctor[]; specialties: Specialty[] }) {
+  const isAnalytics = typeof window !== "undefined" && window.location.pathname.includes("analiticas")
+  return <section className="flex flex-col gap-5"><div className="flex flex-wrap gap-2 border-b border-outline-variant/50 pb-2">{operationItems.map((item) => <a key={item.href} href={item.href} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${((isAnalytics && item.href.includes("analiticas")) || (!isAnalytics && item.href.endsWith("operaciones"))) ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container-low"}`}><item.icon className="size-4" />{item.label}</a>)}</div>{isAnalytics ? <AnalyticsDashboard doctors={doctors} specialties={specialties} /> : <AppointmentsCalendar doctors={doctors} />}</section>
+}
+
+function ManagementSection({ activeTab, setActiveTab, specialties, doctors, coverages, refreshData }: { activeTab: string; setActiveTab: (tab: string) => void; specialties: Specialty[]; doctors: Doctor[]; coverages: Coverage[]; refreshData: () => void }) {
+  return <section className="flex flex-col gap-5"><div className="flex flex-wrap gap-2 border-b border-outline-variant/50 pb-2">{managementItems.map((item) => <button type="button" key={item.id} onClick={() => setActiveTab(item.id)} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${activeTab === item.id ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container-low"}`}><item.icon className="size-4" />{item.label}</button>)}</div>{activeTab === "specialties" && <SpecialtiesTable specialties={specialties} doctors={doctors} onRefresh={refreshData} />}{activeTab === "doctors" && <DoctorsTable doctors={doctors} specialties={specialties} coverages={coverages} onRefresh={refreshData} />}{activeTab === "coverages" && <CoveragesTable coverages={coverages} specialties={specialties} doctors={doctors} onRefresh={refreshData} />}{activeTab === "ai" && <AiIntegrationPanel specialties={specialties} doctors={doctors} coverages={coverages} />}</section>
+}
+
+function NavCard({ active, href, icon: Icon, title, description }: { active: boolean; href: string; icon: typeof Activity; title: string; description: string }) { return <a href={href} className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-colors ${active ? "bg-surface-container-lowest shadow-sm ring-1 ring-primary/20" : "hover:bg-surface-container-lowest/70"}`}><span className={`flex size-10 items-center justify-center rounded-xl ${active ? "bg-primary text-on-primary" : "bg-primary/10 text-primary"}`}><Icon className="size-5" /></span><span><span className="block text-sm font-bold text-on-surface">{title}</span><span className="block text-xs text-on-surface-variant">{description}</span></span></a> }
+
+function AccessCard({ title, description, action, onClick, restricted = false }: { title: string; description: string; action: string; onClick: () => void; restricted?: boolean }) { return <div className="flex min-h-screen items-center justify-center bg-background px-4"><div className="w-full max-w-md rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-8 text-center shadow-md"><div className={`mx-auto flex size-14 items-center justify-center rounded-2xl ${restricted ? "border border-amber-200 bg-amber-50 text-amber-700" : "bg-primary/10 text-primary"}`}><ShieldAlert className="size-7" /></div><h2 className="mt-4 font-headline-md text-on-surface">{title}</h2><p className="mt-2 text-sm leading-relaxed text-on-surface-variant">{description}</p><Button onClick={onClick} className="mt-6 w-full">{action}</Button></div></div> }
