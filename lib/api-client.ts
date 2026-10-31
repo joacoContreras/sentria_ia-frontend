@@ -214,3 +214,14 @@ export async function apiClient<T = unknown>(
     }
   }
 }
+
+/**
+ * Indica si el backend todavía no implementa el endpoint (o no está accesible).
+ * En ese caso los servicios usan los datos de prueba en lugar de mostrar un error,
+ * para que el front siga funcionando mientras se completa la API.
+ *  - 0: sin conexión / CORS / timeout
+ *  - 404 / 405 / 501: endpoint inexistente o método no soportado
+ */
+export function isEndpointUnavailable(response: ApiResponse<unknown>): boolean {
+  return [0, 404, 405, 501].includes(response.statusCode ?? 0)
+}

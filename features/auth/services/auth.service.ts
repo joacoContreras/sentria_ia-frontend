@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client"
+import { apiClient, isEndpointUnavailable } from "@/lib/api-client"
 import type {
   PatientRegistrationInput,
   PatientLoginInput,
@@ -52,6 +52,11 @@ export const authService = {
         },
       })
 
+      // Endpoint aún no implementado en el backend: continuar en modo simulado
+      if (!response.success && isEndpointUnavailable(response)) {
+        return authService.mockRegister(data)
+      }
+
       if (!response.success || !response.data) {
         return {
           success: false,
@@ -83,7 +88,13 @@ export const authService = {
       }
     }
 
-    // Modo Simulado (Mock) de contingencia para desarrollo local
+    return authService.mockRegister(data)
+  },
+
+  /**
+   * Registro simulado (sin backend o con el endpoint aún no implementado)
+   */
+  async mockRegister(data: PatientRegistrationInput): Promise<AuthResponse> {
     await new Promise((resolve) => setTimeout(resolve, 800))
 
     return {
@@ -160,7 +171,8 @@ export const authService = {
         }
 
         // Si el backend respondió con un código HTTP específico (ej. 401 Credenciales inválidas)
-        if (response.statusCode) {
+        // (si el endpoint todavía no existe -404- o no hay conexión, se usa el modo simulado)
+        if (!isEndpointUnavailable(response)) {
           return {
             success: false,
             message: response.message || "Error de autenticación",
@@ -223,10 +235,12 @@ export const authService = {
         body: { email },
       })
 
-      return {
-        success: response.success,
-        message: response.message || (response.success ? "Instrucciones enviadas al correo" : "Error al procesar solicitud"),
-        error: response.error,
+      if (!isEndpointUnavailable(response)) {
+        return {
+          success: response.success,
+          message: response.message || (response.success ? "Instrucciones enviadas al correo" : "Error al procesar solicitud"),
+          error: response.error,
+        }
       }
     }
 
@@ -250,10 +264,12 @@ export const authService = {
         requiresAuth: true,
       })
 
-      return {
-        success: response.success,
-        user: response.data,
-        error: response.error,
+      if (!isEndpointUnavailable(response)) {
+        return {
+          success: response.success,
+          user: response.data,
+          error: response.error,
+        }
       }
     }
 
