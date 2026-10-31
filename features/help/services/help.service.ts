@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client"
+import { apiClient, isEndpointUnavailable } from "@/lib/api-client"
 
 export interface SupportTicketInput {
   name: string
@@ -96,7 +96,7 @@ export const helpService = {
         }
       }
 
-      if (!response.success && response.error) {
+      if (!response.success && response.error && !isEndpointUnavailable(response)) {
         return {
           success: false,
           ticketCode: "",

@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
 
+// Origen del backend Java (NEXT_PUBLIC_API_URL) habilitado en connect-src de la CSP,
+// para que el navegador pueda llamar a la API publicada (ej. en producción en Vercel).
+function getApiOrigin(): string {
+  try {
+    return process.env.NEXT_PUBLIC_API_URL ? new URL(process.env.NEXT_PUBLIC_API_URL).origin : ""
+  } catch {
+    return ""
+  }
+}
+
+const connectSrc = ["'self'", "http://localhost:*", "https://*.sentria.ai", getApiOrigin()]
+  .filter(Boolean)
+  .join(" ")
+
 const securityHeaders = [
   {
     key: "X-DNS-Prefetch-Control",
@@ -33,7 +47,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https:",
-      "connect-src 'self' http://localhost:* https://*.sentria.ai",
+      `connect-src ${connectSrc}`,
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",

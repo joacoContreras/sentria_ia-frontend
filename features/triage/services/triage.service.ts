@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client"
+import { apiClient, isEndpointUnavailable } from "@/lib/api-client"
 import { SymptomIntakeForm, BaselineVitals, TriageResult } from "@/types/triage"
 
 export interface TriageEvaluationInput {
@@ -60,7 +60,7 @@ export const triageService = {
         }
       }
 
-      if (!response.success && response.error) {
+      if (!response.success && response.error && !isEndpointUnavailable(response)) {
         return {
           success: false,
           error: response.error,
